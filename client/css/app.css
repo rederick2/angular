@@ -1,0 +1,117 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none;
+}
+
+body {
+    font-size: 1em;
+    padding-top: 50px;
+}
+
+#cover {
+    position:absolute;
+    height:100%;
+    width:100%;
+    background:white;
+}
+
+#userInfo {
+    float:right;padding:8px;
+}
+
+.icon-twitter {
+    color:#00A7E7;
+}
+
+.icon-facebook-sign {
+    color:#3662A0;
+}
+
+.icon-google-plus-sign {
+    color: #D74634;
+}
+
+.fade-hide-setup, .fade-show-setup {
+    -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+
+.fade-hide-setup {
+    opacity:1;
+}
+.fade-hide-setup.fade-hide-start {
+    opacity:0;
+}
+
+.fade-show-setup {
+    opacity:0;
+}
+.fade-show-setup.fade-show-start {
+    opacity:1;
+}
+
+
+.form-signin {
+  max-width: 400px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.valid{
+  color: #51a351;
+}
+
+.error{
+  color: #bd362f;
+}
+
+.form-register input[type="text"], .form-register input[type="password"] , .form-register input[type="email"]{
+  float: left;
+  width: 90%;
+  margin-bottom: 0px;
+  border-radius: 5px
+}
+
+.form-register i{
+  float: left;
+  z-index: 10000000;
+  padding: 10px 0px 0px 5px;
+}
+
+.form-register .controls{
+  height: 43px;
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+

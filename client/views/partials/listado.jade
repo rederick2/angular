@@ -1,0 +1,17 @@
+input.search-query(type='text', data-ng-model='search', placeholder='Search')
+table
+    thead
+      tr
+        th Users
+        th Description
+        th
+          a(href='#/new')
+            span.glyphicon.glyphicon-plus-sign
+    tbody
+      tr(data-ng-repeat='user in users | filter:search | orderBy:\'username\'')
+        td
+          a(href='{{user.id}}', target='_blank') {{user.username}}
+        td {{user.password}}
+        td
+          a(href='#/edit/{{user.$id}}')
+            i.icon-pencil
