@@ -1,7 +1,7 @@
 var q = require('q');
 
-var Firebase = require('firebase');
-var listRef = new Firebase('https://rederick2.firebaseio.com/');
+var Firebase = require('../models/Firebase.js');
+var listRef = Firebase.getRef('');
 
 module.exports = {
 

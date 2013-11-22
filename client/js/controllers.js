@@ -19,9 +19,14 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('LoginCtrl',
-['$rootScope', '$scope', '$location', '$window', 'Auth', function($rootScope, $scope, $location, $window, Auth) {
+['$rootScope', '$scope', '$location', '$window', 'Auth', 'angularFireAuth', function($rootScope, $scope, $location, $window, Auth, angularFireAuth) {
 
     $scope.rememberme = true;
+
+    var url = "https://rederick2.firebaseio.com/";
+
+    angularFireAuth.initialize(url, {scope: $scope, name: "user"});
+
     $scope.login = function() {
         Auth.login({
                 username: $scope.username,
@@ -37,7 +42,33 @@ angular.module('angular-client-side-auth')
     };
 
     $scope.loginOauth = function(provider) {
-        $window.location.href = '/auth/' + provider;
+        //$window.location.href = '/auth/' + provider;
+        /*var ref = new Firebase('https://rederick2.firebaseio.com/users/');
+
+        var auth = new FirebaseSimpleLogin(ref , function(error, user) {
+                  
+                });*/
+
+        angularFireAuth.login(provider);
+
+        $scope.$on("angularFireAuth:login", function(evt, user) {
+        // User logged in.
+            console.log(user);
+
+            Auth.loginFb({
+                provider : provider,
+                id : user.id,
+                username: user.username,
+                email: user.email,
+               // rememberme: $scope.rememberme
+            },
+            function(res) {
+                $location.path('/');
+            },
+            function(err) {
+                $rootScope.error = err;
+            });
+        });
     };
 }]);
 
@@ -145,11 +176,13 @@ function($rootScope, $scope, $location, angularFire, $routeParams, Users, Auth) 
 
 angular.module('angular-client-side-auth')
 .controller('ListCtrl',
-['$rootScope', '$scope', 'Users', 'Auth', 'Usersregistered', function($rootScope, $scope, Users, Auth, Usersregistered ) {
+['$rootScope', '$scope', 'Users', 'Auth', 'angularFireCollection', 'Usersregistered', function($rootScope, $scope, Users, Auth, angularFireCollection, Usersregistered ) {
     $scope.loading = false;
     $scope.userRoles = Auth.userRoles;
 
-    $scope.users = Usersregistered;
+    console.log(angularFireCollection('https://rederick2.firebaseio.com/users/rederick2'));
+
+    $scope.users = angularFireCollection('https://rederick2.firebaseio.com/users/');
 
 }]);
 

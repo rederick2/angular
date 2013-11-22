@@ -93,6 +93,11 @@ var routes = [
         middleware: [AuthCtrl.login]
     },
     {
+        path: '/loginFb',
+        httpMethod: 'POST',
+        middleware: [AuthCtrl.loginFb]
+    },
+    {
         path: '/logout',
         httpMethod: 'POST',
         middleware: [AuthCtrl.logout]

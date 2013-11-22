@@ -1,7 +1,7 @@
 var passport =  require('passport')
-    , User = require('../models/User.js');
+    , User = require('../models/User.js')
+    , Firebase = require('../models/Firebase.js');
 
-var Firebase = require('firebase');
 
 //myRootRef.set("hello world!");
 
@@ -27,7 +27,7 @@ module.exports = {
                 else        { res.json(200, { "role": user.role, "username": user.username }); }
             });
 
-            var myRootRef = new Firebase('https://rederick2.firebaseio.com/users/'+ req.body.username);
+            var myRootRef = Firebase.getRef('users/'+ req.body.username);
 
             myRootRef.set(user);
 
@@ -59,6 +59,18 @@ module.exports = {
                 res.json(200, { "role": user.role, "username": user.username });
             });
         })(req, res, next);
+    },
+
+    loginFb: function(req, res, next) {
+        User.firebaseAuth(req.body.provider, req.body.id, req.body.username, req.body.email, function(err, user){
+            if(err === 'UserAlreadyExists') return res.send(403, "User already exists");
+            else if(err)                    return res.send(500);
+            //console.log(user);
+            req.logIn(user, function(err) {
+                if(err)     { next(err); }
+                else        { res.json(200, { "role": user.role, "username": user.username }); }
+            });
+        });
     },
 
     logout: function(req, res) {

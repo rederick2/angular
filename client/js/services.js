@@ -46,6 +46,12 @@ angular.module('angular-client-side-auth')
                 success(user);
             }).error(error);
         },
+        loginFb: function(user, success, error) {
+            $http.post('/loginFb' , user).success(function(user){
+                changeUser(user);
+                success(user);
+            }).error(error);
+        },
         logout: function(success, error) {
             $http.post('/logout').success(function(){
                 changeUser({
@@ -75,3 +81,8 @@ angular.module('angular-client-side-auth')
 .factory('_', function() {
         return window._; // assumes underscore has already been loaded on the page
     });  
+
+/*value('fbURL', 'https://rederick2.firebaseio.com/users/').
+    factory('Usersregistered', function(angularFireCollection, fbURL) {
+        return angularFireCollection(fbURL);
+    })*/

@@ -76,9 +76,9 @@ angular.module('angular-client-side-auth').directive('activeNav', ['$location', 
             scope.location = $location;
             scope.$watch('location.absUrl()', function(newPath) {
                 if (path === newPath) {
-                    element.addClass('active');
+                    //element.addClass('active');
                 } else {
-                    element.removeClass('active');
+                    //element.removeClass('active');
                 }
             });
         }

@@ -7,12 +7,11 @@ var User
     , GoogleStrategy = require('passport-google').Strategy
     , LinkedInStrategy = require('passport-linkedin').Strategy
     , check =           require('validator').check
-    , userRoles =       require('../../client/js/routingConfig').userRoles;
+    , userRoles =       require('../../client/js/routingConfig').userRoles
+    , List = require('../models/List.js')
+    , Firebase = require('../models/Firebase.js');
 
 
-var List = require('../models/List.js');
-
-var Firebase = require('firebase');
 
 //console.log(List.getUsers());
 
@@ -81,24 +80,32 @@ module.exports = {
     findOrCreateOauthUser: function(profile, providerId) {
         var user = module.exports.findByProviderId(profile.provider, providerId);
         //console.log(user);
-        if(!user) {
+        if(user) {
+
+            return user;
+            
+        }else if(!module.exports.findByUsername(profile.username)){
+
             user = {
                 id: _.max(users, function(user) { return user.id; }).id + 1,
                 username: profile.username, // Should keep Oauth users anonymous on demo site
                 role: userRoles.admin,
+                email : profile.email || '',
                 provider: profile.provider
             };
             user[profile.provider] = providerId;
             users.push(user);
 
-            var myRootRef = new Firebase('https://rederick2.firebaseio.com/users/'+ profile.username);
+            var myRootRef = Firebase.getRef('users/'+ profile.username);
 
             myRootRef.set(user);
+
+            return user;
+
+        }else{
+            return "UserAlreadyExists";
         }
 
-
-
-        return user;
     },
 
     findAll: function() {
@@ -174,8 +181,20 @@ module.exports = {
         function(accessToken, refreshToken, profile, done) {
             var user = module.exports.findOrCreateOauthUser(profile, profile.id);
             console.log(profile);
-            done(null, user);
+            //done(null, user);
         });
+    },
+
+    firebaseAuth: function(provider, id, username, email, callback) {
+       
+        var user = module.exports.findOrCreateOauthUser({provider:provider , id:id , username:username , email:email} , id);
+        
+        if(user == "UserAlreadyExists"){
+            callback("UserAlreadyExists");
+        }else{
+            callback(null, user);
+        }
+        
     },
 
     googleStrategy: function() {
