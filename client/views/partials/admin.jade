@@ -19,5 +19,5 @@ table.table.table-striped(data-ng-hide="loading")
             td
                 span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
             td
-                a.btn.btn-primary(href='/edit/{{user.$id}}')
+                a.btn.btn-primary(href='/edit/{{user.username}}')
                   i.fa.fa-edit

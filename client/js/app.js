@@ -40,7 +40,7 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase'])
             controller:     'AdminCtrl',
             access:         access.admin
         });
-    $routeProvider.when('/list/:id',
+    $routeProvider.when('/list',
         {
             templateUrl:    'listado',
             controller:     'ListCtrl',

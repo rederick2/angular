@@ -18,7 +18,7 @@ module.exports = {
 
         //myRootRef.set({ id : {username:req.body.username, password:req.body.password, role:req.body.role}});
 
-        User.addUser(req.body.username, req.body.password, req.body.role, function(err, user) {
+        User.addUser(req.body.username, req.body.password, req.body.email, req.body.firstname, req.body.role, function(err, user) {
             if(err === 'UserAlreadyExists') return res.send(403, "User already exists");
             else if(err)                    return res.send(500);
 

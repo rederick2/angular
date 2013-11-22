@@ -69,3 +69,9 @@ angular.module('angular-client-side-auth')
         }
     };
 });
+
+
+angular.module('angular-client-side-auth')
+.factory('_', function() {
+        return window._; // assumes underscore has already been loaded on the page
+    });  

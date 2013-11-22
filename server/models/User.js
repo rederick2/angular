@@ -43,7 +43,7 @@ usersf.then(function (user) {
 
 
 module.exports = {
-    addUser: function(username, password, role, callback) {
+    addUser: function(username, password, email, firstname, role, callback) {
         if(this.findByUsername(username) !== undefined)  return callback("UserAlreadyExists");
 
         // Clean up when 500 users reached
@@ -55,9 +55,14 @@ module.exports = {
             id:         _.max(users, function(user) { return user.id; }).id + 1,
             username:   username,
             password:   password,
+            email:      email,
+            firstname:  firstname,
             role:       role
         };
         users.push(user);
+
+       // console.log(users);
+
         callback(null, user);
     },
 
@@ -168,7 +173,7 @@ module.exports = {
         },
         function(accessToken, refreshToken, profile, done) {
             var user = module.exports.findOrCreateOauthUser(profile, profile.id);
-            //console.log('ola');
+            console.log(profile);
             done(null, user);
         });
     },

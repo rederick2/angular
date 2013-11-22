@@ -96,16 +96,20 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
             ctrl.$parsers.unshift(function (viewValue) {
                 if (viewValue) {
 
-                    var myRootRef = new Firebase('https://rederick2.firebaseio.com/users/' + viewValue);
+                   new Firebase('https://rederick2.firebaseio.com/users/')
+                    .on('value', function(snapshot) {
 
-                    myRootRef.on('value', function(snapshot) {
-                      if(snapshot.val() === null) {
-                        //console.log('User julie does not exist.');
+                        var data = snapshot.val();
+
+                        var result = _.where(data, {username: viewValue});
+
+                        
+
+                      if(!result[0]) {
+                        console.log('not exist.');
                         ctrl.$setValidity('uniqueUsername', true);
                       } else {
-                        var firstName = snapshot.val().id;
-                        var lastName = snapshot.val().username;
-                        console.log('User julie’s full name is: ' + firstName + ' ' + lastName);
+                        console.log('exist.');
                         ctrl.$setValidity('uniqueUsername', false);
                       }
                     });
@@ -118,7 +122,7 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
     }
 });
 
-angular.module('angular-client-side-auth').directive('uniqueEmail', ['Usersregistered' ,  function (Usersregistered) {
+angular.module('angular-client-side-auth').directive('uniqueEmail', ['_' ,  function (_) {
     return {
         require:'ngModel',
         restrict:'A',
@@ -127,17 +131,20 @@ angular.module('angular-client-side-auth').directive('uniqueEmail', ['Usersregis
             ctrl.$parsers.unshift(function (viewValue) {
                 if (viewValue) {
 
-                    new Firebase('https://rederick2.firebaseio.com/users/rederick2')
-                    .startAt('rederick2@hotmail.com')
-                    .endAt('rederick2@hotmail.com')
+                    new Firebase('https://rederick2.firebaseio.com/users/')
                     .on('value', function(snapshot) {
 
-                        console.log(snapshot.val());
+                        var data = snapshot.val();
 
-                      if(snapshot.val() === null) {
-                        console.log('User julie does not exist.');
+                        var result = _.where(data, {email: viewValue});
+
+                        
+
+                      if(!result[0]) {
+                        console.log('not exist.');
                         ctrl.$setValidity('uniqueEmail', true);
                       } else {
+                        console.log('exist.');
                         ctrl.$setValidity('uniqueEmail', false);
                       }
                     });

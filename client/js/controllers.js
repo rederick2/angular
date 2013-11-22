@@ -19,9 +19,7 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('LoginCtrl',
-['$rootScope', '$scope', '$location', '$window', 'Auth', 'Usersregistered', function($rootScope, $scope, $location, $window, Auth, Usersregistered) {
-
-    console.log(Usersregistered);
+['$rootScope', '$scope', '$location', '$window', 'Auth', function($rootScope, $scope, $location, $window, Auth) {
 
     $scope.rememberme = true;
     $scope.login = function() {
@@ -59,6 +57,8 @@ angular.module('angular-client-side-auth')
         Auth.register({
                 username: $scope.username,
                 password: $scope.password,
+                email: $scope.email,
+                firstname: $scope.firstname,
                 role: $scope.role
             },
             function() {
@@ -78,21 +78,38 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('AdminCtrl',
-['$rootScope', '$scope', 'Auth', 'Usersregistered', 
-function($rootScope, $scope, Auth, Usersregistered) {
-    $scope.loading = false;
+['$rootScope', '$scope', 'Auth', 'Users', '_' ,
+function($rootScope, $scope, Auth, Users, _ ) {
+    $scope.loading = true;
     $scope.userRoles = Auth.userRoles;
 
+    var ref = new Firebase('https://rederick2.firebaseio.com/users/');
+
+    ref.on('value' , function(snap){
+
+        var data = snap.val();
+
+        var result = _.where(data, {email: "rda_acym@hotmail.com"});
+
+        console.log(result[0].username);
+    });
      
-    $scope.users = Usersregistered;
+    Users.getAll(function(res) {
+        $scope.users = res;
+        $scope.loading = false;
+    }, function(err) {
+        $rootScope.error = "Failed to fetch users.";
+        $scope.loading = false;
+    });
+
 
     
 }]);
 
 angular.module('angular-client-side-auth')
 .controller('EditCtrl',
-['$rootScope', '$scope', '$location', 'angularFire', '$routeParams','Users', 'Auth', 'Usersregistered', 
-function($rootScope, $scope, $location, angularFire, $routeParams, Users, Auth, Usersregistered) {
+['$rootScope', '$scope', '$location', 'angularFire', '$routeParams','Users', 'Auth', 
+function($rootScope, $scope, $location, angularFire, $routeParams, Users, Auth) {
     $scope.loading = true;
     $scope.userRoles = Auth.userRoles;
 
