@@ -14,7 +14,8 @@
     "passport-linkedin": "~0.1.3",
     "mongofb" :"*",
     "firebase": "*",
-    "q": "*"
+    "q": "*",
+    "monk" : "*"
   },
   "repository": {
     "type": "git",

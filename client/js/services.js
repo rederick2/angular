@@ -72,6 +72,10 @@ angular.module('angular-client-side-auth')
     return {
         getAll: function(success, error) {
             $http.get('/users').success(success).error(error);
+        },
+        getUsers: function(sort, success, error) {
+            console.log(sort);
+            $http.post('/getusers', sort).success(success).error(error);
         }
     };
 });

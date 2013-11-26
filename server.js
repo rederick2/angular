@@ -29,6 +29,20 @@ passport.use(User.facebookStrategy()); // Comment out this line if you don't wan
 //passport.use(User.linkedInStrategy()); // Comment out this line if you don't want to enable login via LinkedIn
 
 
+
+
+
+/*for (var i = 1; i < 30; i++) {
+	cats.save({name:'Cat '+ i})
+};*/
+
+/*cats.find().limit(5).skip(30,function(err, docs) {
+    // docs is an array of all the documents in mycollection
+    console.log(docs);
+});*/
+
+
+
 passport.serializeUser(User.serializeUser);
 passport.deserializeUser(User.deserializeUser);
 

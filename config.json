@@ -1,6 +1,7 @@
 {
   	
 	"FACEBOOK_APP_ID" : "210521229054903",
-	"FACEBOOK_APP_SECRET": "f46e9ccc6f476cf9205dc08128ab5e34"
+	"FACEBOOK_APP_SECRET": "f46e9ccc6f476cf9205dc08128ab5e34",
+	"URIMONGODB" : "users:alex2002@ds053438.mongolab.com:53438/rederick2"
 	
 }

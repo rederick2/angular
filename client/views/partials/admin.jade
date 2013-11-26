@@ -1,3 +1,17 @@
+.container
+  div
+      h1 Angular Infinite Scroll Demo
+      p Scroll the div to add more elements.
+      .scroll-loader(infinite-scroll='addItems()', can-load='canLoad', threshold='100', after = 'after')
+        ul
+          li(ng-repeat='item in items') {{item.username}}
+      p
+        | Maximum {{maxItems}} items
+        small ({{items.length}} added)
+        button.btn(ng-click='items=[];canLoad=true;addItems();') Reset
+      p
+        | It is up to you to add server requests and loading indicators.
+
 h1 Admin
 p This view is visible to users with the administrator role.
 
@@ -21,3 +35,4 @@ table.table.table-striped(data-ng-hide="loading")
             td
                 a.btn.btn-primary(href='/edit/{{user.username}}')
                   i.fa.fa-edit
+

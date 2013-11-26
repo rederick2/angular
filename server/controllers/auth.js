@@ -2,6 +2,9 @@ var passport =  require('passport')
     , User = require('../models/User.js')
     , Firebase = require('../models/Firebase.js');
 
+var mongojs = require('mongojs');
+
+var db = mongojs(config.URIMONGODB);
 
 //myRootRef.set("hello world!");
 
@@ -30,6 +33,10 @@ module.exports = {
             var myRootRef = Firebase.getRef('users/'+ req.body.username);
 
             myRootRef.set(user);
+
+            var usersmongo = db.collection('users');
+
+            usersmongo.save(user);
 
         });
     },

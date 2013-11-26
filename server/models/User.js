@@ -12,6 +12,10 @@ var User
     , Firebase = require('../models/Firebase.js');
 
 
+var mongojs = require('mongojs');
+
+
+
 
 //console.log(List.getUsers());
 
@@ -100,6 +104,13 @@ module.exports = {
 
             myRootRef.set(user);
 
+
+            var db = mongojs(config.URIMONGODB);
+
+            var usersmongo = db.collection('users');
+
+            usersmongo.save(user);
+
             return user;
 
         }else{
@@ -112,6 +123,7 @@ module.exports = {
         return _.map(users, function(user) { return _.clone(user); });
     },
 
+    
     findById: function(id) {
         return _.clone(_.find(users, function(user) { return user.id === id }));
     },

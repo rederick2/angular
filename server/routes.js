@@ -111,6 +111,13 @@ var routes = [
         accessLevel: accessLevels.admin
     },
 
+    {
+        path: '/getusers',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.getUsers],
+        accessLevel: accessLevels.admin
+    },
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',

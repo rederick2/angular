@@ -109,21 +109,12 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('AdminCtrl',
-['$rootScope', '$scope', 'Auth', 'Users', '_' ,
+['$rootScope', '$scope', 'Auth', 'Users', '_' , 
 function($rootScope, $scope, Auth, Users, _ ) {
     $scope.loading = true;
     $scope.userRoles = Auth.userRoles;
 
-    var ref = new Firebase('https://rederick2.firebaseio.com/users/');
-
-    ref.on('value' , function(snap){
-
-        var data = snap.val();
-
-        var result = _.where(data, {email: "rda_acym@hotmail.com"});
-
-        console.log(result[0].username);
-    });
+    
      
     Users.getAll(function(res) {
         $scope.users = res;
@@ -132,6 +123,47 @@ function($rootScope, $scope, Auth, Users, _ ) {
         $rootScope.error = "Failed to fetch users.";
         $scope.loading = false;
     });
+
+    $scope.page = 0;
+
+    $scope.addItems = function () {
+
+        Users.getUsers({limit:5, page:$scope.page} , function(res) {
+
+            if(res.length > 1 ){
+
+                res.forEach(function(r){
+                    $scope.items.push(r);
+                });
+
+                $scope.page++;
+                $scope.loading = false;
+
+            }else{
+                //$scope.page = 0;
+                $scope.canLoad = false;
+                return;
+            }
+
+            
+           // console.log(res);
+            
+        }, function(err) {
+            $rootScope.error = "Failed to fetch users.";
+            $scope.loading = false;
+        });
+
+
+    };
+
+    $scope.reset = function () {
+        $scope.items = [];
+        $scope.page = 0;
+        $scope.canLoad = true;
+        $scope.addItems();
+    };
+
+    $scope.reset();
 
 
     
