@@ -39,5 +39,22 @@ module.exports = {
 
         });
 
+    },
+    getByUsername: function(req, res) {
+        var usersmongo = db.collection('users');
+
+        
+
+        usersmongo.find({username:req.body.username} ,function(err, docs) {
+            if (err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+                res.json(docs);
+            }
+
+        });
+
     }
 };

@@ -5,8 +5,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         title Angular Auth Example
         link(rel='stylesheet', href='/css/app.css')
         link(href="/css/bootstrap.css", rel="stylesheet")
+
         link(href="/css/bootstrap-theme.css", rel="stylesheet")
         link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css", rel="stylesheet")
+
+        //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
 
 
         // This is needed because Facebook login redirects add #_=_ at the end of the URL
@@ -16,16 +19,28 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             }
     body(data-ng-cloak)
 
-        .navbar.navbar-inverse.navbar-fixed-top(data-ng-controller="NavCtrl")
+        .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation")
             .container
                 .navbar-header
-                    .navbar-toggle(type="button" data-toggle="collapse" data-target=".navbar-collapse")
+                    .navbar-toggle(type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
-                        a.navbar-brand
-                    a.navbar-brand(href="./") Project
-                .navbar-collapse.in(style="height: auto;")
+                    a.navbar-brand(href="./") Project Manager
+                    div.divider-vertical
+                    a.navbar-brand.active(href="./", data-access-level='accessLevels.user', active-nav)
+                        i.fa.fa-users.fa-lg
+                    a.navbar-brand.active(href="./", data-access-level='accessLevels.user', active-nav)
+                        i.fa.fa-comments-o.fa-lg
+                    a.navbar-brand.active(href="./", data-access-level='accessLevels.user', active-nav)
+                        i.fa.fa-edit.fa-lg
+                    div.divider-vertical(data-access-level='accessLevels.user', active-nav)
+                .collapse.navbar-collapse#bs-example-navbar-collapse-1
+                    form.navbar-form.navbar-left(role='search', data-access-level='accessLevels.user', active-nav)
+                        .form-group
+                            input.form-control(type='text', placeholder='Search')
+                        button.btn.btn-default(type='submit') 
+                            i.fa.fa-search
                     ul.nav.navbar-nav
                         li(data-access-level='accessLevels.anon', active-nav)
                             a(href='/login') Log in
@@ -37,15 +52,21 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             a(href='/private') Private
                         li(data-access-level='accessLevels.admin', active-nav)
                             a(href='/admin') Admin
-                        li(data-access-level='accessLevels.admin', active-nav)
-                            a(href='/list') List
-                        li(data-access-level='accessLevels.user')
-                            a(href="", data-ng-click="logout()")
-                                | Log out
-                    div#userInfo.pull-right(data-access-level='accessLevels.user')
-                        | Welcome&nbsp;
-                        strong {{ user.username }}&nbsp;
-                        span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
+
+                    ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
+                        li.dropdown(data-toggle="dropdown")
+
+                            a.dropdown-toggle(data-toggle="dropdown" , href="#")
+                                img(src="http://placehold.it/30x30")
+                                strong &nbsp;{{ user.username }}&nbsp;
+                                span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
+                                b.caret
+                            ul.dropdown-menu
+                                li(data-access-level='accessLevels.user')
+                                    a(href="", data-ng-click="logout()")
+                                        | Log out
+                        
+
 
         .container
             div(data-ng-view='ng-view')
@@ -72,6 +93,14 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         script(src='/js/mongofbClient.js')
 
+        script
+            $('ul.nav.navbar-nav li').on('click' , function(){
+                console.log('hola');
+                if($(".navbar-toggle").is(":visible") == true && !$(this).attr('data-toggle')){
+                    $('.navbar-toggle').click();
+                }
+            });
+
 
 
 
@@ -92,3 +121,5 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/listado
         script(type="text/ng-template", id="edit")
             include partials/edit
+        script(type="text/ng-template", id="user")
+            include partials/user

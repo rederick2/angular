@@ -16,6 +16,7 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase'])
             controller:     'HomeCtrl',
             access:         access.user
         });
+    
     $routeProvider.when('/login',
         {
             templateUrl:    'login',
@@ -56,6 +57,12 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase'])
         {
             templateUrl:    '404',
             access:         access.public
+        });
+    $routeProvider.when('/:id',
+        {
+            templateUrl:    'user',
+            controller:     'UserCtrl',
+            access:         access.user
         });
     $routeProvider.otherwise({redirectTo:'/404'});
 

@@ -79,6 +79,25 @@ angular.module('angular-client-side-auth')
 }]);
 
 angular.module('angular-client-side-auth')
+.controller('UserCtrl',
+['$rootScope', '$scope', '$routeParams', 'Users', function($rootScope , $scope, $routeParams, Users) {
+
+    //$scope.username = $routeParams.id;
+    Users.getByUsername({username:$routeParams.id} , 
+        function(res){
+
+            console.log(res[0]);
+
+            $scope.user = res[0];
+
+        }, function(err){
+            $rootScope.error = err;
+        });
+
+
+}]);
+
+angular.module('angular-client-side-auth')
 .controller('RegisterCtrl',
 ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
     $scope.role = Auth.userRoles.user;
@@ -132,11 +151,8 @@ function($rootScope, $scope, Auth, Users, _ ) {
         if ($scope.busy) return;
         $scope.busy = true;
 
-        //if($scope.page < 3){
 
             Users.getUsers({limit:5, page:$scope.page} , function(res) {
-
-              //  if(res.length > 1 ){
 
                     res.forEach(function(r){
                         $scope.items.push(r);
@@ -144,21 +160,11 @@ function($rootScope, $scope, Auth, Users, _ ) {
 
                     $scope.page++;
                     $scope.busy = false;
-
-               /* }else{
-                    //$scope.page = 0;
-                    $scope.canLoad = false;
-                    return;
-                }*/
-
-               // console.log(res);
                 
             }, function(err) {
                 $rootScope.error = "Failed to fetch users.";
                 $scope.loading = false;
             });
-
-       // }
 
 
     };

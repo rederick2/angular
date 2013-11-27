@@ -112,9 +112,16 @@ var routes = [
     },
 
     {
-        path: '/getusers',
+        path: '/users/get',
         httpMethod: 'POST',
         middleware: [UserCtrl.getUsers],
+        accessLevel: accessLevels.admin
+    },
+
+    {
+        path: '/users/getbyusername',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.getByUsername],
         accessLevel: accessLevels.admin
     },
 

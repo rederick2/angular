@@ -4,7 +4,7 @@
       p Scroll the div to add more elements.
       div.row
         div.col-sm-6.col-md-4(ng-repeat='item in items') 
-          a.thumbnail(href='#')
+          a.thumbnail(href='./{{item.username}}')
             img(src='http://placehold.it/390x200')
             div.caption 
               h3 {{item.username}}
