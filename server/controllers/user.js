@@ -25,6 +25,9 @@ module.exports = {
 
     getUsers: function(req, res) {
         var usersmongo = db.collection('users');
+
+        
+
         usersmongo.find().limit(req.body.limit).skip((req.body.page) * req.body.limit,function(err, docs) {
             if (err) {
                 res.render('error', {

@@ -125,33 +125,40 @@ function($rootScope, $scope, Auth, Users, _ ) {
     });
 
     $scope.page = 0;
+    $scope.busy = false;
 
     $scope.addItems = function () {
 
-        Users.getUsers({limit:5, page:$scope.page} , function(res) {
+        if ($scope.busy) return;
+        $scope.busy = true;
 
-            if(res.length > 1 ){
+        //if($scope.page < 3){
 
-                res.forEach(function(r){
-                    $scope.items.push(r);
-                });
+            Users.getUsers({limit:5, page:$scope.page} , function(res) {
 
-                $scope.page++;
+              //  if(res.length > 1 ){
+
+                    res.forEach(function(r){
+                        $scope.items.push(r);
+                    });
+
+                    $scope.page++;
+                    $scope.busy = false;
+
+               /* }else{
+                    //$scope.page = 0;
+                    $scope.canLoad = false;
+                    return;
+                }*/
+
+               // console.log(res);
+                
+            }, function(err) {
+                $rootScope.error = "Failed to fetch users.";
                 $scope.loading = false;
+            });
 
-            }else{
-                //$scope.page = 0;
-                $scope.canLoad = false;
-                return;
-            }
-
-            
-           // console.log(res);
-            
-        }, function(err) {
-            $rootScope.error = "Failed to fetch users.";
-            $scope.loading = false;
-        });
+       // }
 
 
     };

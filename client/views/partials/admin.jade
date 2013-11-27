@@ -1,10 +1,14 @@
-.container
+.container(infinite-scroll='addItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0')
   div
       h1 Angular Infinite Scroll Demo
       p Scroll the div to add more elements.
-      .scroll-loader(infinite-scroll='addItems()', can-load='canLoad', threshold='100', after = 'after')
-        ul
-          li(ng-repeat='item in items') {{item.username}}
+      div.row
+        div.col-sm-6.col-md-4(ng-repeat='item in items') 
+          a.thumbnail(href='#')
+            img(src='http://placehold.it/390x200')
+            div.caption 
+              h3 {{item.username}}
+      i.fa.fa-spinner.fa-spin(ng-show='busy')
       p
         | Maximum {{maxItems}} items
         small ({{items.length}} added)
@@ -12,27 +16,5 @@
       p
         | It is up to you to add server requests and loading indicators.
 
-h1 Admin
-p This view is visible to users with the administrator role.
 
-table.table.table-striped(data-ng-hide="loading")
-    thead
-        tr
-            th #
-            th Username
-            th Role
-    tbody
-        tr(data-ng-repeat="user in users")
-            td {{ user.id }}
-            td
-               i.fa.fa-twitter(data-ng-show="user.provider == 'twitter'")
-               i.fa.fa-facebook-square(data-ng-show="user.provider == 'facebook'")
-               i.icon-google-plus-sign(data-ng-show="user.provider == 'google'")
-               i.icon-linkedin(data-ng-show="user.provider == 'linkedin'")
-               |  {{ user.username }}
-            td
-                span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
-            td
-                a.btn.btn-primary(href='/edit/{{user.username}}')
-                  i.fa.fa-edit
 
