@@ -1,4 +1,31 @@
 div.row
-	div.col-md-4
-		h2 {{user.username}}
-	div.col-md-8
+	div.col-md-3
+		div.thumbnail
+			img(src="http://placehold.it/250x150" alt="...")
+			div.caption
+				h2 {{user.username}}
+	div.col-md-9
+		h3 
+			i.fa.fa-edit 
+			|	Crear Post
+		div.panel.panel-default
+			form(ng-submit="addPost()", name="postForm")
+				div.panel-body
+					textarea.form-control(rows="2", placeholder="Qué quieres publicar?", data-ng-model="message", required)
+				div.panel-footer
+					.btn-group
+						button.btn.btn-primary(type="submit", data-ng-disabled="postForm.$invalid") publicar
+					| &nbsp;
+					.btn-group
+						a.btn.btn-default(href="./", title="Photos")
+							i.fa.fa-camera
+						a.btn.btn-default(href="./", title="Code Source")
+							i.fa.fa-file-text
+		hr
+		h3 Recent Activity
+		div.panel.panel-default
+			div.panel-body
+				.well(ng-repeat="post in posts")
+					h3 {{post.message}}
+					span(am-time-ago="{{post.created_time}}")
+						{{post.created_time | amCalendar}}

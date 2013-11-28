@@ -3,6 +3,7 @@ var _ =           require('underscore')
     , passport =  require('passport')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
+    , PostCtrl =  require('./controllers/post')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -123,6 +124,20 @@ var routes = [
         httpMethod: 'POST',
         middleware: [UserCtrl.getByUsername],
         accessLevel: accessLevels.admin
+    },
+
+    {
+        path: '/posts/add',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.add],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/posts/getbyusername',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.getByUsername],
+        accessLevel: accessLevels.user
     },
 
     // All other get requests should be handled by AngularJS's client-side routing system

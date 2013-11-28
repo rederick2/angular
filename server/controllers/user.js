@@ -28,7 +28,7 @@ module.exports = {
 
         
 
-        usersmongo.find().limit(req.body.limit).skip((req.body.page) * req.body.limit,function(err, docs) {
+        usersmongo.find().limit(req.body.limit).sort({id:-1}).skip((req.body.page) * req.body.limit,function(err, docs) {
             if (err) {
                 res.render('error', {
                     status: 500

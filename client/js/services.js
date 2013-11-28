@@ -87,6 +87,24 @@ angular.module('angular-client-side-auth')
 
 
 angular.module('angular-client-side-auth')
+.factory('Posts', function($http) {
+    return {
+
+        add: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/add', data).success(success).error(error);
+        },
+
+        getByUsername: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/getbyusername', data).success(success).error(error);
+        }
+
+    };
+});
+
+
+angular.module('angular-client-side-auth')
 .factory('_', function() {
         return window._; // assumes underscore has already been loaded on the page
     });  

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase']).
+angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment']).
     
     value('fbURL', 'https://rederick2.firebaseio.com/users/').
     factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -94,6 +94,9 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase'])
 }])
 
     .run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+
+        // New look for Google Maps
+        //google.maps.visualRefresh = true;
 
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.error = null;

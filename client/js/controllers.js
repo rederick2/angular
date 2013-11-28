@@ -74,15 +74,23 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('HomeCtrl',
-['$rootScope', function($rootScope) {
+['$rootScope', '$scope', function($rootScope, $scope) {
+
+    $scope.message = {
+       text: 'hello world!',
+       time: new Date()
+    };
 
 }]);
 
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
-['$rootScope', '$scope', '$routeParams', 'Users', function($rootScope , $scope, $routeParams, Users) {
+['$rootScope', '$scope', '$routeParams', 'Users', 'Posts', 'Auth', 'angularFireCollection', function($rootScope , $scope, $routeParams, Users, Posts, Auth, angularFireCollection) {
 
     //$scope.username = $routeParams.id;
+    $scope.userRoles = Auth.userRoles;
+    $scope.username = $routeParams.id;
+
     Users.getByUsername({username:$routeParams.id} , 
         function(res){
 
@@ -93,6 +101,45 @@ angular.module('angular-client-side-auth')
         }, function(err){
             $rootScope.error = err;
         });
+
+    $scope.getPost = function(){
+        Posts.getByUsername({
+            username : $scope.username
+        },
+        function(res){
+
+            $scope.posts = res;
+
+        },
+        function(err) {
+                $rootScope.error = err;
+        });
+    }
+    //$scope.posts = angularFireCollection('https://rederick2.firebaseio.com/posts/' + $scope.username);
+
+    $scope.addPost = function(){
+
+        Posts.add({
+            username : Auth.user.username,
+            message : $scope.message,
+            type : 'text',
+            picture : '',
+            create_time: new Date(), 
+            update_time: new Date()
+
+        },
+        function(){
+            $scope.message = '';
+            $scope.getPost();
+        },
+        
+        function(err) {
+            $rootScope.error = err;
+        });
+
+    }
+
+    $scope.getPost();
 
 
 }]);

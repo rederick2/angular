@@ -1,2 +1,10 @@
 h1 Hello
 p This view is visible to logged in users.
+span(am-time-ago="{{message.time}}")
+	{{message.time | amCalendar}}
+
+span
+	{{message.time | amCalendar}}
+
+
+google-map(center="{{center}}" draggable="true" zoom="{{zoom}}" markers="{{markers}}" mark-click="true" style="height: 400px")
