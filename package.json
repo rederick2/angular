@@ -12,10 +12,9 @@
     "passport-facebook": "~0.1.5",
     "passport-google": "~0.3.0",
     "passport-linkedin": "~0.1.3",
-    "mongofb" :"*",
+    "mongojs" :"*",
     "firebase": "*",
-    "q": "*",
-    "monk" : "*"
+    "q": "*"
   },
   "repository": {
     "type": "git",
