@@ -109,6 +109,18 @@ angular.module('angular-client-side-auth')
     };
 });
 
+angular.module('angular-client-side-auth')
+.factory('Files', function($http) {
+    return {
+
+        upload: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/file', data).success(success).error(error);
+        }
+
+    };
+});
+
 
 angular.module('angular-client-side-auth')
 .factory('_', function() {

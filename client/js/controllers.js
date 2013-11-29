@@ -85,18 +85,89 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
-['$rootScope', '$scope', '$routeParams', 'Users', 'Posts', 'Auth', 'angularFireCollection', function($rootScope , $scope, $routeParams, Users, Posts, Auth, angularFireCollection) {
+['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files) {
 
     //$scope.username = $routeParams.id;
     //$scope.userRoles = Auth.userRoles;
     $scope.username = $routeParams.id;
     $scope.authUser = Auth.user.username;
 
-    $scope.myHTML =
-     'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
+    $scope.video = [];
 
     $scope.id = '';
+    $scope.typepost = 'text';
+    $scope.source = '';
+    $scope.photo = false;
+    $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
 
+
+    $scope.trustSrc = function(src) {
+        return $sce.trustAsResourceUrl(src);
+    }
+
+    $scope.onFileSelect = function($files) {
+        $scope.selectedFiles = [];
+        $scope.progress = [];
+        if ($scope.upload && $scope.upload.length > 0) {
+                for (var i = 0; i < $scope.upload.length; i++) {
+                        if ($scope.upload[i] != null) {
+                                $scope.upload[i].abort();
+                        }
+                }
+        }
+        $scope.upload = [];
+        $scope.uploadResult = [];
+        $scope.selectedFiles = $files;
+        for ( var i = 0; i < $files.length; i++) {
+                var $file = $files[i];
+                $scope.progress[i] = 0;
+                $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
+                (function(index) {
+                        $scope.upload[index] = $upload.upload({
+                                url : '/file',
+                                headers: {'myHeaderKey': 'myHeaderVal'},
+                                data : {
+                                        myModel : $scope.myModel
+                                },
+                                /* formDataAppender: function(fd, key, val) {
+                                        if (angular.isArray(val)) {
+                        angular.forEach(val, function(v) {
+                          fd.append(key, v);
+                        });
+                      } else {
+                        fd.append(key, val);
+                      }
+                                }, */
+                                file : $file,
+                                fileFormDataName: 'file'
+                        }).then(function(response) {
+                                $scope.uploadResult.push(response.data.result);
+                                $scope.uploadimage = response.data.image_th;
+                                $scope.picture = response.data.image_big;
+
+                        }, null, function(evt) {
+                                $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
+                        });
+                })(i);
+        }
+    }
+
+    $scope.uploadPhoto = function(){
+        $scope.photo = true;
+
+        //console.log($scope.file);
+        $scope.typepost = 'photo';
+
+        $('.btn-select-files').on('click', function(){
+            //alert('0');
+            $('.uploadphoto').trigger('click');
+
+        });
+
+        $rootScope.photo = true;
+
+    }
+    
     Users.getByUsername({username:$routeParams.id} , 
         function(res){
 
@@ -125,19 +196,49 @@ angular.module('angular-client-side-auth')
 
     $scope.addPost = function(){
 
+        //alert($scope.typepost);
+        //var message = '';
+        var title = '';
+        var picture = '';
+        var description = '';
+        var source = '';
+        var url = '';
+
+        $scope.loading = true;
+
+        //console.log($('.liveurl').html());
+
+        if($scope.typepost == 'url' || $scope.typepost == 'video'){
+            description = $scope.description;//$('.liveurl').html();
+            title = $scope.title;
+            picture = $scope.picture;
+            url = $scope.url;
+            source = $scope.source;
+        }else if($scope.typepost == 'photo'){
+            picture = $scope.picture;
+        }
+
         Posts.add({
             from : Auth.user.username,
             to : $scope.username,
+            title : title,
+            picture : picture,
+            source : source,
+            url : url,
+            description : description,
             message : $scope.message,
-            type : 'text',
-            picture : '',
-            create_time: new Date(), 
-            update_time: new Date()
+            type : $scope.typepost,
+            created_time: new Date(), 
+            updated_time: new Date()
 
         },
         function(){
             $scope.message = '';
             $scope.getPost();
+            $('.close').click();
+            $scope.loading = false;
+            $scope.selectedFiles = [];
+            $scope.photo = false;
         },
         
         function(err) {

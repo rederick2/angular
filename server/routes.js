@@ -4,6 +4,7 @@ var _ =           require('underscore')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
     , PostCtrl =  require('./controllers/post')
+    , FileCtrl =  require('./controllers/file')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -144,6 +145,13 @@ var routes = [
         path: '/posts/getbyusername',
         httpMethod: 'POST',
         middleware: [PostCtrl.getByUsername],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/file',
+        httpMethod: 'POST',
+        middleware: [FileCtrl.index],
         accessLevel: accessLevels.user
     },
 

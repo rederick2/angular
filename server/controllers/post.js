@@ -50,18 +50,23 @@ module.exports = {
                 id: id,
                 from : req.body.from,
                 to : req.body.to,
+                title : req.body.title,
+                picture : req.body.picture,
+                source : req.body.source,
+                url : req.body.url,
+                description : req.body.description,
                 message : req.body.message,
                 type : req.body.type,
                 picture : req.body.picture,
-                created_time: req.body.create_time, 
-                updated_time: req.body.update_time
+                created_time: req.body.created_time, 
+                updated_time: req.body.updated_time
             }
 
             postsmongo.save(post);
 
             var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + id);
 
-            myRootRef.push(post);
+            myRootRef.set(post);
 
             res.json({success:'true'});        
 

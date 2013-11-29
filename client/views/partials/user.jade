@@ -8,13 +8,42 @@ div.row
 		div.panel.panel-default
 			form(ng-submit="addPost()", name="postForm")
 				div.panel-body
-					textarea.form-control(rows="2", placeholder="Qué quieres publicar?", data-ng-model="message", required)
+					textarea.form-control(rows="2", placeholder="Qué quieres publicar?", data-ng-model="message", required , live-url)
+					div(ng-show="photo")
+						button.navbar-right(type="button" class="close" , ng-click="photo=false; selectedFiles=null") &times;
+						div(ng-show="dropSupported", class="drop-box", ng-file-drop="onFileSelect($files);", ng-file-drop-available="dropSupported=true") drop files here
+							a.btn.btn-default.btn-select-files(href="#") Select Files
+							input.uploadphoto(type="file", name="file", ng-file-select="onFileSelect($files)", accept="image/*")
+						div.thumbnail.picture(ng-show="selectedFiles != null",ng-bind-html="uploadimage")
+					.liveurl-loader 
+						i.fa.fa-spinner.fa-spin
+					i(ng-show="loaging").fa.fa-spinner.fa-spin
+					.liveurl
+						.close(title='close')
+						.inner
+							.image  
+							.details
+								.info
+									h3.title  
+									.description  
+									a.link(href="#", target="_blank")
+										.url  
+								.thumbnail
+									.pictures
+										.controls
+											.prev.button.inactive
+											.next.button.inactive
+											.count
+												span.current 0
+												span  de 
+												span.max 0
+								.video
 				div.panel-footer
 					.btn-group
 						button.btn.btn-info(type="submit", data-ng-disabled="postForm.$invalid") publicar
 					| &nbsp;
 					.btn-group
-						a.btn.btn-default(href="./", title="Photos")
+						a.btn.btn-default(href="#", title="Photos", ng-click="uploadPhoto()")
 							i.fa.fa-camera
 						a.btn.btn-default(href="./", title="Code Source")
 							i.fa.fa-code
@@ -26,10 +55,18 @@ div.row
 					button.navbar-right(type="button" class="close" , ng-click="remove(post.id);", ng-show="post.to == authUser") &times;
 					div.panel-body
 						.well
-							h3 
+							h3(ng-show="post.message !== ''")
 								i.fa.fa-quote-left.fa-2x.pull-left.fa-border
-								p(ng-bind-html="post.message")	
-						span(am-time-ago="post.created_time")
+								div(ng-bind-html="post.message")	
+							div
+								img(src="{{post.picture}}",ng-show="post.type == 'url' || post.type == 'photo'", style="width:100%")
+								iframe(class="youtube-player", type="text/html", style="height:420px; width:100%",ng-src="{{trustSrc(post.source)}}", frameborder="0", allowfullscreen, ng-show="post.type == 'video'")
+								h3 {{post.title}}
+								|	{{post.description}}
+								hr
+								a(href="{{post.url}}" , target="_blank") {{post.url}}
+
+						span(am-time-ago="post.created_time", title="{{post.created_time | amCalendar}}")
 						|	by 
 						a(href="./{{post.from}}") {{post.from}}
 					div.panel-footer

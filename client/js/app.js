@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize']).
+angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload']).
     
     value('fbURL', 'https://rederick2.firebaseio.com/users/').
     factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -93,10 +93,14 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
 }])
 
-    .run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+    .run(['$rootScope', '$location', 'Auth', '$route', function ($rootScope, $location, Auth, $route) {
 
         // New look for Google Maps
         //google.maps.visualRefresh = true;
+
+        $rootScope.photo = false;
+
+        var lastRoute = $route.current;
 
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.error = null;
@@ -104,6 +108,24 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
                 if(Auth.isLoggedIn()) $location.path('/');
                 else                  $location.path('/login');
             }
+            
         });
+
+        $rootScope.$on("$locationChangeStart", function (event, next, current) {
+            
+
+            if($rootScope.photo){
+                
+                if (window.confirm("Are you sure you wish to leave?")) { 
+                  
+                  $rootScope.photo = false;
+
+                }else{
+                    event.preventDefault();
+                }
+            }
+            
+        });
+  
 
     }]);

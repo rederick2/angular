@@ -11,6 +11,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css", rel="stylesheet")
 
         //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
+        link(href="/js/liveurl.css", rel="stylesheet")
 
 
         // This is needed because Facebook login redirects add #_=_ at the end of the URL
@@ -86,8 +87,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
         //script(src='/js/underscore-min.js')
         script(src='/js/angular-moment.js')
+        script(src="/js/angular-file-upload-shim.js")
+        script(src="/js/angular-file-upload.js")
         script(src='/js/moment.js')
         //script(src='/js/gmaps.js')
+        script(src="/js/liveurl.js")
 
         script(src='/js/routingConfig.js')
         script(src='/js/app.js')
@@ -103,12 +107,21 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         
         
 
-        script
+        script(type="text/javascript")
             $('ul.nav.navbar-nav li').on('click' , function(){
                 console.log('hola');
                 if($(".navbar-toggle").is(":visible") == true && !$(this).attr('data-toggle')){
                     $('.navbar-toggle').click();
                 }
+            });
+
+        script(type="text/javascript")
+            $('textarea').liveUrl({
+              success : function(data) 
+              {  
+                console.log(data);
+                // this return the first found url data
+              }
             });
 
 
