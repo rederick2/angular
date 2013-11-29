@@ -95,6 +95,12 @@ angular.module('angular-client-side-auth')
             $http.post('/posts/add', data).success(success).error(error);
         },
 
+        remove: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/remove', data).success(success).error(error);
+        },
+
+
         getByUsername: function(data, success, error) {
             //console.log(sort);
             $http.post('/posts/getbyusername', data).success(success).error(error);

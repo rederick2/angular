@@ -88,8 +88,14 @@ angular.module('angular-client-side-auth')
 ['$rootScope', '$scope', '$routeParams', 'Users', 'Posts', 'Auth', 'angularFireCollection', function($rootScope , $scope, $routeParams, Users, Posts, Auth, angularFireCollection) {
 
     //$scope.username = $routeParams.id;
-    $scope.userRoles = Auth.userRoles;
+    //$scope.userRoles = Auth.userRoles;
     $scope.username = $routeParams.id;
+    $scope.authUser = Auth.user.username;
+
+    $scope.myHTML =
+     'I am an <code>HTML</code>string with <a href="#">links!</a> and other <em>stuff</em>';
+
+    $scope.id = '';
 
     Users.getByUsername({username:$routeParams.id} , 
         function(res){
@@ -120,7 +126,8 @@ angular.module('angular-client-side-auth')
     $scope.addPost = function(){
 
         Posts.add({
-            username : Auth.user.username,
+            from : Auth.user.username,
+            to : $scope.username,
             message : $scope.message,
             type : 'text',
             picture : '',
@@ -137,6 +144,16 @@ angular.module('angular-client-side-auth')
             $rootScope.error = err;
         });
 
+    }
+
+    $scope.remove = function(id){
+        Posts.remove({id:id, username:Auth.user.username},
+            function(res){
+                $scope.getPost();
+            },
+            function(err){
+                $rootScope.error = err;
+            });
     }
 
     $scope.getPost();

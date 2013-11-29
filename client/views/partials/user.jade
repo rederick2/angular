@@ -5,27 +5,38 @@ div.row
 			div.caption
 				h2 {{user.username}}
 	div.col-md-9
-		h3 
-			i.fa.fa-edit 
-			|	Crear Post
 		div.panel.panel-default
 			form(ng-submit="addPost()", name="postForm")
 				div.panel-body
 					textarea.form-control(rows="2", placeholder="Qué quieres publicar?", data-ng-model="message", required)
 				div.panel-footer
 					.btn-group
-						button.btn.btn-primary(type="submit", data-ng-disabled="postForm.$invalid") publicar
+						button.btn.btn-info(type="submit", data-ng-disabled="postForm.$invalid") publicar
 					| &nbsp;
 					.btn-group
 						a.btn.btn-default(href="./", title="Photos")
 							i.fa.fa-camera
 						a.btn.btn-default(href="./", title="Code Source")
-							i.fa.fa-file-text
+							i.fa.fa-code
 		hr
 		h3 Recent Activity
 		div.panel.panel-default
 			div.panel-body
-				.well(ng-repeat="post in posts")
-					h3 {{post.message}}
-					span(am-time-ago="{{post.created_time}}")
-						{{post.created_time | amCalendar}}
+				div.panel.panel-default(ng-repeat="post in posts")
+					button.navbar-right(type="button" class="close" , ng-click="remove(post.id);", ng-show="post.to == authUser") &times;
+					div.panel-body
+						.well
+							h3 
+								i.fa.fa-quote-left.fa-2x.pull-left.fa-border
+								p(ng-bind-html="post.message")	
+						span(am-time-ago="post.created_time")
+						|	by 
+						a(href="./{{post.from}}") {{post.from}}
+					div.panel-footer
+						.btn-group
+							a.btn.btn-info(href="./", title="Check")
+								i.fa.fa-check
+							a.btn.btn-info(href="./", title="Comments")
+								i.fa.fa-comments
+							a.btn.btn-info(href="./", title="Share")
+								i.fa.fa-share

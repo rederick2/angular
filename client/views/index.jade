@@ -30,11 +30,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                     a.navbar-brand(href="./") Project Manager
                     div.divider-vertical
                     a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                        i.fa.fa-users.fa
+                        i.fa.fa-users
                     a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                        i.fa.fa-comments-o.fa
+                        i.fa.fa-envelope
                     a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                        i.fa.fa-edit.fa
+                        i.fa.fa-edit
                     div.divider-vertical(data-access-level='accessLevels.user')
                 .collapse.navbar-collapse#bs-example-navbar-collapse-1
                     form.navbar-form.navbar-left(role='search', data-access-level='accessLevels.user')
@@ -55,12 +55,14 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             a(href='/admin') Admin
 
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
+                        a.btn-profile.navbar-text(href="./{{user.username}}")
+                            img(src="http://placehold.it/30x30")
+                            strong &nbsp;{{ user.username }}&nbsp;
+                            span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
                         li.dropdown(data-toggle="dropdown")
 
                             a.dropdown-toggle(data-toggle="dropdown" , href="#")
-                                img(src="http://placehold.it/30x30")
-                                strong &nbsp;{{ user.username }}&nbsp;
-                                span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
+                                i.fa.fa-cog
                                 b.caret
                             ul.dropdown-menu
                                 li(data-access-level='accessLevels.user')
@@ -79,6 +81,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
         script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js')
+        script(src='http://code.angularjs.org/1.2.0/angular-sanitize.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
         //script(src='/js/underscore-min.js')

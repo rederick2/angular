@@ -7,7 +7,7 @@ var mongojs = require('mongojs');
 
 var db = mongojs(config.URIMONGODB);
 
-        
+var postsmongo = db.collection('posts');
 
 
 
@@ -24,40 +24,56 @@ module.exports = {
         res.json(users);
     },
 
+    remove: function(req,res){
+
+        postsmongo.remove({id:req.body.id});
+
+        var myRootRef = Firebase.getRef('posts/' + req.body.username + '/' + req.body.id);
+
+        myRootRef.remove();
+
+        res.json({success:'true'}); 
+
+    },
+
     add: function(req, res) {
 
-        var postsmongo = db.collection('posts');
+        postsmongo.find(function(err, docs){
 
-        var post = {
-            from : {
-                username : req.body.username
-            },
-            message : req.body.message,
-            type : req.body.type,
-            picture : req.body.picture,
-            created_time: req.body.create_time, 
-            updated_time: req.body.update_time
-        }
+            var id = _.max(docs, function(doc) { return doc.id; }).id + 1;
+
+            if(_.isNaN(id)){
+                id = 1;
+            }
+
+            var post = {
+                id: id,
+                from : req.body.from,
+                to : req.body.to,
+                message : req.body.message,
+                type : req.body.type,
+                picture : req.body.picture,
+                created_time: req.body.create_time, 
+                updated_time: req.body.update_time
+            }
+
+            postsmongo.save(post);
+
+            var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + id);
+
+            myRootRef.push(post);
+
+            res.json({success:'true'});        
+
+        });
 
         
-
-        postsmongo.save(post);
-
-        var myRootRef = Firebase.getRef('posts/' + req.body.username);
-
-        myRootRef.push(post);
-
-        res.json({success:'true'});
 
 
     },
     getByUsername: function(req, res) {
 
-        var postsmongo = db.collection('posts');
-
-        
-
-        postsmongo.find({from : {username:req.body.username} }).sort({_id:-1} ,function(err, docs) {
+        postsmongo.find({to : req.body.username}).sort({_id:-1} ,function(err, docs) {
             if (err) {
                 res.render('error', {
                     status: 500

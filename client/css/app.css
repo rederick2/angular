@@ -2,6 +2,27 @@
     display: none;
 }
 
+a.btn-profile{
+  margin: 0;
+  padding: 15px;
+}
+
+.btn-profile:hover{
+  text-decoration: none;
+  background-color: #dddddd;
+}
+
+h3{
+
+  font-weight: bold;
+  color: #9b9c9c;
+  text-shadow: 1px 1px 0 #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  vertical-align: baseline;
+}
+
 .dropuser {
   padding-top: 10px;
   padding-bottom: 10px;

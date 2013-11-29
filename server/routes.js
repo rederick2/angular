@@ -109,27 +109,34 @@ var routes = [
         path: '/users',
         httpMethod: 'GET',
         middleware: [UserCtrl.index],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.user
     },
 
     {
         path: '/users/get',
         httpMethod: 'POST',
         middleware: [UserCtrl.getUsers],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.user
     },
 
     {
         path: '/users/getbyusername',
         httpMethod: 'POST',
         middleware: [UserCtrl.getByUsername],
-        accessLevel: accessLevels.admin
+        accessLevel: accessLevels.user
     },
 
     {
         path: '/posts/add',
         httpMethod: 'POST',
         middleware: [PostCtrl.add],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/posts/remove',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.remove],
         accessLevel: accessLevels.user
     },
 
