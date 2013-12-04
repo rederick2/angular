@@ -26,13 +26,21 @@ module.exports = {
 
     remove: function(req,res){
 
-        postsmongo.remove({id:req.body.id});
+        try{
 
-        var myRootRef = Firebase.getRef('posts/' + req.body.username + '/' + req.body.id);
+            postsmongo.remove({id:req.body.id});
 
-        myRootRef.remove();
+            var myRootRef = Firebase.getRef('posts/' + req.body.username + '/' + req.body.id);
 
-        res.json({success:'true'}); 
+            myRootRef.remove();
+
+            res.json({success:'true'}); 
+
+        }catch(e){
+            console.log(e);
+        }
+
+        
 
     },
 
@@ -54,6 +62,7 @@ module.exports = {
                 picture : req.body.picture,
                 source : req.body.source,
                 url : req.body.url,
+                fuente : req.body.fuente,
                 description : req.body.description,
                 message : req.body.message,
                 type : req.body.type,
@@ -62,13 +71,21 @@ module.exports = {
                 updated_time: req.body.updated_time
             }
 
-            postsmongo.save(post);
+            try{
 
-            var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + id);
+                postsmongo.save(post);
 
-            myRootRef.set(post);
+                var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + id);
 
-            res.json({success:'true'});        
+                myRootRef.set(post);
+
+                res.json({success:'true'});  
+
+            }catch(e){
+                 console.log(e);
+            }
+
+                 
 
         });
 

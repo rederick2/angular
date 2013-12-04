@@ -160,9 +160,9 @@ angular.module('angular-client-side-auth').directive('activeNav', ['$location', 
             scope.location = $location;
             scope.$watch('location.absUrl()', function(newPath) {
                 if (path === newPath) {
-                    //element.addClass('active');
+                    element.addClass('active');
                 } else {
-                    //element.removeClass('active');
+                    element.removeClass('active');
                 }
             });
         }
@@ -254,9 +254,11 @@ angular.module('angular-client-side-auth').directive('liveUrl', function () {
                 $('textarea').liveUrl({
                     loadStart : function(){
                         $('.liveurl-loader').show();
+                        scope.loading = true;
                     },
                     loadEnd : function(){
                         $('.liveurl-loader').hide();
+                        scope.loading = false;
                     },
                     success : function(data) 
                     {
@@ -266,6 +268,7 @@ angular.module('angular-client-side-auth').directive('liveUrl', function () {
                         scope.title = data.title;
                         output.find('.description').text(data.description);
                         scope.description = data.description;
+                        scope.message = data.description;
                         output.find('.url').text(data.url);
                         scope.url = data.url;
                         output.find('.link').attr('href' , data.url);

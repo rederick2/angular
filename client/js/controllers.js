@@ -203,6 +203,7 @@ angular.module('angular-client-side-auth')
         var description = '';
         var source = '';
         var url = '';
+        var fuente = '';
 
         $scope.loading = true;
 
@@ -213,6 +214,7 @@ angular.module('angular-client-side-auth')
             title = $scope.title;
             picture = $scope.picture;
             url = $scope.url;
+            fuente = getHost(url);
             source = $scope.source;
         }else if($scope.typepost == 'photo'){
             picture = $scope.picture;
@@ -225,6 +227,7 @@ angular.module('angular-client-side-auth')
             picture : picture,
             source : source,
             url : url,
+            fuente:fuente,
             description : description,
             message : $scope.message,
             type : $scope.typepost,
@@ -232,7 +235,7 @@ angular.module('angular-client-side-auth')
             updated_time: new Date()
 
         },
-        function(){
+        function(res){
             $scope.message = '';
             $scope.getPost();
             $('.close').click();
@@ -245,6 +248,13 @@ angular.module('angular-client-side-auth')
             $rootScope.error = err;
         });
 
+    }
+
+    function getHost(url)
+    {
+        var a = document.createElement('a');
+        a.href = url;
+        return a.hostname;
     }
 
     $scope.remove = function(id){
