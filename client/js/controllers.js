@@ -94,11 +94,24 @@ angular.module('angular-client-side-auth')
 
     $scope.video = [];
 
+    $scope.comments = [];
+
     $scope.id = '';
+    $scope.idpost = 45;
     $scope.typepost = 'text';
     $scope.source = '';
     $scope.photo = false;
     $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
+
+    $scope.refresh = function(){
+
+        setTimeout(function(){
+            $('.masonry').masonry();
+        }, 10);
+        
+
+       // console.log('hhh');
+    }
 
 
     $scope.trustSrc = function(src) {
@@ -145,6 +158,7 @@ angular.module('angular-client-side-auth')
                                 $scope.uploadimage = response.data.image_th;
                                 $scope.picture = response.data.image_big;
 
+
                         }, null, function(evt) {
                                 $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
                         });
@@ -168,22 +182,33 @@ angular.module('angular-client-side-auth')
 
     }
     
-    Users.getByUsername({username:$routeParams.id} , 
-        function(res){
+        Users.getByUsername({username:$routeParams.id} , 
+            function(res){
 
-            console.log(res[0]);
+                //console.log(res[0]);
 
-            $scope.user = res[0];
+                $scope.user = res[0];
 
-        }, function(err){
-            $rootScope.error = err;
-        });
+            }, function(err){
+                $rootScope.error = err;
+            });
 
     $scope.getPost = function(){
         Posts.getByUsername({
             username : $scope.username
         },
         function(res){
+
+            for (var p in res){
+
+                var data = angularFireCollection('https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments');
+                $scope.comments.push(data);
+
+
+            }
+
+
+            //console.log($scope.comments);
 
             $scope.posts = res;
 
@@ -193,6 +218,74 @@ angular.module('angular-client-side-auth')
         });
     }
     //$scope.posts = angularFireCollection('https://rederick2.firebaseio.com/posts/' + $scope.username);
+    $scope.addCommentPost = function(id, comment, to){
+
+        //$scope.loading = true;
+
+        Posts.addComment({
+            idpost: id,
+            from : Auth.user.username,
+            to : to,
+            comment : comment,
+            created_time: new Date(), 
+            updated_time: new Date()
+
+        },
+        function(res){
+            $scope.comment = '';
+            //$scope.getPost();
+            //$('.close').click();
+            $scope.loading = false;
+
+            setTimeout(function() {
+
+                $('#'+id).animate({scrollTop : ($('#'+id).children().size() + 1) * 300 });
+
+                $('.masonry').masonry();
+
+            }, 500);
+
+            console.log($('#'+id).height());
+        },
+        
+        function(err) {
+            $rootScope.error = err;
+        });
+
+       // console.log(comment);
+
+    }
+
+    $scope.removeCommentPost = function(to, from, idpost, id){
+
+        //$scope.loading = true;
+
+        if(to == $scope.authUser || from == $scope.authUser){
+
+            Posts.removeComment({
+                idpost: idpost,
+                id:id,
+                from : $routeParams.id
+            },
+            function(res){
+
+                setTimeout(function() {
+
+                    $('.masonry').masonry();
+
+                }, 500);
+
+            },
+            
+            function(err) {
+                $rootScope.error = err;
+            });
+        }
+
+       // console.log(comment);
+
+    }
+
 
     $scope.addPost = function(){
 

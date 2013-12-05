@@ -40,11 +40,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                         i.fa.fa-edit
                     div.divider-vertical(data-access-level='accessLevels.user')
                 .collapse.navbar-collapse#bs-example-navbar-collapse-1
-                    form.navbar-form.navbar-left(role='search', data-access-level='accessLevels.user')
-                        .form-group
+                    .col-sm-3(style="padding:8px",role='search', data-access-level='accessLevels.user')
+                        .input-group
                             input.form-control(type='text', placeholder='Search')
-                        button.btn.btn-default(type='submit') 
-                            i.fa.fa-search
+                            span.input-group-btn
+                                button.btn.btn-default(type='submit') 
+                                    i.fa.fa-search
                     ul.nav.navbar-nav
                         li(data-access-level='accessLevels.anon', active-nav)
                             a(href='/login') Log in
@@ -58,10 +59,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             a(href='/admin') Admin
 
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
-                        a.btn-profile.navbar-text(href="./{{user.username}}")
+                        a.btn-profile.navbar-text(style="padding: 10px 10px;",href="./{{user.username}}")
                             img(src="http://placehold.it/30x30")
                             strong &nbsp;{{ user.username }}&nbsp;
-                            span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
+                            //span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
                         li.dropdown(data-toggle="dropdown")
 
                             a.dropdown-toggle(data-toggle="dropdown" , href="#")

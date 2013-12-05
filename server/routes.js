@@ -149,6 +149,20 @@ var routes = [
     },
 
     {
+        path: '/posts/add/comment',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.addComment],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/posts/remove/comment',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.removeComment],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/file',
         httpMethod: 'POST',
         middleware: [FileCtrl.index],

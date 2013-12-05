@@ -49,7 +49,7 @@ div.row
 							i.fa.fa-code
 		hr
 		h4 Recent Activity
-		div(masonry)
+		div.masonry(masonry)
 			div.col-md-6.masonry-brick(ng-repeat="post in posts")
 				div.panel.panel-default
 					ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
@@ -61,10 +61,17 @@ div.row
 									a(href="#" , ng-click="remove(post.id);", ng-show="post.to == authUser") Remove post
 									a(href="#") Report spam or abuse
 					div.panel-body
+						.clearfix
+							a(href="./{{post.from}}") 
+								img(src="http://placehold.it/50x50", align='left', valign='middle', style='margin:5px')
+							a(href="./{{post.from}}") 
+								strong{{post.from}}
+							h6
+								span(am-time-ago="post.created_time", title="{{post.created_time | amCalendar}}")
 						h3(ng-show="post.message !== ''")
 							i.fa.fa-quote-left.fa-2x.pull-left
 							div(ng-bind-html="post.message")	
-						div
+						div.clearfix
 							hr(ng-show="post.type == 'url' || post.type == 'photo' || post.type == 'video'")
 							img(src="{{post.picture}}",ng-show=" post.type == 'photo'", style="width:100%;")
 							iframe(class="youtube-player", type="text/html", style="width:100%",ng-src="{{trustSrc(post.source)}}", frameborder="0", allowfullscreen, ng-show="post.type == 'video'")
@@ -73,18 +80,33 @@ div.row
 								h3 {{post.title}}
 							a(href="{{post.url}}" , target="_blank")
 								span(style='color:#666666')	{{post.fuente}}
-						hr
-						a(href="./{{post.from}}") 
-							img(src="http://placehold.it/50x50", align='left', valign='middle', style='margin:5px')
-						a(href="./{{post.from}}") 
-							strong{{post.from}}
-						h6
-							span(am-time-ago="post.created_time", title="{{post.created_time | amCalendar}}")
+						br
+						.clearfix
+							.btn-group
+								a.btn.btn-default(href="./", title="Check") 10 
+									i.fa.fa-check
+								a.btn.btn-default(ng-show="comments[$index].length", href="#", title="Comments" , ng-click="viewComment=true; hideComents=true; refresh();") {{comments[$index].length}} 
+									i.fa.fa-comments
+								a.btn.btn-default(href="./", title="Share")
+									i.fa.fa-share
+							h6
+								a(href="#", ng-show="hideComents && comments[$index].length" , ng-click="hideComents=false; viewComment=false; refresh();") Ocultar Comentarios
 					div.panel-footer
-						.btn-group
-							a.btn.btn-info(href="./", title="Check")
-								i.fa.fa-check
-							a.btn.btn-info(href="./", title="Comments")
-								i.fa.fa-comments
-							a.btn.btn-info(href="./", title="Share")
-								i.fa.fa-share
+						div.comments(id="{{post.id}}", ng-show="viewComment" ng-init="viewComment=false")
+							div.clearfix.comment(ng-repeat="comment in comments[$index]", ng-mouseover="viewDeleteComment = true", ng-mouseleave="viewDeleteComment = false")
+								a.text-right(href="#", style="position:absolute; right:30px", ng-show="viewDeleteComment && (post.to == authUser || comment.from == authUser)", ng-click="removeCommentPost(post.to, comment.from, post.id, comment.id);")
+									i.fa.fa-times
+								.imgProfile
+									a(href="./{{comment.from}}") 
+										img(src="http://placehold.it/30x30", align='left', valign='middle', style='margin:5px')
+								.content
+									a(href="./{{comment.from}}") 
+										{{comment.from}}
+									p {{comment.comment}}
+										h6
+											span(am-time-ago="comment.created_time", title="{{comment.created_time | amCalendar}}")
+						
+						form(ng-submit="", name="commentForm")
+							textarea.form-control(rows="2", placeholder="Agrega tu comentario ...", data-ng-model="comment", ng-focus="viewButtonComment = true", required)
+							.btn-group(style="margin-top:5px")
+								button.btn.btn-info(ng-show="viewButtonComment", data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addCommentPost(post.id, comment, post.to); comment = ''; viewComment=true; hideComents=true;") Comentar

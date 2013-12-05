@@ -44,6 +44,72 @@ module.exports = {
 
     },
 
+    removeComment: function(req, res) {
+
+        try{
+
+            postsmongo.update({id:req.body.idpost}, {$pull: {'comments': {'id': req.body.id}}});
+
+            var myRootRef = Firebase.getRef('posts/' + req.body.from + '/' + req.body.idpost + '/comments/' + req.body.id);
+
+            myRootRef.remove();
+
+            res.json({success:'true'}); 
+
+        }catch(e){
+            console.log(e);
+        }
+
+        
+
+
+    },
+
+    addComment: function(req, res) {
+
+        postsmongo.find({id:req.body.idpost},function(err, docs){
+
+            
+            var id = _.max(docs[0].comments, function(doc) { return doc.id; }).id + 1;
+           
+
+            //console.log(docs);
+
+            if(_.isNaN(id)){
+                id = 1;
+            }
+
+            var comment = {
+                id: id,
+                from : req.body.from,
+                comment:req.body.comment,
+                created_time: req.body.created_time, 
+                updated_time: req.body.updated_time
+            }
+
+            try{
+
+                postsmongo.update({id:req.body.idpost},{$push:{'comments':comment}});
+
+                var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + req.body.idpost + '/comments/' + id);
+
+                myRootRef.set(comment);
+
+                res.json({success:'true'});  
+
+            }catch(e){
+                 console.log(e);
+            }
+
+                 
+
+        });
+
+        
+
+
+    },
+
     add: function(req, res) {
 
         postsmongo.find(function(err, docs){

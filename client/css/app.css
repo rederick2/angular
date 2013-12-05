@@ -24,6 +24,23 @@ a.btn-profile{
   
 }
 
+.comments{
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 10px 0px;
+}
+
+.comments .imgProfile, .comments .content{
+  height: auto;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.comment{
+  border-bottom: 1px solid #e4e4e4;
+  margin-top: 5px;
+}
+
 .response {
   padding-top: 30px;
 }
@@ -111,7 +128,7 @@ h3{
   float: left;
   display: inline-block;
   width: 1px;
-  height: 45px;
+  height: 38px;
   margin: 5px 10px;
   background-color: #948B8B;
   border-right: 1px solid rgba(255, 255, 255, 0.82);

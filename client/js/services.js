@@ -100,6 +100,15 @@ angular.module('angular-client-side-auth')
             $http.post('/posts/remove', data).success(success).error(error);
         },
 
+        addComment: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/add/comment', data).success(success).error(error);
+        },
+
+        removeComment: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/remove/comment', data).success(success).error(error);
+        },
 
         getByUsername: function(data, success, error) {
             //console.log(sort);
