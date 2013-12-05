@@ -13,17 +13,43 @@ cloudinary.config({
 module.exports = {
     index: function(req, res) {
 
-        console.log(req.files.file.path);
+        var width = 800;
+        var img_big = '';
+        var img = '';
         
         cloudinary.uploader.upload(req.files.file.path, function(result) { 
-          var img = cloudinary.image(result.public_id , { format: result.format, width: 90, height: 98, crop: 'fill'});
 
-          var img_big = cloudinary.url(result.public_id , { format: result.format, width: 800, crop: 'scale'});
+          if(req.body.width){
 
-          res.json({image_th:img, image_big:img_big});
+              width = req.body.width;
+
+              img_big = cloudinary.url(result.public_id , { format: result.format, height: width, crop: 'scale'});
+
+              img  = cloudinary.url(result.public_id , { format: result.format, width: 160, height: 160, x: 0, y: 0, crop: 'crop'});
+          
+          }else{
+
+              img_big = cloudinary.url(result.public_id , { format: result.format, width: 800, crop: 'scale'});
+
+              img = cloudinary.image(result.public_id , { format: result.format, width: 100, height: 100, crop: 'fill'});
+
+          }
+
+          res.json({public_id:result.public_id , image_th:img, image_big:img_big});
+
         });
 
         
     },
+
+    destroy: function(req, res){
+      cloudinary.uploader.destroy(req.body.public_id, function(result) { 
+          res.json(result);
+        }, 
+        { 
+          invalidate: true 
+        }
+      );
+    }
 
 };

@@ -8,6 +8,8 @@ angular.module('angular-client-side-auth')
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
 
+    console.log(Auth.user);
+
     $scope.logout = function() {
         Auth.logout(function() {
             $location.path('/login');
@@ -102,6 +104,23 @@ angular.module('angular-client-side-auth')
     $scope.source = '';
     $scope.photo = false;
     $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
+    $scope.imgProfile = 'http://placehold.it/160x160';
+
+    $('.btn-select-imgProfile').on('click', function(){
+        //alert('0');
+        $('.profilephoto').trigger('click');
+
+        return false;
+
+    });
+
+    $('.btn-select-files').on('click', function(){
+        //alert('0');
+        $('.uploadphoto').trigger('click');
+
+        return false;
+
+    });
 
     $scope.refresh = function(){
 
@@ -118,7 +137,7 @@ angular.module('angular-client-side-auth')
         return $sce.trustAsResourceUrl(src);
     }
 
-    $scope.onFileSelect = function($files) {
+    $scope.onFileSelect = function($files, type) {
         $scope.selectedFiles = [];
         $scope.progress = [];
         if ($scope.upload && $scope.upload.length > 0) {
@@ -140,7 +159,8 @@ angular.module('angular-client-side-auth')
                                 url : '/file',
                                 headers: {'myHeaderKey': 'myHeaderVal'},
                                 data : {
-                                        myModel : $scope.myModel
+                                        myModel : $scope.myModel,
+                                        widht : 200
                                 },
                                 /* formDataAppender: function(fd, key, val) {
                                         if (angular.isArray(val)) {
@@ -155,8 +175,14 @@ angular.module('angular-client-side-auth')
                                 fileFormDataName: 'file'
                         }).then(function(response) {
                                 $scope.uploadResult.push(response.data.result);
-                                $scope.uploadimage = response.data.image_th;
-                                $scope.picture = response.data.image_big;
+                                if(type=='post'){
+                                    $scope.uploadimage = response.data.image_th;
+                                    $scope.picture = response.data.image_big;
+                                }else if(type=='profile'){
+                                    $scope.uploadimgProfile = response.data.image_th;
+                                    //$scope.picture = response.data.image_big;
+                                }
+                                
 
 
                         }, null, function(evt) {
@@ -172,12 +198,6 @@ angular.module('angular-client-side-auth')
         //console.log($scope.file);
         $scope.typepost = 'photo';
 
-        $('.btn-select-files').on('click', function(){
-            //alert('0');
-            $('.uploadphoto').trigger('click');
-
-        });
-
         $rootScope.photo = true;
 
     }
@@ -186,6 +206,9 @@ angular.module('angular-client-side-auth')
             function(res){
 
                 //console.log(res[0]);
+                if(res[0].picture){
+                    $scope.imgProfile = res[0].picture;
+                }
 
                 $scope.user = res[0];
 
@@ -395,6 +418,94 @@ angular.module('angular-client-side-auth')
 
 
 angular.module('angular-client-side-auth')
+.controller('PictureCtrl',
+['$rootScope', '$scope', '$upload', 'Files' , '$sce', function($rootScope, $scope, $upload, Files, $sce) {
+
+    $('.btn-select-files').on('click', function(){
+        //alert('0');
+        $('.uploadphoto').trigger('click');
+
+        return false;
+
+    });
+
+    $scope.trustSrc = function(src) {
+        return $sce.trustAsResourceUrl(src);
+    }
+
+    $scope.imagePreview = false;
+    $scope.uploadimage = '';
+
+    $scope.selected = function(x) {
+        console.log("selected",x);
+    };
+
+    $scope.onFileSelect = function($files) {
+        $scope.loading = true;
+        $scope.selectedFiles = [];
+        $scope.progress = [];
+        if ($scope.upload && $scope.upload.length > 0) {
+                for (var i = 0; i < $scope.upload.length; i++) {
+                        if ($scope.upload[i] != null) {
+                                $scope.upload[i].abort();
+                        }
+                }
+        }
+        $scope.upload = [];
+        $scope.uploadResult = [];
+        $scope.selectedFiles = $files;
+        for ( var i = 0; i < $files.length; i++) {
+                var $file = $files[i];
+                $scope.progress[i] = 0;
+                //$scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
+                (function(index) {
+                        $scope.upload[index] = $upload.upload({
+                                url : '/file',
+                                headers: {'myHeaderKey': 'myHeaderVal'},
+                                data : {
+                                        myModel : $scope.myModel,
+                                        width : 450
+                                },
+                                /* formDataAppender: function(fd, key, val) {
+                                        if (angular.isArray(val)) {
+                        angular.forEach(val, function(v) {
+                          fd.append(key, v);
+                        });
+                      } else {
+                        fd.append(key, val);
+                      }
+                                }, */
+                                file : $file,
+                                fileFormDataName: 'file'
+                        }).then(function(response) {
+                                $scope.uploadResult.push(response.data.result);
+
+                                $scope.uploadimage = response.data.image_big;
+                                $scope.picture = response.data.image_th;
+                                $scope.imagePreview = true;
+                                $scope.loading = false;
+
+                                /*$('.imagecrop').Jcrop({
+                                    onSelect:    $scope.selected,
+                                    trackDocument: true,  
+                                    aspectRatio: 1,
+                                    minSize: [160,160],
+                                    setSelect:   [ 100, 100, 260, 260 ],
+                                });*/
+
+                        }, null, function(evt) {
+                                $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
+                        });
+                })(i);
+        }
+    }
+
+
+
+}]);
+
+
+angular.module('angular-client-side-auth')
 .controller('AdminCtrl',
 ['$rootScope', '$scope', 'Auth', 'Users', '_' , 
 function($rootScope, $scope, Auth, Users, _ ) {
@@ -498,4 +609,6 @@ angular.module('angular-client-side-auth')
     $scope.users = angularFireCollection('https://rederick2.firebaseio.com/users/');
 
 }]);
+
+
 

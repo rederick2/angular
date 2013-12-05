@@ -89,9 +89,31 @@ a.btn-profile{
   margin-left: 30px;
 }
 
+.jcrop-holder{
+  margin: 0 auto;
+}
+
 .uploadphoto{
   opacity: 0
 }
+
+.profilephoto{
+  opacity: 0
+}
+
+.btn-select-imgProfile{
+  position: absolute;
+  top: 10px;
+  left: 28px;
+}
+
+.profile .btn-group{
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  opacity:.75;
+}
+
 .drop-box.dragover {
   border: 5px dashed blue;
 }

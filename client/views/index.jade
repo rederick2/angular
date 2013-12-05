@@ -14,6 +14,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
         link(href="/js/vendor/liveurl.css", rel="stylesheet")
+        link(href="/css/jquery.Jcrop.css", rel="stylesheet")
 
 
         // This is needed because Facebook login redirects add #_=_ at the end of the URL
@@ -59,15 +60,15 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             a(href='/admin') Admin
 
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
-                        a.btn-profile.navbar-text(style="padding: 10px 10px;",href="./{{user.username}}")
-                            img(src="http://placehold.it/30x30")
+                        a.btn-profile.navbar-text(style="padding: 10px 10px;",href="/{{user.username}}")
+                            img(ng-src="{{user.picture}}", height="30")
                             strong &nbsp;{{ user.username }}&nbsp;
                             //span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
                         li.dropdown(data-toggle="dropdown")
 
                             a.dropdown-toggle(data-toggle="dropdown" , href="#")
                                 i.fa.fa-cog
-                                b.caret
+                                //b.caret
                             ul.dropdown-menu
                                 li(data-access-level='accessLevels.user')
                                     a(href="", data-ng-click="logout()")
@@ -99,6 +100,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/masonry.js")
         script(src="/js/vendor/imagesloaded.js")
         script(src="/js/vendor/angular-masonry.js")
+        script(src="/js/vendor/jquery.Jcrop.js")
 
 
         script(src='/js/routingConfig.js')
@@ -117,7 +119,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         script(type="text/javascript")
             $('ul.nav.navbar-nav li').on('click' , function(){
-                console.log('hola');
+                //console.log('hola');
                 if($(".navbar-toggle").is(":visible") == true && !$(this).attr('data-toggle')){
                     $('.navbar-toggle').click();
                 }
@@ -127,7 +129,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             $('textarea').liveUrl({
               success : function(data) 
               {  
-                console.log(data);
+                //console.log(data);
                 // this return the first found url data
               }
             });
@@ -154,3 +156,5 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/edit
         script(type="text/ng-template", id="user")
             include partials/user
+        script(type="text/ng-template", id="picture")
+            include partials/picture

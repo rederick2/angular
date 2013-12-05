@@ -416,5 +416,45 @@ angular.module('angular-client-side-auth')
     }
 }]);
 
+angular.module('angular-client-side-auth')
+.directive('imgCropped', function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: { src:'@', selected:'&' },
+    link: function(scope,element, attr) {
+      var myImg;
+      var clear = function() {
+        if (myImg) {
+          myImg.next().remove();
+          myImg.remove();
+          myImg = undefined;
+        }
+      };
+      scope.$watch('src', function(nv) {        
+        clear();
+        if (nv) {
+          element.after('<img />');
+          myImg = element.next();        
+          myImg.attr('src',nv);
+          $(myImg).Jcrop({
+            trackDocument: true,  
+            aspectRatio: 1,
+            minSize: [160,160],
+            setSelect:   [ 100, 100, 260, 260 ],
+            onSelect: function(x) {              
+              scope.$apply(function() {
+                scope.selected({cords: x});
+              });
+            }
+          });
+        }
+      });
+      
+      scope.$on('$destroy', clear);
+    }
+  };
+});
+
 
 

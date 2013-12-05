@@ -64,6 +64,12 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             controller:     'UserCtrl',
             access:         access.user
         });
+    $routeProvider.when('/:id/picture',
+        {
+            templateUrl:    'picture',
+            controller:     'PictureCtrl',
+            access:         access.user
+        });
     $routeProvider.otherwise({redirectTo:'/404'});
 
     $locationProvider.html5Mode(true);

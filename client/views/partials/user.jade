@@ -1,9 +1,12 @@
 div.row
-	div.col-md-3.profile
+	div.col-md-2.profile
 		div.thumbnail
-			img(src="http://placehold.it/250x150" alt="...")
+			img(ng-src="{{imgProfile}}" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false")
+			a.btn.btn-default.btn-select-imgProfile(href="#", ng-show="viewUpload && finalized",ng-mouseover="viewUpload = true", ng-click="finalized=false; aceptar=true;") Cambiar Photo
+			
+			input.profilephoto(type="file", name="file", ng-file-select="onFileSelect($files,'profile')", accept="image/*")
 			div.caption
-				h2 {{user.username}}
+				h3 {{user.username}}
 	div.col-md-9
 		div.panel.panel-default
 			form(ng-submit="addPost()", name="postForm")
@@ -13,7 +16,7 @@ div.row
 						//button.navbar-right(type="button" , ng-click="photo=false; selectedFiles=null") &times;
 						div(ng-show="dropSupported", class="drop-box", ng-file-drop="onFileSelect($files);", ng-file-drop-available="dropSupported=true") drop files here
 							a.btn.btn-default.btn-select-files(href="#") Select Files
-							input.uploadphoto(type="file", name="file", ng-file-select="onFileSelect($files)", accept="image/*")
+							input.uploadphoto(type="file", name="file", ng-file-select="onFileSelect($files,'post')", accept="image/*")
 						div.thumbnail.picture(ng-show="selectedFiles != null",ng-bind-html="uploadimage")
 					.liveurl-loader 
 						i.fa.fa-spinner.fa-spin

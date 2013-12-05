@@ -169,18 +169,30 @@ var routes = [
         accessLevel: accessLevels.user
     },
 
+    {
+        path: '/file/destroy',
+        httpMethod: 'POST',
+        middleware: [FileCtrl.destroy],
+        accessLevel: accessLevels.user
+    },
+
     // All other get requests should be handled by AngularJS's client-side routing system
     {
         path: '/*',
         httpMethod: 'GET',
         middleware: [function(req, res) {
-            var role = userRoles.public, username = '';
+            var role = userRoles.public, username = '', picture='http://placehold.it/30x30';
             if(req.user) {
                 role = req.user.role;
                 username = req.user.username;
+                if(req.user.picture){
+                    picture = req.user.picture;
+                }
+                
             }
             res.cookie('user', JSON.stringify({
                 'username': username,
+                'picture': picture,
                 'role': role
             }));
             res.render('index');

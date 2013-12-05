@@ -5,7 +5,7 @@ angular.module('angular-client-side-auth')
 
     var accessLevels = routingConfig.accessLevels
         , userRoles = routingConfig.userRoles
-        , currentUser = $cookieStore.get('user') || { username: '', role: userRoles.public };
+        , currentUser = $cookieStore.get('user') || { username: '', picture:'http://placehold.it/30x30', role: userRoles.public };
 
     $cookieStore.remove('user');
 
@@ -125,6 +125,11 @@ angular.module('angular-client-side-auth')
         upload: function(data, success, error) {
             //console.log(sort);
             $http.post('/file', data).success(success).error(error);
+        },
+
+        destroy: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/file/destroy', data).success(success).error(error);
         }
 
     };
