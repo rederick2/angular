@@ -1,6 +1,7 @@
 var _ =           require('underscore')
     , User =      require('../models/User.js')
-    , userRoles = require('../../client/js/routingConfig').userRoles;
+    , userRoles = require('../../client/js/routingConfig').userRoles
+    , Firebase = require('../models/Firebase.js');
 
 var mongojs = require('mongojs');
 
@@ -55,6 +56,25 @@ module.exports = {
             }
 
         });
+
+    },
+    update: function(req, res) {
+
+        try{
+
+            var usersmongo = db.collection('users');
+
+            usersmongo.update({username:req.body.username} , {$set: {'picture':req.body.value}});
+
+            var myRootRef = Firebase.getRef('users/' + req.body.username);
+
+            myRootRef.update({'picture':req.body.value});
+            
+            res.json({success:'true'}); 
+
+        }catch(e){
+            console.log(e);
+        }
 
     }
 };

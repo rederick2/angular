@@ -5,7 +5,7 @@ angular.module('angular-client-side-auth')
 
     var accessLevels = routingConfig.accessLevels
         , userRoles = routingConfig.userRoles
-        , currentUser = $cookieStore.get('user') || { username: '', picture:'http://placehold.it/30x30', role: userRoles.public };
+        , currentUser = $cookieStore.get('user') || { username: '', role: userRoles.public };
 
     $cookieStore.remove('user');
 
@@ -80,6 +80,10 @@ angular.module('angular-client-side-auth')
         getByUsername: function(data, success, error) {
             //console.log(sort);
             $http.post('/users/getbyusername', data).success(success).error(error);
+        },
+        update: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/users/update', data).success(success).error(error);
         }
 
     };

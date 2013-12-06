@@ -1,12 +1,19 @@
-div(style="width:100%; height:500px; text-align:center; background:#F8F8F8; line-height:500px")
-	i.fa.fa-spinner.fa-spin.fa-2x(ng-show="loading")
-	img-cropped(ng-if="imagePreview", style="margin:0 auto", src="{{trustSrc(uploadimage)}}", selected='selected(cords)')
-	div(ng-show="dropSupported && !imagePreview && !loading", style="width:98%; height:490px; border:0; line-height: 400px; font-size:15px", class="drop-box", ng-file-drop="onFileSelect($files);", ng-file-drop-available="dropSupported=true;", ng-click="aceptar=true") Arrastra aqui la Foto  -o- 
-		a.btn.btn-default.btn-select-files(href="#") Selecciona una de tu computadora
+div(style="text-align:center;margin-bottom:5px" )
+	.btn-group()
+			button.btn.btn-default(ng-disabled="!imagePreview", ng-click="setAsProfile(); imagePreview=false; aceptar=false;")
+				i.fa.fa-check
+				|	Aceptar
+			button.btn.btn-default(ng-click="imagePreview=false; aceptar=false; cancel();")
+				i.fa.fa-times
+				|	Cancelar
+div(style="width:100%; height:500px; background:#F8F8F8; position:relative")
+	div(ng-show="loading", style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;height: 30px;text-align: center;")
+		i.fa.fa-spinner.fa-spin.fa-2x
+	img-cropped(ng-if="imagePreview", style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;", src="{{trustSrc(uploadimage)}}", selected='selected(cords)')
+	div(ng-show="dropSupported && !imagePreview && !loading", style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;width:98%; border:0; font-size:15px", class="drop-box", ng-file-drop="onFileSelect($files);", ng-file-drop-available="dropSupported=true;", ng-click="aceptar=true") 
+		span
+			|	Arrastra aqui la Foto  -o- 
+			a.btn.btn-default.btn-select-files(href="#") Selecciona una de tu computadora
 		input.uploadphoto(type="file", name="file", ng-file-select="onFileSelect($files)", accept="image/*")
-	.btn-group(ng-show="aceptar")
-		a.btn.btn-default(href="#",ng-click="imagePreview=false; aceptar=false;")
-			i.fa.fa-check
-		a.btn.btn-default(href="#",ng-click="imagePreview=false; aceptar=false;")
-			i.fa.fa-times
+	
 	//div.thumbnail.picture(ng-show="selectedFiles != null",ng-bind-html="uploadimage")

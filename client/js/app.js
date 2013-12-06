@@ -99,10 +99,12 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
 }])
 
-    .run(['$rootScope', '$location', 'Auth', '$route', function ($rootScope, $location, Auth, $route) {
+    .run(['$rootScope', '$location', 'Auth', 'Users', 'Files', '$route', function ($rootScope, $location, Auth, Users, Files, $route) {
 
         // New look for Google Maps
         //google.maps.visualRefresh = true;
+
+        $rootScope.imgProfile = '';
 
         $rootScope.photo = false;
 
@@ -114,6 +116,24 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
                 if(Auth.isLoggedIn()) $location.path('/');
                 else                  $location.path('/login');
             }
+
+            if(Auth.isLoggedIn()){
+
+                Users.getByUsername({username:Auth.user.username} , 
+                function(res){
+
+                    //console.log(res[0]);
+                    if(res[0].picture){
+                        $rootScope.imgProfile = res[0].picture + '?' + (Math.random()*10);
+                    }
+
+                }, function(err){
+                    $rootScope.error = err;
+                });
+
+            }
+
+            
             
         });
 
@@ -122,9 +142,20 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
             if($rootScope.photo){
                 
-                if (window.confirm("Are you sure you wish to leave?")) { 
+                if (window.confirm("Deseas abandonar esta página?")) { 
                   
-                  $rootScope.photo = false;
+                  Files.destroy({
+                                    public_id: $rootScope.public_id
+                                },
+                                function(res){
+
+                                    $rootScope.photo = false;
+
+                                }, 
+                                function(err){
+                                    $rootScope.error = err;
+                                });
+                  
 
                 }else{
                     event.preventDefault();

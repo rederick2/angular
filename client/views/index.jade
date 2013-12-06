@@ -61,7 +61,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
                         a.btn-profile.navbar-text(style="padding: 10px 10px;",href="/{{user.username}}")
-                            img(ng-src="{{user.picture}}", height="30")
+                            img(ng-src="{{imgProfile}}", height="30")
                             strong &nbsp;{{ user.username }}&nbsp;
                             //span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
                         li.dropdown(data-toggle="dropdown")
@@ -91,7 +91,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
         //script(src='/js/vendor/underscore-min.js')
         script(src='/js/vendor/angular-moment.js')
-        script(src="/js/vendor/angular-file-upload-shim.js")
+        //script(src="/js/vendor/angular-file-upload-shim.js")
         script(src="/js/vendor/angular-file-upload.js")
         script(src='/js/vendor/moment.js')
         //script(src='/js/vendor/gmaps.js')

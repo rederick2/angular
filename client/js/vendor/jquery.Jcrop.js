@@ -330,7 +330,7 @@
         
         
         $div = $('<div />').width(boundx).height(boundy).addClass(cssClass('holder')).css({
-        position: 'relative',
+        position: 'absolute',
         backgroundColor: options.bgColor
       }).insertAfter($origimg).append($img);
 

@@ -25,7 +25,16 @@ module.exports = {
 
               img_big = cloudinary.url(result.public_id , { format: result.format, height: width, crop: 'scale'});
 
-              img  = cloudinary.url(result.public_id , { format: result.format, width: 160, height: 160, x: 0, y: 0, crop: 'crop'});
+              img  = cloudinary.url(result.public_id , { format: result.format,                                                            
+                                                          transformation:[{
+                                                              height: width, crop: 'scale'
+                                                          },{
+                                                              width: 0, height: 0, x: 0, y: 0, crop: 'crop'
+                                                          },
+                                                          {
+                                                            width:160, crop:'scale'
+                                                          }]
+                                                        });
           
           }else{
 

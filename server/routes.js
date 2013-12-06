@@ -128,6 +128,13 @@ var routes = [
     },
 
     {
+        path: '/users/update',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.update],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/posts/add',
         httpMethod: 'POST',
         middleware: [PostCtrl.add],
@@ -181,18 +188,14 @@ var routes = [
         path: '/*',
         httpMethod: 'GET',
         middleware: [function(req, res) {
-            var role = userRoles.public, username = '', picture='http://placehold.it/30x30';
+            var role = userRoles.public, username = '';
             if(req.user) {
                 role = req.user.role;
                 username = req.user.username;
-                if(req.user.picture){
-                    picture = req.user.picture;
-                }
                 
             }
             res.cookie('user', JSON.stringify({
                 'username': username,
-                'picture': picture,
                 'role': role
             }));
             res.render('index');

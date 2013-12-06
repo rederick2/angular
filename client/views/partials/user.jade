@@ -1,10 +1,9 @@
 div.row
 	div.col-md-2.profile
-		div.thumbnail
-			img(ng-src="{{imgProfile}}" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false")
-			a.btn.btn-default.btn-select-imgProfile(href="#", ng-show="viewUpload && finalized",ng-mouseover="viewUpload = true", ng-click="finalized=false; aceptar=true;") Cambiar Photo
-			
-			input.profilephoto(type="file", name="file", ng-file-select="onFileSelect($files,'profile')", accept="image/*")
+		div.thumbnail(style="position:relative")
+			img(ng-src="{{imgProfile}}" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
+			a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
+				i.fa.fa-camera
 			div.caption
 				h3 {{user.username}}
 	div.col-md-9
@@ -52,7 +51,9 @@ div.row
 							i.fa.fa-code
 		hr
 		h4 Recent Activity
-		div.masonry(masonry)
+		div(ng-show="busy", style="position:absolute; left:0; right:0; bottom:0; margin:auto;height: 30px;text-align: center;")
+			i.fa.fa-spinner.fa-spin.fa-lg
+		div.masonry(masonry, infinite-scroll='getPost()' infinite-scroll-disabled='busy' infinite-scroll-distance='0')
 			div.col-md-6.masonry-brick(ng-repeat="post in posts")
 				div.panel.panel-default
 					ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
@@ -66,7 +67,7 @@ div.row
 					div.panel-body
 						.clearfix
 							a(href="./{{post.from}}") 
-								img(src="http://placehold.it/50x50", align='left', valign='middle', style='margin:5px')
+								img(src="{{post.pictureUser}}", align='left', valign='middle', style='margin:5px', width="50")
 							a(href="./{{post.from}}") 
 								strong{{post.from}}
 							h6
@@ -101,7 +102,7 @@ div.row
 									i.fa.fa-times
 								.imgProfile
 									a(href="./{{comment.from}}") 
-										img(src="http://placehold.it/30x30", align='left', valign='middle', style='margin:5px')
+										img(src="", picture-profile, username="{{comment.from}}", align='left', valign='middle', style='margin:5px', width="30")
 								.content
 									a(href="./{{comment.from}}") 
 										{{comment.from}}

@@ -3,12 +3,10 @@
 /* Controllers */
 
 angular.module('angular-client-side-auth')
-.controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
+.controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', 'Users', function($rootScope, $scope, $location, Auth, Users) {
     $scope.user = Auth.user;
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
-
-    console.log(Auth.user);
 
     $scope.logout = function() {
         Auth.logout(function() {
@@ -104,7 +102,7 @@ angular.module('angular-client-side-auth')
     $scope.source = '';
     $scope.photo = false;
     $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
-    $scope.imgProfile = 'http://placehold.it/160x160';
+    $scope.imgProfile = '';
 
     $('.btn-select-imgProfile').on('click', function(){
         //alert('0');
@@ -132,12 +130,19 @@ angular.module('angular-client-side-auth')
        // console.log('hhh');
     }
 
+    $scope.pictureProfile = function(username){
+        return username;
+    }
+
 
     $scope.trustSrc = function(src) {
         return $sce.trustAsResourceUrl(src);
     }
 
     $scope.onFileSelect = function($files, type) {
+        if($rootScope.public_id){
+            Files.destroy({public_id:$rootScope.public_id});
+        }
         $scope.selectedFiles = [];
         $scope.progress = [];
         if ($scope.upload && $scope.upload.length > 0) {
@@ -152,43 +157,50 @@ angular.module('angular-client-side-auth')
         $scope.selectedFiles = $files;
         for ( var i = 0; i < $files.length; i++) {
                 var $file = $files[i];
-                $scope.progress[i] = 0;
-                $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
-                (function(index) {
-                        $scope.upload[index] = $upload.upload({
-                                url : '/file',
-                                headers: {'myHeaderKey': 'myHeaderVal'},
-                                data : {
-                                        myModel : $scope.myModel,
-                                        widht : 200
-                                },
-                                /* formDataAppender: function(fd, key, val) {
-                                        if (angular.isArray(val)) {
-                        angular.forEach(val, function(v) {
-                          fd.append(key, v);
-                        });
-                      } else {
-                        fd.append(key, val);
-                      }
-                                }, */
-                                file : $file,
-                                fileFormDataName: 'file'
-                        }).then(function(response) {
-                                $scope.uploadResult.push(response.data.result);
-                                if(type=='post'){
-                                    $scope.uploadimage = response.data.image_th;
-                                    $scope.picture = response.data.image_big;
-                                }else if(type=='profile'){
-                                    $scope.uploadimgProfile = response.data.image_th;
-                                    //$scope.picture = response.data.image_big;
-                                }
-                                
+                if($file.size <= 200000){
+                    $scope.progress[i] = 0;
+                    $scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
+                    (function(index) {
+                            $scope.upload[index] = $upload.upload({
+                                    url : '/file',
+                                    headers: {'myHeaderKey': 'myHeaderVal'},
+                                    data : {
+                                            myModel : $scope.myModel,
+                                            widht : 200
+                                    },
+                                    /* formDataAppender: function(fd, key, val) {
+                                            if (angular.isArray(val)) {
+                            angular.forEach(val, function(v) {
+                              fd.append(key, v);
+                            });
+                          } else {
+                            fd.append(key, val);
+                          }
+                                    }, */
+                                    file : $file,
+                                    fileFormDataName: 'file'
+                            }).then(function(response) {
+                                    $scope.uploadResult.push(response.data.result);
+                                    if(type=='post'){
+                                        $scope.uploadimage = response.data.image_th;
+                                        $scope.picture = response.data.image_big;
+                                        $rootScope.public_id = response.data.public_id;
+                                    }else if(type=='profile'){
+                                        $scope.uploadimgProfile = response.data.image_th;
+                                        //$scope.picture = response.data.image_big;
+                                    }
+                                    
 
 
-                        }, null, function(evt) {
-                                $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
-                        });
-                })(i);
+                            }, null, function(evt) {
+                                    $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
+                            });
+                    })(i);
+                }else{
+
+                    alert('Tamaño maximo del archivo debe ser de 200Kb, el tamaño de tu archivo es: '+($file.size/1000)+ 'Kb');
+                    $scope.selectedFiles = null;
+                }
         }
     }
 
@@ -216,11 +228,26 @@ angular.module('angular-client-side-auth')
                 $rootScope.error = err;
             });
 
+    $scope.page = 0;
+    $scope.busy = false;
+    $scope.posts = [];
+
     $scope.getPost = function(){
+        
+
+        if ($scope.busy) return;
+        $scope.busy = true;
+
         Posts.getByUsername({
-            username : $scope.username
+            username : $scope.username,
+            limit:20, 
+            page:$scope.page
         },
         function(res){
+
+            res.forEach(function(r){
+                $scope.posts.push(r);
+            });
 
             for (var p in res){
 
@@ -232,8 +259,13 @@ angular.module('angular-client-side-auth')
 
 
             //console.log($scope.comments);
+            
 
-            $scope.posts = res;
+            $scope.page++;
+            $scope.busy = false;
+
+            //$scope.posts = res;
+
 
         },
         function(err) {
@@ -358,6 +390,7 @@ angular.module('angular-client-side-auth')
             $scope.loading = false;
             $scope.selectedFiles = [];
             $scope.photo = false;
+            $rootScope.photo = false;
         },
         
         function(err) {
@@ -419,7 +452,7 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('PictureCtrl',
-['$rootScope', '$scope', '$upload', 'Files' , '$sce', function($rootScope, $scope, $upload, Files, $sce) {
+['$rootScope', '$scope', '$location', '$upload', 'Files' , '$sce', 'Users', 'Auth' , function($rootScope, $scope, $location, $upload, Files, $sce, Users, Auth) {
 
     $('.btn-select-files').on('click', function(){
         //alert('0');
@@ -438,6 +471,51 @@ angular.module('angular-client-side-auth')
 
     $scope.selected = function(x) {
         console.log("selected",x);
+        $scope.coordenadas = x;
+    };
+
+    $scope.cancel = function(){
+
+        Files.destroy({
+            public_id: $scope.public_id
+        },
+        function(res) {
+            console.log(res);
+            $location.path('/'+Auth.user.username);
+
+        },
+        function(err) {
+            $rootScope.error = err;
+        });
+         
+    }
+
+    $scope.setAsProfile = function() {
+        var url = $scope.picture;
+        var x = $scope.coordenadas;
+        var newurl = '';
+
+        newurl = url.replace('h_0' , 'h_' + x.h)
+                    .replace('w_0' , 'w_' + x.w)
+                    .replace('x_0' , 'x_' + x.x)
+                    .replace('y_0' , 'y_' + x.y);
+
+        console.log(newurl);
+
+        Users.update({
+            username: Auth.user.username,
+            name: 'picture',
+            value: newurl
+        },
+        function(res) {
+            console.log(res);
+            //$location.path('/'+Auth.user.username);
+            window.location.href = '/'+Auth.user.username;
+
+        },
+        function(err) {
+            $rootScope.error = err;
+        });
     };
 
     $scope.onFileSelect = function($files) {
@@ -458,45 +536,38 @@ angular.module('angular-client-side-auth')
                 var $file = $files[i];
                 $scope.progress[i] = 0;
                 //$scope.uploadimage = '<i class="fa fa-spinner fa-spin"></i>';
-                (function(index) {
-                        $scope.upload[index] = $upload.upload({
-                                url : '/file',
-                                headers: {'myHeaderKey': 'myHeaderVal'},
-                                data : {
-                                        myModel : $scope.myModel,
-                                        width : 450
-                                },
-                                /* formDataAppender: function(fd, key, val) {
-                                        if (angular.isArray(val)) {
-                        angular.forEach(val, function(v) {
-                          fd.append(key, v);
-                        });
-                      } else {
-                        fd.append(key, val);
-                      }
-                                }, */
-                                file : $file,
-                                fileFormDataName: 'file'
-                        }).then(function(response) {
-                                $scope.uploadResult.push(response.data.result);
+               // console.log($file);
+                if($file.size <= 100000){
+                    (function(index) {
+                            $scope.upload[index] = $upload.upload({
+                                    url : '/file',
+                                    headers: {'myHeaderKey': 'myHeaderVal'},
+                                    data : {
+                                            myModel : $scope.myModel,
+                                            width : 450
+                                    },
+                                    file : $file,
+                                    fileFormDataName: 'file'
+                            }).then(function(response) {
+                                    $scope.uploadResult.push(response.data.result);
 
-                                $scope.uploadimage = response.data.image_big;
-                                $scope.picture = response.data.image_th;
-                                $scope.imagePreview = true;
-                                $scope.loading = false;
+                                    $scope.uploadimage = response.data.image_big;
+                                    $scope.picture = response.data.image_th;
+                                    $scope.public_id = response.data.public_id;
+                                    $scope.imagePreview = true;
+                                    $scope.loading = false;
 
-                                /*$('.imagecrop').Jcrop({
-                                    onSelect:    $scope.selected,
-                                    trackDocument: true,  
-                                    aspectRatio: 1,
-                                    minSize: [160,160],
-                                    setSelect:   [ 100, 100, 260, 260 ],
-                                });*/
+                            }, null, function(evt) {
+                                    $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
+                                    console.log(parseInt(100.0 * evt.loaded / evt.total));
+                            });
+                    })(i);
+                }else{
 
-                        }, null, function(evt) {
-                                $scope.progress[index] = parseInt(100.0 * evt.loaded / evt.total);
-                        });
-                })(i);
+                    $rootScope.error = 'Tamaño maximo del archivo debe ser de 100Kb, el tamaño de tu archivo es: '+($file.size/1000)+ 'Kb';
+                    $scope.imagePreview = false;
+                    $scope.loading = false;
+                }
         }
     }
 

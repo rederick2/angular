@@ -437,6 +437,7 @@ angular.module('angular-client-side-auth')
           element.after('<img />');
           myImg = element.next();        
           myImg.attr('src',nv);
+          myImg.attr('style', 'position:absolute; top:0; left:0; right:0; bottom:0; margin:auto;');
           $(myImg).Jcrop({
             trackDocument: true,  
             aspectRatio: 1,
@@ -455,6 +456,30 @@ angular.module('angular-client-side-auth')
     }
   };
 });
+
+angular.module('angular-client-side-auth')
+.directive('pictureProfile', ['Users', function(Users) {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+
+             Users.getByUsername({username:attrs.username} , 
+                function(res){
+
+                    //console.log(res[0]);
+                    if(res[0].picture){
+                        element.attr('src' , res[0].picture + '?' + (Math.random()*10));
+                    }else{
+                        element.attr('src' , '');
+                    }
+
+                }, function(err){
+                    $rootScope.error = err;
+                });
+            //element.attr('src' , attrs.username);
+        }
+    };
+}]);
 
 
 
