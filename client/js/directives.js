@@ -470,7 +470,7 @@ angular.module('angular-client-side-auth')
                     if(res[0].picture){
                         element.attr('src' , res[0].picture + '?' + (Math.random()*10));
                     }else{
-                        element.attr('src' , '');
+                        element.attr('src' , 'http://placehold.it/50x50');
                     }
 
                 }, function(err){
@@ -480,6 +480,5 @@ angular.module('angular-client-side-auth')
         }
     };
 }]);
-
 
 

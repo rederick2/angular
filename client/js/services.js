@@ -73,6 +73,9 @@ angular.module('angular-client-side-auth')
         getAll: function(success, error) {
             $http.get('/users').success(success).error(error);
         },
+        query: function(data, success, error) {
+            $http.post('/users/query', data).success(success).error(error);
+        },
         getUsers: function(data, success, error) {
             //console.log(sort);
             $http.post('/users/get', data).success(success).error(error);
@@ -84,6 +87,10 @@ angular.module('angular-client-side-auth')
         update: function(data, success, error) {
             //console.log(sort);
             $http.post('/users/update', data).success(success).error(error);
+        },
+        addMessage: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/users/messages/add', data).success(success).error(error);
         }
 
     };

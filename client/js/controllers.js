@@ -83,6 +83,150 @@ angular.module('angular-client-side-auth')
 
 }]);
 
+
+angular.module('angular-client-side-auth')
+.controller('MessagesCtrl',
+['$rootScope', '$http', '$location', '$scope', 'Users', 'Auth', 'angularFireCollection', '_', function($rootScope, $http, $location, $scope, Users, Auth, angularFireCollection, _) {
+
+    $scope.messages = [];
+
+    $scope.typeahead = [];
+
+    $scope.s_users = [];
+
+    $scope.to = '';
+
+    $scope.inboxes = [];
+
+    $scope.username = Auth.user.username;
+
+    $scope.viewInboxes = function(){
+
+        Users.getByUsername({username: Auth.user.username}, function(res) {
+        
+            $scope.inboxes = _.sortBy(res[0].messages, function (m) {return m.update}).reverse();
+        });
+
+    }
+
+
+    $scope.selectUser = function(user){
+
+        $scope.to = user;
+
+        $scope.s_users = [];
+
+        $scope.messages = [];
+
+        $scope.isSeach=false;
+
+    }
+
+    $scope.viewMessages = function(id, to){
+
+        $scope.messages = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
+
+        $scope.to=to; 
+
+        $scope.isSeach=false;
+
+        $('a.inboxes').removeClass('activo');
+
+        $('#inbox_' + id).addClass('activo');
+
+        var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
+
+        ref.limit(1).on('child_added' , function(snap){
+
+            setTimeout(function() {
+
+                $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
+
+            }, 10);
+
+        });
+
+        //console.log($scope.messages);
+
+    }
+
+    $scope.searchUsers = function(username){
+
+        var result = [];
+        
+
+        Users.query({q:username}, function(res) {
+
+            $scope.s_users = [];
+
+            res.forEach(function(r){
+
+                var pic = 'http://placehold.it/50x50';
+
+                if (r.picture){
+                    pic = r.picture;
+                }
+
+                result = {
+                    username: r.username,
+                    picture : pic
+                }
+
+                $scope.s_users.push(result);
+            });
+
+        });
+    }
+
+
+    $scope.addMessage = function(text){
+
+        //alert(text);
+
+        var message = {
+            to: $scope.to,
+            from: Auth.user.username,
+            text: text,
+            time: new Date()
+        }
+
+        //$scope.messages.push(message);
+
+        Users.addMessage(message, 
+        function(res){
+
+            $scope.viewMessages(res.id, $scope.to);
+
+            if($scope.newMessage){
+
+                $scope.viewInboxes();
+
+                $scope.newMessage=false;
+
+            }
+
+            
+
+        }, function(err){
+            $rootScope.error = err;
+        });
+
+        setTimeout(function() {
+
+            $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
+
+        }, 500);
+
+        
+
+
+
+    }
+
+    $scope.viewInboxes();
+
+}]);
+
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
 ['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files) {
@@ -251,8 +395,37 @@ angular.module('angular-client-side-auth')
 
             for (var p in res){
 
-                var data = angularFireCollection('https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments');
+                var url = 'https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments';
+
+                var data = angularFireCollection(url);
+                
                 $scope.comments.push(data);
+
+                var ref = new Firebase(url);
+
+                ref.limit(1).on('child_added', function(snap){
+
+                    //console.log('Hola');
+
+                    setTimeout(function() {
+
+                        $('div.comments').animate({scrollTop : ($('div.comments').children().size() + 1) * 300 });
+
+                        $('.masonry').masonry();
+
+                    }, 10);
+
+                });
+
+                ref.on('child_removed', function(snap){
+
+                    setTimeout(function() {
+
+                        $('.masonry').masonry();
+
+                    }, 10);
+
+                });
 
 
             }
@@ -300,7 +473,7 @@ angular.module('angular-client-side-auth')
 
             }, 500);
 
-            console.log($('#'+id).height());
+            //console.log($('#'+id).height());
         },
         
         function(err) {

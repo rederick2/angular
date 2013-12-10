@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry']).
+angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives']).
     
     value('fbURL', 'https://rederick2.firebaseio.com/users/').
     factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -53,6 +53,18 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             controller:     'EditCtrl',
             access:         access.admin
         });
+    $routeProvider.when('/messages',
+        {
+            templateUrl:    'messages',
+            controller:     'MessagesCtrl',
+            access:         access.user
+        });
+    $routeProvider.when('/messages/:id',
+        {
+            templateUrl:    'messages',
+            controller:     'MessagesCtrl',
+            access:         access.user
+        });
     $routeProvider.when('/404',
         {
             templateUrl:    '404',
@@ -70,6 +82,7 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             controller:     'PictureCtrl',
             access:         access.user
         });
+    
     $routeProvider.otherwise({redirectTo:'/404'});
 
     $locationProvider.html5Mode(true);

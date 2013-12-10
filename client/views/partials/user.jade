@@ -98,7 +98,7 @@ div.row
 					div.panel-footer
 						div.comments(id="{{post.id}}", ng-show="viewComment" ng-init="viewComment=false")
 							div.clearfix.comment(ng-repeat="comment in comments[$index]", ng-mouseover="viewDeleteComment = true", ng-mouseleave="viewDeleteComment = false")
-								a.text-right(href="#", style="position:absolute; right:30px", ng-show="viewDeleteComment && (post.to == authUser || comment.from == authUser)", ng-click="removeCommentPost(post.to, comment.from, post.id, comment.id);")
+								a.text-right(href="#", ng-show="viewDeleteComment && (post.to == authUser || comment.from == authUser)", ng-click="removeCommentPost(post.to, comment.from, post.id, comment.id);")
 									i.fa.fa-times
 								.imgProfile
 									a(href="./{{comment.from}}") 

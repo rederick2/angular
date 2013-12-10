@@ -2,6 +2,70 @@
     display: none;
 }
 
+.typeahead,
+.tt-query,
+.tt-hint {
+  padding: 8px 12px;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  outline: none;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+.typeahead:focus {
+  border: 2px solid #0097cf;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 422px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 2px 5px rgba(0,0,0,.2);
+          box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.gist {
+  font-size: 14px;
+}
+
 a.btn-profile{
   margin: 0;
   padding: 15px;
@@ -24,6 +88,67 @@ a.btn-profile{
   
 }
 
+.s_name{
+  float: left;
+  width: 90%;
+}
+
+.s_results{
+  width:100%;
+  height: 60px;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.s_results:hover{
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.05);
+
+}
+
+.listUsers{
+  background: white;
+  width: 100%;
+}
+
+.inboxes{
+  width: 100%;
+  height: 60px;
+  display: inline-block;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.inboxlist{
+  max-height: 400px;
+  overflow: auto;
+}
+.inboxes:hover{
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.me{
+  background-color: #f4f4f4;
+}
+
+.activo{
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.inboxes:focus{
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.contentMessages{
+  height: 300px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  overflow: auto;
+}
+
 .comments{
   max-height: 300px;
   overflow-y: auto;
@@ -38,7 +163,7 @@ a.btn-profile{
 
 .comment{
   border-bottom: 1px solid #e4e4e4;
-  margin-top: 5px;
+  padding-top: 5px;
 }
 
 .response {
@@ -69,7 +194,8 @@ a.btn-profile{
 
 .picture{
   float: left;
-  margin: 10px;
+  margin-right: 10px;
+  width: 50px;
 }
 
 .drop-box {

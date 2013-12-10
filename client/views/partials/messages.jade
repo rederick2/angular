@@ -1,0 +1,49 @@
+div(style="background:white; padding:10px")
+	h1 MESSAGES
+
+	div.row
+		div.col-md-3.inboxlist
+			//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
+			.input-group
+				input.form-control(type='text', placeholder='Search', ng-model="typeaheadValue", bs-typeahead="typeahead")
+				span.input-group-btn
+					button.btn.btn-default(type='submit') 
+						i.fa.fa-search
+			a.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-click="viewMessages(inbox.id, inbox.to);")
+				.picture
+					img(src="", picture-profile, username="{{inbox.to}}", align='left', valign='middle',style='margin:5px', width="50")
+				.name
+					h3 {{inbox.to}}
+
+		div.col-md-9.messages
+			.actions
+				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''") 
+					i.fa.fa-plus
+					|	Nuevo Mensaje
+			.to(ng-show="newMessage")
+				form.form-horizontal(style="background: white; padding:5px")
+					.form-group
+						label.control-label.col-md-1() Para:
+						.col-sm-6
+							input.form-control(name="to", ng-model="to", placeholder="Nombre", ng-change="searchUsers(to); isSeach= true")
+				.listUsers(ng-show="isSeach")
+					.s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username);")
+						.picture
+							img(src="{{s_user.picture}}", style='margin:5px', width="50")
+						.s_name
+							h3 {{s_user.username}}
+
+			.contentMessages(ng-show="!isSeach")
+				.message.clearfix.comment(ng-repeat="message in messages", ng-class="{me:message.from == username}")
+					.imgProfile
+						a(href="./{{message.from}}") 
+							img(src="", picture-profile, username="{{message.from}}", align='left', valign='middle', style='margin:5px', width="50")
+					.content
+						a(href="./{{message.from}}") {{message.from}}
+						p {{message.text}}
+						h6
+							span(style="float: right;", am-time-ago="message.time", title="{{message.time | amCalendar}}")
+			form(ng-show="!isSeach", ng-submit="", name="commentForm")
+				textarea.form-control(rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", required)
+				.btn-group(style="margin-top:5px")
+					button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addMessage(comment); comment = ''; viewComment=true; hideComents=true;") Enviar

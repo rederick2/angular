@@ -114,6 +114,20 @@ var routes = [
     },
 
     {
+        path: '/users/query',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.query],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/users/messages/add',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.addMessage],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/users/get',
         httpMethod: 'POST',
         middleware: [UserCtrl.getUsers],
