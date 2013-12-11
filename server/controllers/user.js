@@ -13,15 +13,32 @@ var db = mongojs(config.URIMONGODB);
 
 module.exports = {
     index: function(req, res) {
-        var users = User.findAll();
+        /*var users = User.findAll();
         _.each(users, function(user) {
             delete user.password;
             delete user.twitter;
             delete user.facebook;
             delete user.google;
             delete user.linkedin;
+        });*/
+
+        var usersmongo = db.collection('users');
+
+        usersmongo.find(function(err,users){
+
+            _.each(users, function(user) {
+                delete user.password;
+                delete user.twitter;
+                delete user.facebook;
+                delete user.google;
+                delete user.linkedin;
+            });
+
+            res.json(users);
+
         });
-        res.json(users);
+
+        
     },
 
     query: function(req, res) {
@@ -141,24 +158,41 @@ module.exports = {
                         
                     }
 
+                    var inbox2 = {
+                        id: idInbox + 1,
+                        messages : [{
+                            to: req.body.to,
+                            from: req.body.from,
+                            text: req.body.text,
+                            time : req.body.time
+                        }]
+                        
+                    }
+
                     try{
 
                         db.collection('inboxes').save(inbox);
+
+                        db.collection('inboxes').save(inbox2);
 
                         myRootRef = Firebase.getRef('inboxes/' + idInbox + '/messages');
 
                         myRootRef.push(inbox.messages[0]);
 
+                        myRootRef2 = Firebase.getRef('inboxes/' + (idInbox + 1) + '/messages');
+
+                        myRootRef2.push(inbox2.messages[0]);
+
                         var messageTo = {
                             id: idInbox,
                             to: req.body.to,
-                            update : new Date()
+                            update : req.body.time
                         }
 
                         var messageFrom = {
-                            id: idInbox,
+                            id: idInbox + 1,
                             to: req.body.from,
-                            update : new Date()
+                            update : req.body.time
                         }
 
                         db.collection('users').update({username:req.body.from},{$push:{'messages':messageTo}});
@@ -186,15 +220,37 @@ module.exports = {
 
                         db.collection('inboxes').update({id: id} , {$push: {'messages' : message}});
 
+                        //db.collection('inboxes').update({id: id + 1} , {$push: {'messages' : message}});
+
                         db.collection('users').update({username:req.body.from , 'messages.id' : id},{$set:{'messages.$.update': req.body.time}});
 
-                        db.collection('users').update({username:req.body.to, 'messages.id' : id},{$set:{'messages.$.update':req.body.time}});
+                        //db.collection('users').update({username:req.body.to, 'messages.id' : id + 1},{$set:{'messages.$.update':req.body.time}});
 
                         myRootRef = Firebase.getRef('inboxes/' + id + '/messages');
 
                         myRootRef.push(message);
 
-                        res.json({success:'true', id: id});  
+                        //myRootRef2 = Firebase.getRef('inboxes/' + (id + 1) + '/messages');
+
+                        //myRootRef2.push(message);
+
+                        db.collection('users').find({username:req.body.to}, function(err, docs){
+
+                            arr = _.findWhere(docs[0].messages , {to:req.body.from});
+
+                            db.collection('inboxes').update({id: arr.id} , {$push: {'messages' : message}});
+
+                            db.collection('users').update({username:req.body.to, 'messages.id' : arr.id},{$set:{'messages.$.update':req.body.time}});
+
+                            myRootRef2 = Firebase.getRef('inboxes/' + arr.id + '/messages');
+
+                            myRootRef2.push(message);
+
+                            res.json({success:'true', id: id});
+
+                        });
+
+                          
 
                     }catch(e){
                          console.log(e);

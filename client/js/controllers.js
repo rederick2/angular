@@ -98,11 +98,42 @@ angular.module('angular-client-side-auth')
 
     $scope.id = 0;
 
+    $scope.idTo = 0;
+
     $scope.inboxes = [];
 
     $scope.username = Auth.user.username;
 
     $scope.writes = false;
+
+    var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+
+    ref.limit(1).on('child_added' , function(snap){
+
+       $scope.viewInboxes();
+
+    });
+
+    Users.getByUsername({username: Auth.user.username}, function(res) {
+
+        console.log(res[0].messages);
+
+        res[0].messages.forEach(function(r){
+
+           // if($scope.to != r.id)
+
+            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + r.id + '/messages');
+
+            ref.limit(1).on('child_added' , function(snap){
+
+                //console.log(snap.val());
+                $scope.viewInboxes();
+
+            });
+
+        });
+
+    });
 
     $scope.writeMessage = function(){
 
@@ -110,7 +141,7 @@ angular.module('angular-client-side-auth')
 
             console.log('write');
 
-            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.id + '/write' );
+            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo + '/write' );
 
             ref.update({estado: {valor : 'true', from : Auth.user.username}});
 
@@ -123,7 +154,7 @@ angular.module('angular-client-side-auth')
 
             console.log('unWrite');
 
-            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.id +'/write');
+            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo +'/write');
 
             ref.update({estado: {valor : 'false', from : Auth.user.username}});
 
@@ -135,6 +166,7 @@ angular.module('angular-client-side-auth')
         Users.getByUsername({username: Auth.user.username}, function(res) {
         
             $scope.inboxes = _.sortBy(res[0].messages, function (m) {return m.update}).reverse();
+
         });
 
     }
@@ -177,6 +209,13 @@ angular.module('angular-client-side-auth')
                 $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
 
             }, 10);
+
+            console.log(snap.val());
+        });
+
+        Users.getByUsername({username: to}, function(res) {
+        
+            $scope.idTo = _.findWhere(res[0].messages, {to:Auth.user.username}).id;
 
         });
 
@@ -233,11 +272,12 @@ angular.module('angular-client-side-auth')
             Users.addMessage(message, 
             function(res){
 
-                $scope.viewMessages(res.id, $scope.to);
+                //$scope.viewMessages(res.id, $scope.to);
 
                 if($scope.newMessage){
 
-                    $scope.viewInboxes();
+                    //$scope.viewInboxes();
+                    $scope.viewMessages(res.id, $scope.to);
 
                     $scope.newMessage=false;
 
@@ -254,6 +294,9 @@ angular.module('angular-client-side-auth')
                 $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
 
             }, 500);
+
+
+
         }else{
 
             alert('Debe seleccionar un nombre de usuario a enviar.');

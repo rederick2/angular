@@ -11,7 +11,8 @@ div(style="background:white; padding:10px")
 						i.fa.fa-search
 			a.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-click="viewMessages(inbox.id, inbox.to);")
 				.picture
-					img(src="", picture-profile, username="{{inbox.to}}", align='left', valign='middle',style='margin:5px', width="50")
+					//img(src="", picture-profile, username="{{inbox.to}}", align='left', valign='middle',style='margin:5px', width="50")
+					img(src="", align='left', valign='middle',style='margin:5px', width="50")
 				.name
 					h3 {{inbox.to}}
 
