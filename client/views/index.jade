@@ -23,7 +23,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                 window.location = window.location.href.replace(/#.*/, '');
             }
     body(data-ng-cloak)
-
+        #presenceDiv
         .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation")
             .container
                 .navbar-header
@@ -117,7 +117,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='https://cdn.firebase.com/v0/firebase.js')
         script(src='http://firebase.github.io/angularFire/angularFire.js')
         script(src='https://cdn.firebase.com/v0/firebase-simple-login.js')
-
+        script(src='https://www.firebase.com/js/libs/idle.js')
         
         
 

@@ -190,10 +190,10 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
                         
 
                       if(!result[0]) {
-                        console.log('not exist.');
+                        //console.log('not exist.');
                         ctrl.$setValidity('uniqueUsername', true);
                       } else {
-                        console.log('exist.');
+                        //console.log('exist.');
                         ctrl.$setValidity('uniqueUsername', false);
                       }
                     });

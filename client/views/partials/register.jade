@@ -19,7 +19,7 @@
                 li(ng-show="registerForm.email.$error.uniqueEmail") Email exists
         .control-group
             .controls
-                input.form-control(type="text", data-ng-model="username", unique-username, placeholder="Username", name="username", required, data-ng-minlength="1", data-ng-maxlength="20", autofocus)
+                input.form-control(type="text", data-ng-model="username", ng-trim='false', unique-username, placeholder="Username", name="username", required, data-ng-minlength="1", data-ng-maxlength="20", autofocus)
                 i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.required && registerForm.username.$dirty") 
                     span Username required
                 i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.minlength && registerForm.username.$dirty")
@@ -50,7 +50,7 @@
                 i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.firstname.$error.required && registerForm.firstname.$dirty")
                 i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.firstname.$valid")
         hr
-        .control-group
+        //.control-group
             label.radio.inline
                 input(type="radio", name="role", data-ng-model="role", id="adminRole", data-ng-value="userRoles.admin")
                 | Administrator

@@ -8,9 +8,80 @@ angular.module('angular-client-side-auth')
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
 
+   //////////////////////////////////////
+
+    var name = Auth.user.username;
+    var currentStatus = "online";
+
+    // Get a reference to the presence data in Firebase.
+    var userListRef = new Firebase("https://rederick2.firebaseio.com/presences/");
+
+    // Generate a reference to a new location for my user with push.
+    var myUserRef = userListRef.push();
+
+    // Get a reference to my own presence status.
+    var connectedRef = new Firebase("http://presence.firebaseio-demo.com/.info/connected");
+    connectedRef.on("value", function(isOnline) {
+    if (isOnline.val()) {
+      // If we lose our internet connection, we want ourselves removed from the list.
+      myUserRef.onDisconnect().remove();
+
+      // Set our initial online status.
+      setUserStatus("online");
+    } else {
+
+      // We need to catch anytime we are marked as offline and then set the correct status. We
+      // could be marked as offline 1) on page load or 2) when we lose our internet connection
+      // temporarily.
+      setUserStatus(currentStatus);
+    }
+    });
+
+    // A helper function to let us set our own state.
+    function setUserStatus(status) {
+        // Set our status in the list of online users.
+        currentStatus = status;
+        myUserRef.set({ name: name, status: status });
+    }
+
+    function getMessageId(snapshot) {
+        return snapshot.name().replace(/[^a-z0-9\-\_]/gi,'');
+    }
+
+    // Update our GUI to show someone"s online status.
+    userListRef.on("child_added", function(snapshot) {
+    var user = snapshot.val();
+
+        $(".status_" + user.name).children('.status').text('user.status');
+
+    });
+
+    // Update our GUI to remove the status of a user who has left.
+    userListRef.on("child_removed", function(snapshot) {
+
+        var user = snapshot.val();
+
+        $(".status_" + user.name).children('.status').text('');
+
+        console.log(user);
+
+    });
+
+
+    document.onBack = function (isIdle, isAway) {
+        setUserStatus("online");
+    }
+
+    //setIdleTimeout(5000);
+    //setAwayTimeout(10000);
+
+
+   //////////////////////////////////////
+
     $scope.logout = function() {
         Auth.logout(function() {
-            $location.path('/login');
+            //$location.path('/login');
+            window.location.href = '/login';
         }, function() {
             $rootScope.error = "Failed to logout";
         });
@@ -34,7 +105,7 @@ angular.module('angular-client-side-auth')
                 rememberme: $scope.rememberme
             },
             function(res) {
-                $location.path('/');
+                window.location.href = '/';
             },
             function(err) {
                 $rootScope.error = "Failed to login";
@@ -106,17 +177,40 @@ angular.module('angular-client-side-auth')
 
     $scope.writes = false;
 
-    var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+    $scope.checkStatus = function(){
 
-    ref.limit(1).on('child_added' , function(snap){
+        setTimeout(function(){
 
-       $scope.viewInboxes();
+            var userListRef = new Firebase('https://rederick2.firebaseio.com/presences/');
 
-    });
+            userListRef.on("child_added", function(snapshot) {
+                
+                var user = snapshot.val();
+
+                $("#status_" + user.name).html('<i class="fa fa-circle fa-1"></i>');
+
+                //console.log(user);
+
+            });
+
+            userListRef.on("child_removed", function(snapshot) {
+
+                var user = snapshot.val();
+
+                $("#status_" + user.name).html('');
+
+                //console.log(user);
+
+            });
+
+        }, 500);
+
+    }
+
 
     Users.getByUsername({username: Auth.user.username}, function(res) {
 
-        console.log(res[0].messages);
+        //console.log(res[0].messages);
 
         res[0].messages.forEach(function(r){
 
@@ -126,8 +220,11 @@ angular.module('angular-client-side-auth')
 
             ref.limit(1).on('child_added' , function(snap){
 
-                //console.log(snap.val());
-                $scope.viewInboxes();
+                console.log(snap.val());
+
+                if(snap.val().from !== $scope.to){
+                    $scope.viewInboxes();
+                }
 
             });
 
@@ -166,6 +263,18 @@ angular.module('angular-client-side-auth')
         Users.getByUsername({username: Auth.user.username}, function(res) {
         
             $scope.inboxes = _.sortBy(res[0].messages, function (m) {return m.update}).reverse();
+
+            $scope.checkStatus();
+
+            setTimeout(function(){
+
+                $('#inbox_' + $scope.id).addClass('activo');
+
+            }, 500);
+
+            
+
+            //console.log($scope.id);
 
         });
 
@@ -210,7 +319,7 @@ angular.module('angular-client-side-auth')
 
             }, 10);
 
-            console.log(snap.val());
+            //console.log(snap.val());
         });
 
         Users.getByUsername({username: to}, function(res) {
@@ -305,7 +414,15 @@ angular.module('angular-client-side-auth')
 
     }
 
-    $scope.viewInboxes();
+    var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+
+    ref.limit(1).on('child_added' , function(snap){
+
+       $scope.viewInboxes();
+
+    });
+
+    //$scope.viewInboxes();
 
 }]);
 
@@ -681,6 +798,12 @@ angular.module('angular-client-side-auth')
 ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
     $scope.role = Auth.userRoles.user;
     $scope.userRoles = Auth.userRoles;
+    $scope.username = '';
+
+
+    $scope.$watch('username', function() {
+        $scope.username = $scope.username.toLowerCase().replace(/\s+/g,'');
+    });
 
     $scope.register = function() {
         Auth.register({

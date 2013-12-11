@@ -117,6 +117,16 @@ a.btn-profile{
   display: inline-block;
   padding-bottom: 3px;
   border-bottom: 1px solid #dddddd;
+  position: relative;
+}
+
+.inboxes h6{
+  color: #333333;
+}
+
+.inboxes i{
+  color: #52D81E;
+  font-size: 10px;
 }
 
 .inboxlist{
@@ -199,7 +209,7 @@ a.btn-profile{
 }
 
 .picture img{
-  background: url(example.jpg);
+  /*background: url(example.jpg);*/
   width: 50px;
   height: 50px;
 }
