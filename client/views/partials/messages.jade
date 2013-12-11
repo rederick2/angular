@@ -43,7 +43,9 @@ div(style="background:white; padding:10px")
 						p {{message.text}}
 						h6
 							span(style="float: right;", am-time-ago="message.time", title="{{message.time | amCalendar}}")
+			.write(ng-repeat="write in writes", style="height:30px;")
+				span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
 			form(ng-show="!isSeach", ng-submit="", name="commentForm")
-				textarea.form-control(rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", required)
+				textarea.form-control(rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-focus="writeMessage();", ng-blur="unWriteMessage();", required)
 				.btn-group(style="margin-top:5px")
-					button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addMessage(comment); comment = ''; viewComment=true; hideComents=true;") Enviar
+					button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;") Enviar

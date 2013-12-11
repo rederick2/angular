@@ -96,9 +96,39 @@ angular.module('angular-client-side-auth')
 
     $scope.to = '';
 
+    $scope.id = 0;
+
     $scope.inboxes = [];
 
     $scope.username = Auth.user.username;
+
+    $scope.writes = false;
+
+    $scope.writeMessage = function(){
+
+        if($scope.to != '' && $scope.id != 0){
+
+            console.log('write');
+
+            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.id + '/write' );
+
+            ref.update({estado: {valor : 'true', from : Auth.user.username}});
+
+        }
+        
+    }
+
+    $scope.unWriteMessage = function(){
+        if($scope.to != '' && $scope.id != 0){
+
+            console.log('unWrite');
+
+            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.id +'/write');
+
+            ref.update({estado: {valor : 'false', from : Auth.user.username}});
+
+        }
+    }
 
     $scope.viewInboxes = function(){
 
@@ -126,7 +156,11 @@ angular.module('angular-client-side-auth')
 
         $scope.messages = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
 
+        $scope.writes = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id +'/write');
+        
         $scope.to=to; 
+
+        $scope.id = id;
 
         $scope.isSeach=false;
 
@@ -161,18 +195,21 @@ angular.module('angular-client-side-auth')
 
             res.forEach(function(r){
 
-                var pic = 'http://placehold.it/50x50';
+                if(r.username !== Auth.user.username){
 
-                if (r.picture){
-                    pic = r.picture;
+                    var pic = 'http://placehold.it/50x50';
+
+                    if (r.picture){
+                        pic = r.picture;
+                    }
+
+                    result = {
+                        username: r.username,
+                        picture : pic
+                    }
+
+                    $scope.s_users.push(result);
                 }
-
-                result = {
-                    username: r.username,
-                    picture : pic
-                }
-
-                $scope.s_users.push(result);
             });
 
         });
@@ -182,44 +219,46 @@ angular.module('angular-client-side-auth')
     $scope.addMessage = function(text){
 
         //alert(text);
+        if($scope.to != ''){
 
-        var message = {
-            to: $scope.to,
-            from: Auth.user.username,
-            text: text,
-            time: new Date()
-        }
-
-        //$scope.messages.push(message);
-
-        Users.addMessage(message, 
-        function(res){
-
-            $scope.viewMessages(res.id, $scope.to);
-
-            if($scope.newMessage){
-
-                $scope.viewInboxes();
-
-                $scope.newMessage=false;
-
+            var message = {
+                to: $scope.to,
+                from: Auth.user.username,
+                text: text,
+                time: new Date()
             }
 
-            
+            //$scope.messages.push(message);
 
-        }, function(err){
-            $rootScope.error = err;
-        });
+            Users.addMessage(message, 
+            function(res){
 
-        setTimeout(function() {
+                $scope.viewMessages(res.id, $scope.to);
 
-            $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
+                if($scope.newMessage){
 
-        }, 500);
+                    $scope.viewInboxes();
 
-        
+                    $scope.newMessage=false;
 
+                }
 
+                
+
+            }, function(err){
+                $rootScope.error = err;
+            });
+
+            setTimeout(function() {
+
+                $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
+
+            }, 500);
+        }else{
+
+            alert('Debe seleccionar un nombre de usuario a enviar.');
+
+        }
 
     }
 
