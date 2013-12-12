@@ -41,7 +41,9 @@ angular.module('angular-client-side-auth')
     function setUserStatus(status) {
         // Set our status in the list of online users.
         currentStatus = status;
-        myUserRef.set({ name: name, status: status });
+        if(name !== ''){
+            myUserRef.set({ name: name, status: status });
+        }
     }
 
     function getMessageId(snapshot) {
@@ -134,7 +136,8 @@ angular.module('angular-client-side-auth')
                // rememberme: $scope.rememberme
             },
             function(res) {
-                $location.path('/');
+                //$location.path('/');
+                window.location.href = '/';
             },
             function(err) {
                 $rootScope.error = err;
