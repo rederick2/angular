@@ -298,7 +298,9 @@ angular.module('angular-client-side-auth')
 
     $scope.viewMessages = function(id, to){
 
-        $scope.messages = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
+        var messageRef = new Firebase('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
+
+        $scope.messages = angularFireCollection(messageRef.limit(50));
 
         $scope.writes = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id +'/write');
         
@@ -597,13 +599,13 @@ angular.module('angular-client-side-auth')
 
             for (var p in res){
 
-                var url = 'https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments';
+                var url = new Firebase('https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments');
 
-                var data = angularFireCollection(url);
+                var data = angularFireCollection(url.limit(50));
                 
                 $scope.comments.push(data);
 
-                var ref = new Firebase(url);
+                var ref = url;
 
                 ref.limit(1).on('child_added', function(snap){
 
