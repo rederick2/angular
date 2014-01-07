@@ -155,6 +155,85 @@ angular.module('angular-client-side-auth')
        time: new Date()
     };
 
+    $scope.jsondata = {publicProfileUrl:'url', firstName:'John Doe'};
+
+    $scope.getCommitData = function() {
+        IN.API.Profile("me").fields(
+                [ "id", "firstName", "lastName", "pictureUrl",
+                        "publicProfileUrl", "educations", "positions" ]).result(function(result) {
+
+                            console.log(result);
+            //set the model
+            $scope.$apply(function() {
+                $scope.jsondata = result.values[0];
+            });
+        }).error(function(err) {
+            $scope.$apply(function() {
+                $scope.error = err;
+            });
+        });
+    };
+
+     $scope.logoutLinkedIn = function() {
+    //retrieve values from LinkedIn
+                IN.User.logout();
+                delete $rootScope.jsondata;
+                $rootScope.loggedUser = false;
+                $location.path("/");
+        };
+
+}]);
+
+angular.module('angular-client-side-auth')
+.controller('ProfileCtrl',
+['$rootScope', '$scope', function($rootScope, $scope) {
+
+    $scope.user = {
+        id: 1,
+        name: 'Erick Santillan',
+        status: 2,
+        group: 4,
+        groupName: 'admin'
+    }; 
+
+    $scope.jsondata = {publicProfileUrl:'url', firstName:'John Doe'};
+
+    $scope.getCommitData = function() {
+        IN.API.Profile("me").fields(
+                [ "id", "firstName", "lastName", "pictureUrl",
+                        "publicProfileUrl", "educations", "positions" ]).result(function(result) {
+
+                            console.log(result);
+            //set the model
+            $scope.$apply(function() {
+                $scope.jsondata = result.values[0];
+            });
+        }).error(function(err) {
+            $scope.$apply(function() {
+                $scope.error = err;
+            });
+        });
+    };
+
+    $scope.logoutLinkedIn = function() {
+    //retrieve values from LinkedIn
+            IN.User.logout();
+            delete $rootScope.jsondata;
+            $rootScope.loggedUser = false;
+            $location.path("/");
+    };
+
+    $scope.checkName = function(data) {
+        if (data == '') {
+          return "Nombre no puede ser vacio";
+        }
+    };
+
+    $scope.saveUser = function() {
+        // $scope.user already updated!
+        console.log($scope.user);
+    };
+
 }]);
 
 
@@ -762,6 +841,9 @@ angular.module('angular-client-side-auth')
         },
         function(res){
             $scope.message = '';
+            $scope.page = 0;
+            $scope.busy = false;
+            $scope.posts = [];
             $scope.getPost();
             $('.close').click();
             $scope.loading = false;
@@ -786,6 +868,9 @@ angular.module('angular-client-side-auth')
     $scope.remove = function(id){
         Posts.remove({id:id, username:Auth.user.username},
             function(res){
+                $scope.page = 0;
+                $scope.busy = false;
+                $scope.posts = [];
                 $scope.getPost();
             },
             function(err){

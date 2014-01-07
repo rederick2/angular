@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives']).
+angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable']).
     
     value('fbURL', 'https://rederick2.firebaseio.com/users/').
     factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -82,6 +82,13 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             controller:     'PictureCtrl',
             access:         access.user
         });
+
+    $routeProvider.when('/:id/profile',
+        {
+            templateUrl:    'profile',
+            controller:     'ProfileCtrl',
+            access:         access.user
+        });
     
     $routeProvider.otherwise({redirectTo:'/404'});
 
@@ -112,12 +119,14 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
 }])
 
-    .run(['$rootScope', '$location', 'Auth', 'Users', 'Files', '$route', function ($rootScope, $location, Auth, Users, Files, $route) {
+    .run(['$rootScope', '$location', 'Auth', 'Users', 'Files', '$route', 'editableOptions', function ($rootScope, $location, Auth, Users, Files, $route, editableOptions) {
 
         // New look for Google Maps
         //google.maps.visualRefresh = true;
 
         $rootScope.imgProfile = '';
+
+        //editableOptions.theme = 'bs3';
 
         $rootScope.photo = false;
 

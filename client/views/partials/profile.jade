@@ -1,0 +1,18 @@
+form(editable-form, name="editableForm", onaftersave="saveUser()")
+	div
+		span.title Nombre
+		span(editable-text="user.name", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.name || 'empty' }}
+	.buttons
+		button.btn.btn-default(ng-click="editableForm.$show()", ng-show="!editableForm.$visible") Editar
+		span(ng-show="editableForm.$visible")
+			button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+			button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+
+
+img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
+
+a.btn.btn-primary(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
+
+a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
+
+script(type="in/Login")

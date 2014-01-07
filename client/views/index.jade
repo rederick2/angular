@@ -15,6 +15,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
         link(href="/js/vendor/liveurl.css", rel="stylesheet")
         link(href="/css/jquery.Jcrop.css", rel="stylesheet")
+        link(href="/css/xeditable.css", rel="stylesheet")
+
+        script(type="text/javascript", src="http://platform.linkedin.com/in.js")
+            api_key:75pza9t7zd2w4k
+            onLoad: onLinkedInLoad
+            authorize: true
 
 
         // This is needed because Facebook login redirects add #_=_ at the end of the URL
@@ -77,9 +83,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
 
         .container
-            div(data-ng-view='ng-view')
+            div(data-ng-view='ng-view', id="appBody")
             hr(data-ng-show="error")
             .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
+
+
 
         script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js')
         //script(src='http://maps.googleapis.com/maps/api/js?sensor=false&language=es')
@@ -97,7 +105,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='/js/vendor/moment.js')
         //script(src='/js/vendor/gmaps.js')
         script(src="/js/vendor/liveurl.js")
-        script(src='js/vendor/EventEmitter.js')
+        //script(src='js/vendor/EventEmitter.js')
         script(src="/js/vendor/masonry.js")
         script(src="/js/vendor/imagesloaded.js")
         script(src="/js/vendor/angular-masonry.js")
@@ -105,6 +113,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/typeahead.js")
         script(src="/js/vendor/angular-strap.js")
         script(src="/js/vendor/hogan.js")
+        script(src="/js/vendor/xeditable.js")
 
 
         script(src='/js/routingConfig.js')
@@ -113,6 +122,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='/js/controllers.js')
         script(src='/js/filters.js')
         script(src='/js/directives.js')
+
+        script(src='/js/linkedin.js')
 
         script(src='https://cdn.firebase.com/v0/firebase.js')
         script(src='http://firebase.github.io/angularFire/angularFire.js')
@@ -139,8 +150,6 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             });
 
 
-
-
         // Partial views... Load up front to make transitions smoother
         script(type="text/ng-template", id="404")
             include partials/404
@@ -162,6 +171,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/user
         script(type="text/ng-template", id="picture")
             include partials/picture
+        script(type="text/ng-template", id="profile")
+            include partials/profile
         script(type="text/ng-template", id="messages")
             include partials/messages
         script(type="text/ng-template", id="listMessages")
