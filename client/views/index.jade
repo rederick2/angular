@@ -8,11 +8,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(href="/css/bootstrap.css", rel="stylesheet")
         link(rel='stylesheet', href='/css/app.css')
         link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Roboto')
-
         //link(href="/css/bootstrap-theme.css", rel="stylesheet")
         link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css", rel="stylesheet")
 
-        //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
+            //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
         link(href="/js/vendor/liveurl.css", rel="stylesheet")
         link(href="/css/jquery.Jcrop.css", rel="stylesheet")
         link(href="/css/xeditable.css", rel="stylesheet")
@@ -23,7 +22,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             authorize: true
 
 
-        // This is needed because Facebook login redirects add #_=_ at the end of the URL
+            // This is needed because Facebook login redirects add #_=_ at the end of the URL
         script(type="text/javascript").
             if (window.location.href.indexOf('#_=_') > 0) {
                 window.location = window.location.href.replace(/#.*/, '');
@@ -88,11 +87,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 
 
-
         script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js')
-        //script(src='http://maps.googleapis.com/maps/api/js?sensor=false&language=es')
+            //script(src='http://maps.googleapis.com/maps/api/js?sensor=false&language=es')
         script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
-        //script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
+            //script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
         script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js')
         script(src='http://code.angularjs.org/1.2.0/angular-sanitize.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js')
@@ -100,12 +98,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='/js/vendor/bootstrap.min.js')
         script(src='/js/vendor/underscore-min.js')
         script(src='/js/vendor/angular-moment.js')
-        //script(src="/js/vendor/angular-file-upload-shim.js")
+            //script(src="/js/vendor/angular-file-upload-shim.js")
         script(src="/js/vendor/angular-file-upload.js")
         script(src='/js/vendor/moment.js')
-        //script(src='/js/vendor/gmaps.js')
+            //script(src='/js/vendor/gmaps.js')
         script(src="/js/vendor/liveurl.js")
-        //script(src='js/vendor/EventEmitter.js')
+            //script(src='js/vendor/EventEmitter.js')
         script(src="/js/vendor/masonry.js")
         script(src="/js/vendor/imagesloaded.js")
         script(src="/js/vendor/angular-masonry.js")

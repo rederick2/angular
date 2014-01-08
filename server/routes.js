@@ -5,6 +5,7 @@ var _ =           require('underscore')
     , UserCtrl =  require('./controllers/user')
     , PostCtrl =  require('./controllers/post')
     , FileCtrl =  require('./controllers/file')
+    , ProfileCtrl = require('./controllers/profile')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -180,6 +181,20 @@ var routes = [
         path: '/posts/remove/comment',
         httpMethod: 'POST',
         middleware: [PostCtrl.removeComment],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/add',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.add],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/getbyusername',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.getByUsername],
         accessLevel: accessLevels.user
     },
 

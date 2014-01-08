@@ -186,15 +186,15 @@ angular.module('angular-client-side-auth')
 
 angular.module('angular-client-side-auth')
 .controller('ProfileCtrl',
-['$rootScope', '$scope', function($rootScope, $scope) {
+['$rootScope', '$routeParams', '$scope', 'Profiles', function($rootScope, $routeParams, $scope, Profiles) {
 
-    $scope.user = {
-        id: 1,
-        name: 'Erick Santillan',
-        status: 2,
-        group: 4,
-        groupName: 'admin'
-    }; 
+    Profiles.getByUsername({username: $routeParams.id}, function(res) {
+
+        $scope.user = res[0]; 
+
+    });
+
+    
 
     $scope.jsondata = {publicProfileUrl:'url', firstName:'John Doe'};
 
@@ -232,6 +232,25 @@ angular.module('angular-client-side-auth')
     $scope.saveUser = function() {
         // $scope.user already updated!
         console.log($scope.user);
+
+        Profiles.add(
+            {
+                username:$routeParams.id,
+                fullname : $scope.user.fullname,
+                location : 'Chimbote, Peru',
+                dob: '27/04/1987'
+
+            } , 
+        
+        function(res){
+
+                return true;
+
+        }, function(err){
+                $rootScope.error = err;
+        });
+
+        
     };
 
 }]);

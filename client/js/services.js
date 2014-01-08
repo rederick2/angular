@@ -96,6 +96,21 @@ angular.module('angular-client-side-auth')
     };
 });
 
+angular.module('angular-client-side-auth')
+.factory('Profiles', function($http) {
+    return {
+        getByUsername: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/getbyusername', data).success(success).error(error);
+        },
+        add: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/add', data).success(success).error(error);
+        }
+
+    };
+});
+
 
 angular.module('angular-client-side-auth')
 .factory('Posts', function($http) {
