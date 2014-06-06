@@ -129,7 +129,9 @@ module.exports = {
                         username: req.body.username,
                         fullname: req.body.fullname,
                         location: req.body.location,
-                        dob : req.body.dob
+                        dob : req.body.dob,
+                        marital : req.body.marital,
+                        gender : req.body.gender
                     }
 
                     try{
@@ -152,7 +154,9 @@ module.exports = {
                 var p = {
                     fullname: req.body.fullname,
                     location: req.body.location,
-                    dob : req.body.dob
+                    dob : req.body.dob,
+                    marital : req.body.marital,
+                    gender : req.body.gender
                 }
 
                 try{

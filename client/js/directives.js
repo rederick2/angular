@@ -180,12 +180,14 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
             ctrl.$parsers.unshift(function (viewValue) {
                 if (viewValue) {
 
+               // console.log(viewValue.trim() + '|');
+
                    new Firebase('https://rederick2.firebaseio.com/users/')
                     .on('value', function(snapshot) {
 
                         var data = snapshot.val();
 
-                        var result = _.where(data, {username: viewValue});
+                        var result = _.where(data, {username: viewValue.trim()});
 
                         
 
@@ -204,6 +206,17 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
 
         }
     }
+});
+
+angular.module('angular-client-side-auth').directive('active', function() {
+  return function(scope, element, attrs) {
+    var clickingCallback = function() {
+      //alert('clicked!')
+      $('ul.menuProfile').find("li").removeClass('active');
+      element.addClass('active');
+    };
+    element.bind('click', clickingCallback);
+  }
 });
 
 angular.module('angular-client-side-auth').directive('uniqueEmail', ['_' ,  function (_) {
@@ -225,10 +238,10 @@ angular.module('angular-client-side-auth').directive('uniqueEmail', ['_' ,  func
                         
 
                       if(!result[0]) {
-                        console.log('not exist.');
+                        //console.log('not exist.');
                         ctrl.$setValidity('uniqueEmail', true);
                       } else {
-                        console.log('exist.');
+                        //console.log('exist.');
                         ctrl.$setValidity('uniqueEmail', false);
                       }
                     });
@@ -480,5 +493,24 @@ angular.module('angular-client-side-auth')
         }
     };
 }]);
+
+angular.module('angular-client-side-auth')
+.directive('googlePlaces', function(){
+    return {
+        restrict:'E',
+        replace:true,
+        // transclude:true,
+        scope: {location:'='},
+        template: '<input id="google_places_ac" name="google_places_ac" type="text" class="input-block-level"/>',
+        link: function($scope, elm, attrs){
+            var autocomplete = new google.maps.places.Autocomplete($("#google_places_ac")[0], {});
+            google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                var place = autocomplete.getPlace();
+                //$scope.location = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+                $scope.$apply();
+            });
+        }
+    }
+});
 
 

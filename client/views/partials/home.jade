@@ -1,12 +1,116 @@
-h1 Hello
-p This view is visible to logged in users.
-span(am-time-ago="{{message.time}}")
-	{{message.time | amCalendar}}
-
-img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
-
-a.btn.btn-primary(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
-
-a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
-
-script(type="in/Login")
+div.row
+	div.col-xs-12.col-sm-3.col-md-2.profile
+		div.thumbnail(style="position:relative")
+			img(ng-src="{{imgProfile}}" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
+			a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
+				i.fa.fa-camera
+			div.caption
+				h3 {{user.username}}
+	div.col-xs-12.col-sm-8.col-md-7
+		div.panel.panel-default
+			form(ng-submit="addPost()", name="postForm")
+				div.panel-body
+					textarea.form-control(rows="2", placeholder="Qué quieres publicar?", data-ng-model="message", required , live-url)
+					div(ng-show="photo")
+						//button.navbar-right(type="button" , ng-click="photo=false; selectedFiles=null") &times;
+						div(ng-show="dropSupported", class="drop-box", ng-file-drop="onFileSelect($files);", ng-file-drop-available="dropSupported=true") Arrastra un archivo aqui
+							a.btn.btn-default.btn-select-files(href="#") Seleccionar archivo
+							input.uploadphoto(type="file", name="file", ng-file-select="onFileSelect($files,'post')", accept="image/*")
+						div.thumbnail.picture(ng-show="selectedFiles != null",ng-bind-html="uploadimage")
+					.liveurl-loader 
+						i.fa.fa-spinner.fa-spin
+					i(ng-show='loading').fa.fa-spinner.fa-spin
+					.liveurl
+						.close(title='close')
+						.inner
+							.image  
+							.details
+								.info
+									h3.title  
+									.description  
+									a.link(href="#", target="_blank")
+										.url  
+								.thumbnail
+									.pictures
+										.controls
+											.prev.button.inactive
+											.next.button.inactive
+											.count
+												span.current 0
+												span  de 
+												span.max 0
+								.video
+				div.panel-footer
+					.btn-group
+						button.btn.btn-info(type="submit", data-ng-disabled="postForm.$invalid && !loading") publicar
+					| &nbsp;
+					.btn-group
+						a.btn.btn-default(href="#", title="Photos", ng-click="uploadPhoto()")
+							i.fa.fa-camera
+						a.btn.btn-default(href="./", title="Code Source")
+							i.fa.fa-code
+		hr
+		h4 Actividad Reciente
+		div(ng-show="busy", style="position:absolute; left:0; right:0; bottom:0; margin:auto;height: 30px;text-align: center;")
+			i.fa.fa-spinner.fa-spin.fa-lg
+		div.masonry(masonry, infinite-scroll='getPost()' infinite-scroll-disabled='busy' infinite-scroll-distance='0')
+			div.col-md-12.masonry-brick(ng-repeat="post in posts", style="width: 100%;")
+				div.panel.panel-default
+					ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
+						li.dropdown(data-toggle="dropdown")
+							a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
+								i.fa.fa-chevron-down
+							ul.dropdown-menu
+								li(data-access-level='accessLevels.user')
+									a(href="#" , ng-click="remove(post.id);", ng-show="post.to == authUser") Emiminar Publicación
+									a(href="#") Reporta un abuso o spam
+					div.panel-body
+						.clearfix
+							a(href="./{{post.from}}") 
+								img(src="{{post.pictureUser}}", align='left', valign='middle', style='margin:5px', width="50")
+							a(href="./{{post.from}}") 
+								strong{{post.from}}
+							h6
+								span(am-time-ago="post.created_time", title="{{post.created_time | amCalendar}}")
+						h3(ng-show="post.message !== ''")
+							i.fa.fa-quote-left.fa-2x.pull-left
+							div(ng-bind-html="post.message")	
+						div.clearfix
+							hr(ng-show="post.type == 'url' || post.type == 'photo' || post.type == 'video'")
+							img(src="{{post.picture}}",ng-show=" post.type == 'photo'", style="width:100%;")
+							iframe(class="youtube-player", type="text/html", style="width:100%",ng-src="{{trustSrc(post.source)}}", frameborder="0", allowfullscreen, ng-show="post.type == 'video'")
+							a(href="{{post.url}}" , target="_blank")
+								img(src="{{post.picture}}",ng-show="post.type == 'url'", style="width:40%; margin:0px 10px", align='left')
+								h3 {{post.title}}
+							a(href="{{post.url}}" , target="_blank")
+								span(style='color:#666666')	{{post.fuente}}
+						br
+						.clearfix
+							.btn-group
+								a.btn.btn-default(href="./", title="Check") 10 
+									i.fa.fa-check
+								a.btn.btn-default(ng-show="comments[$index].length", href="#", title="Comments" , ng-click="viewComment=true; hideComents=true; refresh();") {{comments[$index].length}} 
+									i.fa.fa-comments
+								a.btn.btn-default(href="./", title="Share")
+									i.fa.fa-share
+							h6
+								a(href="#", ng-show="hideComents && comments[$index].length" , ng-click="hideComents=false; viewComment=false; refresh();") Ocultar Comentarios
+					div.panel-footer
+						div.comments(id="{{post.id}}", ng-show="viewComment" ng-init="viewComment=false")
+							div.clearfix.comment(ng-repeat="comment in comments[$index]", ng-mouseover="viewDeleteComment = true", ng-mouseleave="viewDeleteComment = false")
+								a.text-right(href="#", ng-show="viewDeleteComment && (post.to == authUser || comment.from == authUser)", ng-click="removeCommentPost(post.to, comment.from, post.id, comment.id);")
+									i.fa.fa-times
+								.imgProfile
+									a(href="./{{comment.from}}") 
+										img(src="", picture-profile, username="{{comment.from}}", align='left', valign='middle', style='margin:5px', width="30")
+								.content
+									a(href="./{{comment.from}}") 
+										{{comment.from}}
+									p {{comment.comment}}
+										h6
+											span(am-time-ago="comment.created_time", title="{{comment.created_time | amCalendar}}")
+						
+						form(ng-submit="", name="commentForm")
+							textarea.form-control(rows="2", placeholder="Agrega tu comentario ...", data-ng-model="comment", ng-focus="viewButtonComment = true", required)
+							.btn-group(style="margin-top:5px")
+								button.btn.btn-info(ng-show="viewButtonComment", data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addCommentPost(post.id, comment, post.to); comment = ''; viewComment=true; hideComents=true;") Comentar

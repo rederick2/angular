@@ -1,18 +1,47 @@
-form(editable-form, name="editableForm", onaftersave="saveUser()")
-	div
-		span.title Nombre
-		span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'empty' }}
-	.buttons
-		button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible") Editar
-		span(ng-show="editableForm.$visible")
-			button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
-			button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+.row
+	.div.col-xs-12.col-sm-4.col-md-3(style="background:white; padding:0")
+		ul.menuProfile
+			li.active(active)
+				a(href="#") Datos Personales
+			li(active)
+				a(href="#") Datos Académicos
+			li(active)
+				a(href="#") Experiencial Profesional
+			li(active)
+				a(href="#") Proyectos
+	.col-xs-12.col-sm-8.col-md-7(style="background:white; margin-left:20px; padding:0")
+		form(id="formProfile", editable-form, name="editableForm", onaftersave="saveUser()")
+			div.btn-group.col-md-12
+				span.title Nombre Completo
+				span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'empty' }}
+			div.btn-group.col-md-12
+				span.title Localización
+				span(editable-places="user.location", e-name="google_places_ac", e-id="google_places_ac", e-required) {{ user.location || 'empty' }}
+			div.btn-group.col-md-12
+				span.title Fecha de Nacimiento
+				span(editable-date="user.dob")  {{ (user.dob | date:"dd/MM/yyyy") || 'empty' }}
+			div.btn-group.col-md-12
+				span.title Género
+				span(editable-select="user.gender", e-ng-options="s.value as s.text for s in genders")  {{ user.gender || 'empty' }}
+			div.btn-group.col-md-12
+				span.title Estado Civil
+				span(editable-select="user.marital", e-ng-options="s.value as s.text for s in statuses")  {{ user.marital || 'empty' }}
+			div.btn-group.col-md-12
+				span.title Email
+				span.editable.editable-text {{email}}
+
+			.buttons
+				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible") Editar
+				span(ng-show="editableForm.$visible")
+					button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+					button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
 
-img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
+		img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
 
-a.btn.btn-primary(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
+		a.btn.btn-primary(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
 
-a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
+		a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
 
 script(type="in/Login")
+

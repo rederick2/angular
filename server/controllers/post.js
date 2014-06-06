@@ -13,15 +13,37 @@ var postsmongo = db.collection('posts');
 
 module.exports = {
     index: function(req, res) {
-        var users = User.findAll();
-        _.each(users, function(user) {
-            delete user.password;
-            delete user.twitter;
-            delete user.facebook;
-            delete user.google;
-            delete user.linkedin;
+        
+        postsmongo.find().limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit , function(err, docs) {
+            if (err) {
+                res.render('error', {
+                    status: 500
+                });
+            } else {
+
+                var usernames = docs.map(function(doc) { return doc.from; });
+
+                db.collection('users').find({ username : { $in : usernames } }, function(err, users) {
+                    // create a mapping of username -> first name for easy lookup
+                    var usernames = {};
+                    users.forEach(function(user) {
+                        if(user.picture){
+                            usernames[user.username] = user.picture;
+                        }else{
+                            usernames[user.username] = 'http://placehold.it/50x50';
+                        }
+                        
+                    });
+
+                    docs.forEach(function(doc) {
+                      doc.pictureUser = usernames[doc.from];
+                    });
+
+                    res.json(docs);
+                });
+            }
+
         });
-        res.json(users);
     },
 
     remove: function(req,res){

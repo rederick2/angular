@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable']).
+angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' , 'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap']).
     
     value('fbURL', 'https://rederick2.firebaseio.com/users/').
     factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -15,6 +15,19 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             templateUrl:    'home',
             controller:     'HomeCtrl',
             access:         access.user
+        });
+
+    $routeProvider.when('/home/:product',
+        {
+            redirectTo: function(routeParams, path, search){
+
+                console.log(routeParams);
+                console.log(path);
+                console.log(search);
+
+                return '/';
+
+            }         
         });
     
     $routeProvider.when('/login',
@@ -126,7 +139,7 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
         $rootScope.imgProfile = '';
 
-        //editableOptions.theme = 'bs3';
+        editableOptions.theme = 'bs3';
 
         $rootScope.photo = false;
 

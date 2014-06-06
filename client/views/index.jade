@@ -3,7 +3,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
     head
         meta(charset='utf-8')
         meta(name="viewport" content="width=device-width, initial-scale=1.0")
-        title Angular Auth Example
+        title Red Social Universitaria
         
         link(href="/css/bootstrap.css", rel="stylesheet")
         link(rel='stylesheet', href='/css/app.css')
@@ -15,6 +15,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(href="/js/vendor/liveurl.css", rel="stylesheet")
         link(href="/css/jquery.Jcrop.css", rel="stylesheet")
         link(href="/css/xeditable.css", rel="stylesheet")
+        link(href="/css/bootstrap-datetimepicker.min.css", rel="stylesheet")
+        link(rel='stylesheet', href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css')
 
         script(type="text/javascript", src="http://platform.linkedin.com/in.js")
             api_key:75pza9t7zd2w4k
@@ -23,7 +25,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
 
             // This is needed because Facebook login redirects add #_=_ at the end of the URL
-        script(type="text/javascript").
+        script(type="text/javascript")
             if (window.location.href.indexOf('#_=_') > 0) {
                 window.location = window.location.href.replace(/#.*/, '');
             }
@@ -36,15 +38,18 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                         span.icon-bar
                         span.icon-bar
                         span.icon-bar
-                    a.navbar-brand(href="./") Project
-                    div.divider-vertical
-                    a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                        i.fa.fa-users
-                    a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
-                        i.fa.fa-envelope
-                    a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                        i.fa.fa-edit
-                    div.divider-vertical(data-access-level='accessLevels.user')
+                    .menu-hidden
+                        a.navbar-brand(href="./") RSU
+                        div.divider-vertical
+                    .menu-display
+                        a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
+                            i.fa.fa-users
+                        a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
+                            i.fa.fa-envelope
+                        a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
+                            i.fa.fa-edit
+                    .menu-hidden
+                        div.divider-vertical(data-access-level='accessLevels.user')
                 .collapse.navbar-collapse#bs-example-navbar-collapse-1
                     .col-sm-3(style="padding:8px",role='search', data-access-level='accessLevels.user')
                         .input-group
@@ -54,11 +59,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                                     i.fa.fa-search
                     ul.nav.navbar-nav
                         li(data-access-level='accessLevels.anon', active-nav)
-                            a(href='/login') Log in
+                            a(href='/login') Iniciar Sesión
                         li(data-access-level='accessLevels.anon', active-nav)
-                            a(href='/register') Register
+                            a(href='/register') Resgistrarse
                         li(data-access-level='accessLevels.user', active-nav)
-                            a(href='/') Home
+                            a(href='/') Inicio
                         li(data-access-level='accessLevels.user', active-nav)
                             a(href='/private') Private
                         li(data-access-level='accessLevels.admin', active-nav)
@@ -76,8 +81,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                                 //b.caret
                             ul.dropdown-menu
                                 li(data-access-level='accessLevels.user')
+                                    a(href="/{{ user.username }}/profile")
+                                        | Perfil
+                                li(data-access-level='accessLevels.user')
                                     a(href="", data-ng-click="logout()")
-                                        | Log out
+                                        | Salir
                         
 
 
@@ -88,10 +96,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
 
         script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js')
-            //script(src='http://maps.googleapis.com/maps/api/js?sensor=false&language=es')
+        script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
+        script(src='http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=es')
         script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
             //script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
         script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js')
+        script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js')
         script(src='http://code.angularjs.org/1.2.0/angular-sanitize.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
@@ -112,12 +122,25 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/angular-strap.js")
         script(src="/js/vendor/hogan.js")
         script(src="/js/vendor/xeditable.js")
-
+        script(src="/js/vendor/date.js")
 
         script(src='/js/routingConfig.js')
         script(src='/js/app.js')
         script(src='/js/services.js')
-        script(src='/js/controllers.js')
+
+        script(src="/js/controllers.js")
+        script(src="/js/controllers/navbar.js")
+        script(src="/js/controllers/admin.js")
+        script(src="/js/controllers/login.js")
+        script(src="/js/controllers/home.js")
+        script(src="/js/controllers/edituser.js")
+        script(src="/js/controllers/messages.js")
+        script(src="/js/controllers/picture.js")
+        script(src="/js/controllers/profile.js")
+        script(src="/js/controllers/register.js")
+        script(src="/js/controllers/user.js")
+
+
         script(src='/js/filters.js')
         script(src='/js/directives.js')
 
@@ -127,12 +150,13 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='http://firebase.github.io/angularFire/angularFire.js')
         script(src='https://cdn.firebase.com/v0/firebase-simple-login.js')
         script(src='https://www.firebase.com/js/libs/idle.js')
+
+        script(src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js")
         
         
 
         script(type="text/javascript")
             $('ul.nav.navbar-nav li').on('click' , function(){
-                //console.log('hola');
                 if($(".navbar-toggle").is(":visible") == true && !$(this).attr('data-toggle')){
                     $('.navbar-toggle').click();
                 }

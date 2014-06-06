@@ -115,7 +115,10 @@ angular.module('angular-client-side-auth')
 angular.module('angular-client-side-auth')
 .factory('Posts', function($http) {
     return {
-
+        getAll: function(data, success, error) {
+            //console.log(data);
+            $http.post('/posts', data).success(success).error(error);
+        },
         add: function(data, success, error) {
             //console.log(sort);
             $http.post('/posts/add', data).success(success).error(error);

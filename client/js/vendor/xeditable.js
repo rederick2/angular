@@ -88,7 +88,7 @@ Input types: text|email|tel|number|url|search|color|date|datetime|time|month|wee
 
 (function() {
 
-  var types = 'text|email|tel|number|url|search|color|date|datetime|time|month|week'.split('|');
+  var types = 'text|email|tel|number|url|search|color|date|datetime|time|month|week|places'.split('|');
 
   //todo: datalist
   
@@ -116,6 +116,7 @@ Input types: text|email|tel|number|url|search|color|date|datetime|time|month|wee
         }        
       });
   }]);
+
 
 }());
 
@@ -1359,9 +1360,48 @@ angular.module('xeditable').factory('editableThemes', function() {
       postrender: function() {
         //apply `form-control` class to std inputs
         switch(this.directiveName) {
+          case 'editablePlaces':
+          {
+              this.inputEl.addClass('form-control');
+              if(this.theme.inputClass) {
+                // don`t apply `input-sm` and `input-lg` to select multiple
+                // should be fixed in bs itself!
+                if(this.inputEl.attr('multiple') &&
+                  (this.theme.inputClass === 'input-sm' || this.theme.inputClass === 'input-lg')) {
+                    break;
+                }
+                this.inputEl.addClass(this.theme.inputClass);
+              }
+
+              var elm = this.inputEl;
+
+              setTimeout(function(){
+                var autocomplete = new google.maps.places.Autocomplete(elm[0], {});
+                google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                    var place = autocomplete.getPlace();
+                    console.log(place.formatted_address);
+                    //$scope.location = place.geometry.location.lat() + ',' + place.geometry.location.lng();
+                    //$scope.$apply();
+                    angular.element(document.getElementById("appBody")).scope().$apply(
+                            function($scope) {
+                                    $scope.user.location = place.formatted_address;
+                            }
+                    );
+
+                    //elm.after('<output>'+place.formatted_address+'</output>');
+
+                    //elm.val('Hola a todos');
+                });
+              }, 100);
+
+              break;
+          }
           case 'editableText':
           case 'editableSelect':
           case 'editableTextarea':
+          case 'editableBsdate':
+          case 'editableDate':
+          case 'editableSelect':
             this.inputEl.addClass('form-control');
             if(this.theme.inputClass) {
               // don`t apply `input-sm` and `input-lg` to select multiple

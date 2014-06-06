@@ -2,6 +2,29 @@
     display: none;
 }
 
+form[name="editableForm"] > div {
+  height: auto;
+  padding: 5px 0;
+}
+
+form[name="editableForm"] .title {
+  display: inline-block;
+  font-weight: bold;
+  padding-top: 5px;
+  vertical-align: top;
+  min-width: 150px;
+}
+
+form[name="editableForm"] .editable {
+  display: inline-block;
+  padding-top: 5px;
+  vertical-align: top;
+}
+
+form[name="editableForm"] select {
+  width: 120px;
+}
+
 .typeahead,
 .tt-query,
 .tt-hint {
@@ -304,7 +327,19 @@ h3{
   border-right: 1px solid rgba(255, 255, 255, 0.82);
 }
 
+.menu-hidden{
+  float: left;
+}
 
+.menu-display{
+  float: left;
+  text-align: center;
+}
+
+.btnsocial{
+  width: 100%;
+  margin: 5px;
+}
 
 body {
    /* font-size: 1em;*/
@@ -359,7 +394,7 @@ body {
 
 
 .form-signin {
-  max-width: 600px;
+  /*max-width: 600px;*/
   padding: 15px;
   margin: 0 auto;
 }
@@ -403,15 +438,17 @@ body {
 
 .form-register input[type="text"], .form-register input[type="password"] , .form-register input[type="email"]{
   float: left;
-  width: 50%;
+  /*width: 50%;*/
   margin-bottom: 0px;
   border-radius: 5px
 }
 
 .form-register i{
-  float: left;
   z-index: 10000000;
   padding: 10px 0px 0px 5px;
+  position: absolute;
+  right: 10%;
+  text-align: right;
 }
 
 .form-register i span{
@@ -433,6 +470,39 @@ body {
 .youtube-player{
     height: 200px;
 }
+
+/********************** PROFILE ****************************/
+
+.menuProfile{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuProfile li{
+  padding: 10px 10px 10px 20px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+li.active{
+  background: #eee;
+}
+
+#formProfile > div{
+  padding: 15px 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+.editable-text, .editable-places{
+  width: 70%;
+}
+
+#formProfile .title{
+  width: 30%;
+}
+
+/**************************************************************/
 
 @media (max-width: 768px) { 
 
@@ -461,9 +531,13 @@ body {
     display: none;
   }
 
+  .form-register i{
+    right: 6%;
+  }
+
   .form-register input[type="text"], .form-register input[type="password"] , .form-register input[type="email"]{
 
-    width: 90%;
+    /*width: 90%;*/
     
   }
 
@@ -534,6 +608,17 @@ body {
     padding-left: 0px;
   }
 
+  .menu-hidden{
+    display: none;
+  }
+
+  .menu-display{
+    width:73%
+  }
+
+  .menu-display a{
+    width: 33%
+  }
 
 
 }

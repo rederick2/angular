@@ -149,6 +149,15 @@ var routes = [
         accessLevel: accessLevels.user
     },
 
+    //Posts
+
+    {
+        path: '/posts',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.index],
+        accessLevel: accessLevels.user
+    },
+
     {
         path: '/posts/add',
         httpMethod: 'POST',
