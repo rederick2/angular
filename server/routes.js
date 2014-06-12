@@ -4,8 +4,9 @@ var _ =           require('underscore')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
     , PostCtrl =  require('./controllers/post')
-    , FileCtrl =  require('./controllers/file')
+    //, FileCtrl =  require('./controllers/file')
     , ProfileCtrl = require('./controllers/profile')
+    , InboxCtrl = require('./controllers/inbox')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -39,11 +40,11 @@ var routes = [
             failureRedirect: '/login'
         })]
     },
-    {
+    /*{
         path: '/auth/facebook',
         httpMethod: 'GET',
         middleware: [passport.authenticate('facebook')]
-    },
+    },*/
     {
         path: '/auth/facebook/callback',
         httpMethod: 'GET',
@@ -84,21 +85,21 @@ var routes = [
         path: '/register',
         httpMethod: 'POST',
         middleware: [AuthCtrl.register]
-    },
+    },/*
     {
         path: '/remove',
         httpMethod: 'POST',
         middleware: [AuthCtrl.remove]
-    },
+    },*/
     {
         path: '/login',
         httpMethod: 'POST',
         middleware: [AuthCtrl.login]
     },
     {
-        path: '/loginFb',
+        path: '/auth/facebook',
         httpMethod: 'POST',
-        middleware: [AuthCtrl.loginFb]
+        middleware: [AuthCtrl.facebook]
     },
     {
         path: '/logout',
@@ -194,6 +195,27 @@ var routes = [
     },
 
     {
+        path: '/inbox/add',
+        httpMethod: 'POST',
+        middleware: [InboxCtrl.add],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/inbox/getbyusername',
+        httpMethod: 'POST',
+        middleware: [InboxCtrl.getByUsername],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/inbox/getbyto',
+        httpMethod: 'POST',
+        middleware: [InboxCtrl.getByTo],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/profile/add',
         httpMethod: 'POST',
         middleware: [ProfileCtrl.add],
@@ -205,7 +227,7 @@ var routes = [
         httpMethod: 'POST',
         middleware: [ProfileCtrl.getByUsername],
         accessLevel: accessLevels.user
-    },
+    },/*
 
     {
         path: '/file',
@@ -219,7 +241,7 @@ var routes = [
         httpMethod: 'POST',
         middleware: [FileCtrl.destroy],
         accessLevel: accessLevels.user
-    },
+    },*/
 
     // All other get requests should be handled by AngularJS's client-side routing system
     {

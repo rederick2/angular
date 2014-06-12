@@ -1,29 +1,30 @@
 var _ =           require('underscore')
-    , User =      require('../models/User.js')
+    , mongoose = require('mongoose')
+    , Post = mongoose.model('Post')
+    , User = mongoose.model('User')
+    , Counter = mongoose.model('Counter')
     , userRoles = require('../../client/js/routingConfig').userRoles
     , Firebase = require('../models/Firebase.js');
 
-var mongojs = require('mongojs');
+/*var mongojs = require('mongojs');
 
 var db = mongojs(config.URIMONGODB);
 
-var postsmongo = db.collection('posts');
+var postsmongo = db.collection('posts');*/
 
 
 
 module.exports = {
     index: function(req, res) {
         
-        postsmongo.find().limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit , function(err, docs) {
+        Post.find().limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
             if (err) {
-                res.render('error', {
-                    status: 500
-                });
+                res.send(403, err);
             } else {
 
                 var usernames = docs.map(function(doc) { return doc.from; });
 
-                db.collection('users').find({ username : { $in : usernames } }, function(err, users) {
+                User.find({ username : { $in : usernames } }, function(err, users) {
                     // create a mapping of username -> first name for easy lookup
                     var usernames = {};
                     users.forEach(function(user) {
@@ -50,7 +51,7 @@ module.exports = {
 
         try{
 
-            postsmongo.remove({id:req.body.id});
+            Post.remove({id:req.body.id}).exec();
 
             var myRootRef = Firebase.getRef('posts/' + req.body.username + '/' + req.body.id);
 
@@ -70,7 +71,7 @@ module.exports = {
 
         try{
 
-            postsmongo.update({id:req.body.idpost}, {$pull: {'comments': {'id': req.body.id}}});
+            Post.update({id:req.body.idpost}, {$pull: {'comments': {'id': req.body.id}}});
 
             var myRootRef = Firebase.getRef('posts/' + req.body.from + '/' + req.body.idpost + '/comments/' + req.body.id);
 
@@ -89,7 +90,7 @@ module.exports = {
 
     addComment: function(req, res) {
 
-        postsmongo.find({id:req.body.idpost},function(err, docs){
+        Post.find({id:req.body.idpost},function(err, docs){
 
             
             var id = _.max(docs[0].comments, function(doc) { return doc.id; }).id + 1;
@@ -111,7 +112,7 @@ module.exports = {
 
             try{
 
-                postsmongo.update({id:req.body.idpost},{$push:{'comments':comment}});
+                Post.update({id:req.body.idpost},{$push:{'comments':comment}});
 
                 var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + req.body.idpost + '/comments/' + id);
 
@@ -134,56 +135,53 @@ module.exports = {
 
     add: function(req, res) {
 
-        postsmongo.find(function(err, docs){
+        try{
 
-            var id = _.max(docs, function(doc) { return doc.id; }).id + 1;
+            Counter.getNextSequence("postid", function(err, count){
 
-            if(_.isNaN(id)){
-                id = 1;
-            }
+                if(count != 0){
 
-            var post = {
-                id: id,
-                from : req.body.from,
-                to : req.body.to,
-                title : req.body.title,
-                picture : req.body.picture,
-                source : req.body.source,
-                url : req.body.url,
-                fuente : req.body.fuente,
-                description : req.body.description,
-                message : req.body.message,
-                type : req.body.type,
-                picture : req.body.picture,
-                created_time: req.body.created_time, 
-                updated_time: req.body.updated_time
-            }
+                    var model = {
+                            id: count,
+                            from : req.body.from,
+                            to : req.body.to,
+                            title : req.body.title,
+                            picture : req.body.picture,
+                            source : req.body.source,
+                            url : req.body.url,
+                            fuente : req.body.fuente,
+                            description : req.body.description,
+                            message : req.body.message,
+                            type : req.body.type,
+                            picture : req.body.picture,
+                            created_time: Date.now
+                        }
 
-            try{
+                    var post = new Post(model);
 
-                postsmongo.save(post);
+                    post.save();
 
-                var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + id);
+                    var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + count);
 
-                myRootRef.set(post);
+                    myRootRef.set(model);
 
-                res.json({success:'true'});  
+                    res.json({success:'true'});  
 
-            }catch(e){
-                 console.log(e);
-            }
+                }else{
 
-                 
+                    res.json({success:'false'});  
+                }
 
-        });
+            });
 
-        
-
+        }catch(e){
+             console.log(e);
+        }
 
     },
     getByUsername: function(req, res) {
 
-        postsmongo.find({to : req.body.username}).limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit , function(err, docs) {
+        Post.find({to : req.body.username}).limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
             if (err) {
                 res.render('error', {
                     status: 500
@@ -192,7 +190,7 @@ module.exports = {
 
                 var usernames = docs.map(function(doc) { return doc.from; });
 
-                db.collection('users').find({ username : { $in : usernames } }, function(err, users) {
+                User.find({ username : { $in : usernames } }, function(err, users) {
                     // create a mapping of username -> first name for easy lookup
                     var usernames = {};
                     users.forEach(function(user) {

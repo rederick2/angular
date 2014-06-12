@@ -1,10 +1,29 @@
 {
-  	
-	"FACEBOOK_APP_ID" : "210521229054903",
-	"FACEBOOK_APP_SECRET": "f46e9ccc6f476cf9205dc08128ab5e34",
-	"URIMONGODB" : "users:alex2002@ds053438.mongolab.com:53438/rederick2"
-	
+    "port": 8000,
+    "host": "localhost",
+    "db": {
+        "name": "rederick2",
+        "uri" :	"users:alex2002@ds053438.mongolab.com:53438/rederick2"
+    },
+    "twitter": {
+        "consumerKey": "",
+        "consumerSecret": ""
+    },
+    "facebook": {
+        "appId": "210521229054903",
+        "appSecret": "f46e9ccc6f476cf9205dc08128ab5e34"
+    },
+    "session": {
+        "secret": "",
+        "key": ""
+    }, 
+    "cookie": {
+        "secret": ""
+    },
+    "secure": false,
+    "loginsecure": false,
+    "key": "",
+    "cert": "",
+    "sentry": "dsn"
 }
-
-
 

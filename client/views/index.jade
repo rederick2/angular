@@ -17,6 +17,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(href="/css/xeditable.css", rel="stylesheet")
         link(href="/css/bootstrap-datetimepicker.min.css", rel="stylesheet")
         link(rel='stylesheet', href='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css')
+        link(rel="stylesheet", href="/js/vendor/codemirror/lib/codemirror.css")
+        link(rel="stylesheet", href="/js/vendor/codemirror/theme/neo.css")
+        link(rel="stylesheet", href="/js/vendor/codepad/firepad.css")
+        link(rel="stylesheet", href="/js/vendor/codepad/firepad-userlist.css")
 
         script(type="text/javascript", src="http://platform.linkedin.com/in.js")
             api_key:75pza9t7zd2w4k
@@ -46,8 +50,19 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                             i.fa.fa-users
                         a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
                             i.fa.fa-envelope
-                        a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                            i.fa.fa-edit
+                        li.dropdown(data-toggle="dropdown", style="float: left;list-style: none;")   
+                            a.navbar-brand.active.dropdown(href="./", data-access-level='accessLevels.user', data-toggle="dropdown")
+                                i.fa.fa-globe
+                                span.badge(ng-show="notify")  {{ count_notifications }}
+                            ul.dropdown-menu.notifications
+                                li 
+                                    .imgProfile
+                                        a(href="./{{message.from}}") 
+                                            img(src="http://placehold.it/50x50", picture-profile, username="{{user.username}}", align='left', valign='middle', style='margin:5px', width="50")
+                                    .content   UR ha comentado una publicacion en tu muro y ha indicado que te gusta su mensaje.
+                                        h6
+                                            span(am-time-ago="created_time", title="{{created_time | amCalendar}}")
+
                     .menu-hidden
                         div.divider-vertical(data-access-level='accessLevels.user')
                 .collapse.navbar-collapse#bs-example-navbar-collapse-1
@@ -61,11 +76,11 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                         li(data-access-level='accessLevels.anon', active-nav)
                             a(href='/login') Iniciar Sesión
                         li(data-access-level='accessLevels.anon', active-nav)
-                            a(href='/register') Resgistrarse
+                            a(href='/register') Registrarse
                         li(data-access-level='accessLevels.user', active-nav)
                             a(href='/') Inicio
                         li(data-access-level='accessLevels.user', active-nav)
-                            a(href='/private') Private
+                            a(href='/firepad') Firepad
                         li(data-access-level='accessLevels.admin', active-nav)
                             a(href='/admin') Admin
 
@@ -105,6 +120,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='http://code.angularjs.org/1.2.0/angular-sanitize.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
+        script(src="https://cdn.firebase.com/js/simple-login/1.5.0/firebase-simple-login.js")
         script(src='/js/vendor/bootstrap.min.js')
         script(src='/js/vendor/underscore-min.js')
         script(src='/js/vendor/angular-moment.js')
@@ -124,6 +140,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/xeditable.js")
         script(src="/js/vendor/date.js")
 
+        script(src="/js/vendor/codemirror/lib/codemirror.js")
+        script(src="/js/vendor/codemirror/mode/javascript/javascript.js")
+        script(src="/js/vendor/codepad/firepad.js")
+        script(src="/js/vendor/codepad/firepad-userlist.js")
+        script(src="/js/vendor/codepad/example-helper.js")
+
         script(src='/js/routingConfig.js')
         script(src='/js/app.js')
         script(src='/js/services.js')
@@ -139,6 +161,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/controllers/profile.js")
         script(src="/js/controllers/register.js")
         script(src="/js/controllers/user.js")
+        script(src="/js/controllers/firepad.js")
 
 
         script(src='/js/filters.js')
@@ -199,3 +222,5 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/messages
         script(type="text/ng-template", id="listMessages")
             include partials/listMessages
+        script(type="text/ng-template", id="firepad")
+            include partials/firepad

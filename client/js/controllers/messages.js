@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('MessagesCtrl',
-['$rootScope', '$http', '$location', '$scope', 'Users', 'Auth', 'angularFireCollection', '_', function($rootScope, $http, $location, $scope, Users, Auth, angularFireCollection, _) {
+['$rootScope', '$http', '$location', '$scope', 'Users', 'Inboxes', 'Auth', 'angularFireCollection', '_', function($rootScope, $http, $location, $scope, Users, Inboxes, Auth, angularFireCollection, _) {
 
     $scope.messages = [];
 
@@ -19,6 +19,15 @@ angular.module('angular-client-side-auth')
     $scope.username = Auth.user.username;
 
     $scope.writes = false;
+
+    var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+
+        ref.limit(1).on('child_added' , function(snap){
+
+            //$scope.viewInboxes();
+
+            console.log(1);
+        });
 
     $scope.checkStatus = function(){
 
@@ -51,11 +60,11 @@ angular.module('angular-client-side-auth')
     }
 
 
-    Users.getByUsername({username: Auth.user.username}, function(res) {
+    Inboxes.getByUsername({username: Auth.user.username}, function(res) {
 
         //console.log(res[0].messages);
 
-        res[0].messages.forEach(function(r){
+        res.forEach(function(r){
 
            // if($scope.to != r.id)
 
@@ -63,7 +72,7 @@ angular.module('angular-client-side-auth')
 
             ref.limit(1).on('child_added' , function(snap){
 
-                console.log(snap.val());
+                //console.log(snap.val());
 
                 if(snap.val().from !== $scope.to){
                     $scope.viewInboxes();
@@ -79,7 +88,7 @@ angular.module('angular-client-side-auth')
 
         if($scope.to != '' && $scope.id != 0){
 
-            console.log('write');
+            //console.log('write');
 
             var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo + '/write' );
 
@@ -92,7 +101,7 @@ angular.module('angular-client-side-auth')
     $scope.unWriteMessage = function(){
         if($scope.to != '' && $scope.id != 0){
 
-            console.log('unWrite');
+            //console.log('unWrite');
 
             var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo +'/write');
 
@@ -103,9 +112,9 @@ angular.module('angular-client-side-auth')
 
     $scope.viewInboxes = function(){
 
-        Users.getByUsername({username: Auth.user.username}, function(res) {
+        Inboxes.getByUsername({username: Auth.user.username}, function(res) {
         
-            $scope.inboxes = _.sortBy(res[0].messages, function (m) {return m.update}).reverse();
+            $scope.inboxes = _.sortBy(res, function (m) {return m.update}).reverse();
 
             $scope.checkStatus();
 
@@ -150,6 +159,8 @@ angular.module('angular-client-side-auth')
 
         $scope.isSeach=false;
 
+        $scope.newMessage = false;
+
         $('a.inboxes').removeClass('activo');
 
         $('#inbox_' + id).addClass('activo');
@@ -158,18 +169,24 @@ angular.module('angular-client-side-auth')
 
         ref.limit(1).on('child_added' , function(snap){
 
+           $('.loading').show();
+
             setTimeout(function() {
 
                 $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
 
-            }, 10);
+                console.log(2);
+
+                $('.loading').hide();
+
+            }, 1000);
 
             //console.log(snap.val());
         });
 
-        Users.getByUsername({username: to}, function(res) {
+        Inboxes.getByTo({ username: to, to: Auth.user.username}, function(res) {
         
-            $scope.idTo = _.findWhere(res[0].messages, {to:Auth.user.username}).id;
+            $scope.idTo = res.id;
 
         });
 

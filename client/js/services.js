@@ -28,7 +28,7 @@ angular.module('angular-client-side-auth')
         register: function(user, success, error) {
             $http.post('/register', user).success(function(res) {
                 changeUser(res);
-                success();
+                success(res);
             }).error(error);
         },
         remove: function(user, success, error) {
@@ -47,7 +47,7 @@ angular.module('angular-client-side-auth')
             }).error(error);
         },
         loginFb: function(user, success, error) {
-            $http.post('/loginFb' , user).success(function(user){
+            $http.post('/auth/facebook', user).success(function(user){
                 changeUser(user);
                 success(user);
             }).error(error);
@@ -111,6 +111,24 @@ angular.module('angular-client-side-auth')
     };
 });
 
+angular.module('angular-client-side-auth')
+.factory('Inboxes', function($http) {
+    return {
+        getByUsername: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/inbox/getbyusername', data).success(success).error(error);
+        },
+        getByTo: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/inbox/getbyto', data).success(success).error(error);
+        },
+        add: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/inbox/add', data).success(success).error(error);
+        }
+
+    };
+});
 
 angular.module('angular-client-side-auth')
 .factory('Posts', function($http) {

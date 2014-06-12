@@ -14,7 +14,7 @@
                     li(ng-show="registerForm.username.$error.uniqueUsername") Username exists
                     li(ng-show="registerForm.password.$error.minlength") Password must be at least 5 characters long
                     li(ng-show="registerForm.password.$error.maxlength") Password must be at most 60 characters long
-                    li(ng-show="registerForm.firstname.$error.required") Firstname is required
+                    li(ng-show="registerForm.name.$error.required") Firstname is required
                     li(ng-show="registerForm.email.$error.required") Email is required
                     li(ng-show="registerForm.email.$error.email") Invalid email
                     li(ng-show="registerForm.email.$error.uniqueEmail") Email exists
@@ -49,9 +49,9 @@
             hr
             .control-group
                 .controls
-                    input.form-control(type="text", data-ng-model="firstname", placeholder="Nombre", name="firstname", required, data-ng-minlength="1", data-ng-maxlength="200")
-                    i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.firstname.$error.required && registerForm.firstname.$dirty")
-                    i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.firstname.$valid")
+                    input.form-control(type="text", data-ng-model="name", placeholder="Nombre", name="name", required, data-ng-minlength="1", data-ng-maxlength="200")
+                    i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.name.$error.required && registerForm.name.$dirty")
+                    i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.name.$valid")
             hr
             //.control-group
                 label.radio.inline

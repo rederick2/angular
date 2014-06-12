@@ -4,13 +4,56 @@ angular.module('angular-client-side-auth')
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
 
+    var url = "https://rederick2.firebaseio.com/";
+    //$scope.notify = false;
+    //$scope.count_notifications = 10;
+    var Ref = new Firebase(url);
+    var authFirebase = new FirebaseSimpleLogin(Ref, function(error, user) {
+      if (error) {
+        // an error occurred while attempting login
+        console.log(error);
+      } else if (user) {
+        // user authenticated with Firebase
+        console.log('User ID: ' + user.uid + ', Provider: ' + user.provider);
+
+      }
+    });
+
+    var notifications = new Firebase(url + "notifications/" + Auth.user.username );
+
+    $scope.created_time = "2013-12-05T04:28:16.891Z";
+
+    notifications.on("value" , function(notify){
+        //console.log(notify.val().count);
+        if(notify.val().count > 0){
+            $scope.count_notifications = notify.val().count;
+            $scope.notify = true;
+            
+        }else{
+            $scope.notify = false;
+        }
+    });
+
+    notifications.on("child_changed" , function(notify){
+        
+        if(notify.val() > 0){
+            $scope.count_notifications = notify.val();
+            $scope.notify = true;
+            //console.log("N: " + notify.val());
+        }else{
+            $scope.notify = false;
+        }
+    });
+
+    
+
    //////////////////////////////////////
 
     var name = Auth.user.username;
     var currentStatus = "online";
 
     // Get a reference to the presence data in Firebase.
-    var userListRef = new Firebase("https://rederick2.firebaseio.com/presences/");
+    var userListRef = new Firebase(url + "presences/");
 
     // Generate a reference to a new location for my user with push.
     var myUserRef = userListRef.push();
@@ -79,6 +122,7 @@ angular.module('angular-client-side-auth')
     $scope.logout = function() {
         Auth.logout(function() {
             //$location.path('/login');
+            authFirebase.logout();
             window.location.href = '/login';
         }, function() {
             $rootScope.error = "Failed to logout";

@@ -1,8 +1,8 @@
-div(style="background:white; padding:10px")
+div(style="background:white; padding:25px")
 	h1 MESSAGES
 
 	div.row
-		div.col-md-3.inboxlist
+		div.col-md-3.inboxlist(style="padding: 0px;")
 			//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
 			.input-group
 				input.form-control(type='text', placeholder='Search', ng-model="typeaheadValue", bs-typeahead="typeahead")
@@ -17,11 +17,11 @@ div(style="background:white; padding:10px")
 				.name
 					h3 {{inbox.to}}
 				h6
-					span(style="float: right;") {{inbox.update | amCalendar}}
+					span(style="float: right; padding-right:10px") {{inbox.update | amCalendar}}
 
 		div.col-md-9.messages
 			.actions
-				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''") 
+				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]") 
 					i.fa.fa-plus
 					|	Nuevo Mensaje
 			.to(ng-show="newMessage")
@@ -38,6 +38,8 @@ div(style="background:white; padding:10px")
 							h3 {{s_user.username}}
 
 			.contentMessages(ng-show="!isSeach")
+				.loading(style='display:none')
+					i.fa.fa-spinner.fa-spin
 				.message.clearfix.comment(ng-repeat="message in messages", ng-class="{me:message.from == username}")
 					.imgProfile
 						a(href="./{{message.from}}") 
@@ -49,7 +51,7 @@ div(style="background:white; padding:10px")
 							span(style="float: right;", am-time-ago="message.time", title="{{message.time | amCalendar}}")
 			.write(ng-repeat="write in writes", style="height:30px;")
 				span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
-			form(ng-show="!isSeach", ng-submit="", name="commentForm")
+			form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px;")
 				textarea.form-control(rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-focus="writeMessage();", ng-blur="unWriteMessage();", required)
 				.btn-group(style="margin-top:5px")
 					button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;") Enviar

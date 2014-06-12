@@ -78,6 +78,12 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
             controller:     'MessagesCtrl',
             access:         access.user
         });
+    $routeProvider.when('/firepad',
+        {
+            templateUrl:    'firepad',
+            controller:     'FirepadCtrl',
+            access:         access.user
+        });
     $routeProvider.when('/404',
         {
             templateUrl:    '404',

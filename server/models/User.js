@@ -1,40 +1,67 @@
 var User
     , _ =               require('underscore')
-    , passport =        require('passport')
-    , LocalStrategy =   require('passport-local').Strategy
-    , TwitterStrategy = require('passport-twitter').Strategy
-    , FacebookStrategy = require('passport-facebook').Strategy
-    , GoogleStrategy = require('passport-google').Strategy
-    , LinkedInStrategy = require('passport-linkedin').Strategy
     , check =           require('validator').check
     , userRoles =       require('../../client/js/routingConfig').userRoles
-    , List = require('../models/List.js')
     , Firebase = require('../models/Firebase.js');
 
+    var mongoose = require('mongoose');
+    var request = require('request');
 
-var mongojs = require('mongojs');
+var message = new mongoose.Schema({update: {type: Date, default:Date.now, to: String, id: Number}});
 
+/* Tomamos todos los datos de usuario para guardarlos en base de datos */
+var userSchema = new mongoose.Schema({
+    username: { type: String, unique: true, required: true },
+    name : String,
+    email : {type: String, 'default' : 'email@example.com'},
+    password : String,
+    picture: String,
+    link: String,
+    red: String,
+    redId: String,
+    token: String,
+    tokenSecret: String,
+    pais: String,
+    ip: String,
+    activado: { type: Boolean, 'default': true },
+    role: { bitMask: Number, title: String },
+    online: { type: Boolean, 'default': false },
+    messages : [message]
+});
+/* Si todo sale bien creamos el perfil del usuario y lo guardamos */
+userSchema.statics.findOrCreate = function (profile, done) {
+  this.findOne({ username: profile.username }, function (err, user) {
 
+    if(err) return done(err);
 
+    if(user) return done(null, user);
 
-//console.log(List.getUsers());
+    user = new User(profile);
+    
+    var myRootRef = Firebase.getRef('users/'+ profile.username);
 
-/*var users = [
-    {
-        id:         1,
-        username:   "user",
-        password:   "123",
-        role:   userRoles.user
-    },
-    {
-        id:         2,
-        username:   "admin",
-        password:   "123",
-        role:   userRoles.admin
-    }
-];*/
+    myRootRef.set(profile);
+    
+    user.save(done);
 
-var usersf = List.getUsers();
+  });
+};
+
+userSchema.statics.AllUsers = function (done) {
+  this.findOne({ activado: true }, function (err, users) {
+
+    if(err) return done(err);
+
+    if(users) return done(null, users);
+
+  });
+};
+
+/* Guardamos modelo de mongoose */
+
+var User = mongoose.model('User', userSchema);
+
+/*var usersf = List.getUsers();
 
 var users = [];
 
@@ -247,3 +274,4 @@ module.exports = {
         else        { done(null, false); }
     }
 };
+*/
