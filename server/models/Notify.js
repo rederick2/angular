@@ -7,7 +7,8 @@ var notifySchema = new mongoose.Schema({
     to: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     title: String,
     link:String,
-    unread: Boolean
+    unread: { type: Boolean, default: false},
+    datetime : {type: Date, default: Date.now}
 }, {collection: 'notifications'});
 
 

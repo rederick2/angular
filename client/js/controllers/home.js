@@ -133,11 +133,11 @@ angular.module('angular-client-side-auth')
             function(res){
 
                 //console.log(res[0]);
-                if(res[0].picture){
-                    $scope.imgProfile = res[0].picture;
+                if(res.length != 0 ){
+                    $scope.imgProfile = res.picture;
                 }
 
-                $scope.user = res[0];
+                $scope.user = res;
 
             }, function(err){
                 $rootScope.error = err;

@@ -13,16 +13,29 @@ angular.module('angular-client-side-auth')
         console.log(error);
       } else if (user) {
         // user authenticated with Firebase
-        console.log(user);
+        //console.log(1);
 
             if(user.provider == 'facebook'){
+                
                 Auth.loginFb(user,
                 function(res) {
-                    window.location.href = '/';
+
+                    if(res.login == 'true')
+                    {
+
+                        $location.path('/');
+
+                    }else{
+
+                        $rootScope.userRegister = user;
+                        $location.path('/register');
+
+                    }
                 },
                 function(err) {
                     $rootScope.error = err;
                 });
+                
             }
 
       } else {
@@ -42,7 +55,7 @@ angular.module('angular-client-side-auth')
             function(res) {
                 console.log(res);
                 authFirebase.login('password', {email: res.email, password: res.password});
-                window.location.href = '/';
+                $location.path('/');
             },
             function(err) {
                 $rootScope.error = "Failed to login";

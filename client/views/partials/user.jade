@@ -1,7 +1,7 @@
 div.row
 	div.col-xs-12.col-sm-3.col-md-2.profile
 		div.thumbnail(style="position:relative")
-			img(ng-src="{{imgProfile}}" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
+			img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
 			a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
 				i.fa.fa-camera
 			div.caption
@@ -62,14 +62,14 @@ div.row
 								i.fa.fa-chevron-down
 							ul.dropdown-menu
 								li(data-access-level='accessLevels.user')
-									a(href="#" , ng-click="remove(post.id);", ng-show="post.to == authUser") Eliminar Publicación
+									a(href="#" , ng-click="remove(post.id);", ng-show="post.to.username == authUser") Eliminar Publicación
 									a(href="#") Repostar abuso o spam
 					div.panel-body
 						.clearfix
-							a(href="./{{post.from}}") 
-								img(src="{{post.pictureUser}}", align='left', valign='middle', style='margin:5px', width="50")
-							a(href="./{{post.from}}") 
-								strong{{post.from}}
+							a(href="./{{post.from.username}}") 
+								img(src="{{post.from.picture}}", align='left', valign='middle', style='margin:5px', width="50")
+							a(href="./{{post.from.username}}") 
+								strong{{post.from.name}}
 							h6
 								span(am-time-ago="post.created_time", title="{{post.created_time | amCalendar}}")
 						h3(ng-show="post.message !== ''")
@@ -89,7 +89,7 @@ div.row
 							.btn-group
 								a.btn.btn-default(href="./", title="Check") 10 
 									i.fa.fa-check
-								a.btn.btn-default(ng-show="comments[$index].length", href="#", title="Comments" , ng-click="viewComment=true; hideComents=true; refresh();") {{comments[$index].length}} 
+								a.btn.btn-default(ng-show="comments[$index].length || comments2[$index].length", href="#", title="Comments" , ng-click="viewComment=true; hideComents=true; refresh();") {{comments[$index].length + comments2[$index].length}} 
 									i.fa.fa-comments
 								a.btn.btn-default(href="./", title="Share")
 									i.fa.fa-share
@@ -97,20 +97,32 @@ div.row
 								a(href="#", ng-show="hideComents && comments[$index].length" , ng-click="hideComents=false; viewComment=false; refresh();") Ocultar Comentarios
 					div.panel-footer
 						div.comments(id="{{post.id}}", ng-show="viewComment" ng-init="viewComment=false")
+							div.clearfix.comment(ng-repeat="comment in comments2[$index]", id="c_{{comment.id}}" ng-mouseover="viewDeleteComment = true", ng-mouseleave="viewDeleteComment = false")
+								a.text-right(style="position: relative; float: right;", href="#", ng-show="viewDeleteComment && (post.to.username == authUser || comment.from.username == authUser)", ng-click="removeCommentPost(comment.from.username, post.id, comment.id);")
+									i.fa.fa-times
+								.imgProfile
+									a(href="./{{comment.from.username}}") 
+										img(src="{{comment.from.picture}}", align='left', valign='middle', style='margin:5px', width="30")
+								.content
+									a(href="./{{comment.from.username}}") 
+										{{comment.from.name}}
+									p {{comment.message}}
+										h6
+											span(am-time-ago="comment.created_time", title="{{comment.created_time | amCalendar}}")
 							div.clearfix.comment(ng-repeat="comment in comments[$index]", ng-mouseover="viewDeleteComment = true", ng-mouseleave="viewDeleteComment = false")
-								a.text-right(href="#", ng-show="viewDeleteComment && (post.to == authUser || comment.from == authUser)", ng-click="removeCommentPost(post.to, comment.from, post.id, comment.id);")
+								a.text-right(style="position: relative;float: right;", href="#", ng-show="viewDeleteComment && (post.to.username == authUser || comment.from == authUser)", ng-click="removeCommentPost(comment.from, post.id, comment.id);")
 									i.fa.fa-times
 								.imgProfile
 									a(href="./{{comment.from}}") 
-										img(src="", picture-profile, username="{{comment.from}}", align='left', valign='middle', style='margin:5px', width="30")
+										img(src="{{comment.fromPicture}}", align='left', valign='middle', style='margin:5px', width="30")
 								.content
 									a(href="./{{comment.from}}") 
-										{{comment.from}}
-									p {{comment.comment}}
+										{{comment.fromName}}
+									p {{comment.message}}
 										h6
-											span(am-time-ago="comment.created_time", title="{{comment.created_time | amCalendar}}")
+											span(am-time-ago="comment.time", title="{{comment.time | amCalendar}}")
 						
 						form(ng-submit="", name="commentForm")
 							textarea.form-control(rows="2", placeholder="Agrega tu comentario ...", data-ng-model="comment", ng-focus="viewButtonComment = true", required)
 							.btn-group(style="margin-top:5px")
-								button.btn.btn-info(ng-show="viewButtonComment", data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addCommentPost(post.id, comment, post.to); comment = ''; viewComment=true; hideComents=true;") Comentar
+								button.btn.btn-info(ng-show="viewButtonComment", data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addCommentPost(post.id, comment); comment = ''; viewComment=true; hideComents=true;") Comentar

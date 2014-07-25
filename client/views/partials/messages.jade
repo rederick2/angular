@@ -9,19 +9,19 @@ div(style="background:white; padding:25px")
 				span.input-group-btn
 					button.btn.btn-default(type='submit') 
 						i.fa.fa-search
-			a.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-click="viewMessages(inbox.id, inbox.to);")
-				div(id="status_{{inbox.to}}", style="position:absolute; right:5px; top:20px")
+			a.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-class="{activo:id == inbox.id, unread:inbox.unread == false}" ng-click="viewMessages(inbox.id, inbox.to.username);")
+				div(id="status_{{inbox.to.username}}", style="position:absolute; right:5px; top:20px")
 				.picture
-					img(src="", picture-profile, username="{{inbox.to}}", align='left', valign='middle',style='margin:5px', width="50")
+					img(src="{{inbox.to.picture}}", username="{{inbox.to.username}}", align='left', valign='middle',style='margin:5px', width="50")
 					//img(src="", align='left', valign='middle',style='margin:5px', width="50")
 				.name
-					h3 {{inbox.to}}
+					h3 {{inbox.to.name}}
 				h6
 					span(style="float: right; padding-right:10px") {{inbox.update | amCalendar}}
 
 		div.col-md-9.messages
 			.actions
-				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]") 
+				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
 					i.fa.fa-plus
 					|	Nuevo Mensaje
 			.to(ng-show="newMessage")
@@ -40,15 +40,24 @@ div(style="background:white; padding:25px")
 			.contentMessages(ng-show="!isSeach")
 				.loading(style='display:none')
 					i.fa.fa-spinner.fa-spin
+				.message.clearfix.comment(ng-repeat="message in messages2", ng-class="{me:message.from.username == username}")
+					.imgProfile
+						a(href="./{{message.from.username}}") 
+							img(src="{{message.from.picture}}", align='left', valign='middle', style='margin:5px', width="50")
+					.content
+						a(href="./{{message.from}}") {{message.from.name}}
+						p {{message.content}}
+						h6
+							span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
 				.message.clearfix.comment(ng-repeat="message in messages", ng-class="{me:message.from == username}")
 					.imgProfile
 						a(href="./{{message.from}}") 
-							img(src="", picture-profile, username="{{message.from}}", align='left', valign='middle', style='margin:5px', width="50")
+							img(src="{{message.picture}}", align='left', valign='middle', style='margin:5px', width="50")
 					.content
-						a(href="./{{message.from}}") {{message.from}}
-						p {{message.text}}
+						a(href="./{{message.from}}") {{message.name}}
+						p {{message.content}}
 						h6
-							span(style="float: right;", am-time-ago="message.time", title="{{message.time | amCalendar}}")
+							span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
 			.write(ng-repeat="write in writes", style="height:30px;")
 				span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
 			form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px;")

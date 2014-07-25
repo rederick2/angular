@@ -19,11 +19,19 @@ config = require('./config.json');
 mongoose.connect(config.db.uri);
 
 require('./server/models/Counter');
+require('./server/models/Comment');
+require('./server/models/Profile');
+require('./server/models/Infosocial');
 require('./server/models/User');
 require('./server/models/Post');
-require('./server/models/Profile');
+require('./server/models/Message');
 require('./server/models/Inbox');
 require('./server/models/Notify');
+require('./server/models/Education');
+require('./server/models/Experience');
+
+
+
 
 var User = mongoose.model('User'), Notify = mongoose.model('Notify'), Counter = mongoose.model('Counter');
 
@@ -46,10 +54,10 @@ var auth = require('./server/controllers/auth'),
     
 });*/
 
-Notify.find().populate('from').populate('to').exec(function(err, notify){
+/*Notify.find().populate('from').populate('to').exec(function(err, notify){
     console.log(notify);
 });
-
+*/
 
 //app.set('views', __dirname + '/client/views');
 //app.set('view engine', 'jade');

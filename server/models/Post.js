@@ -1,10 +1,24 @@
 var mongoose = require('mongoose');
 var request = require('request');
 
+var commentSchema = new mongoose.Schema({
+    id: {type:Number, required:true},
+    from: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    post: {type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true},
+    message: String,
+    created_time: {type: Date, default: Date.now}
+
+}, {collection: 'comments'});
+
+
+/* Guardamos modelo de mongoose */
+
+var Comment = mongoose.model('Comment', commentSchema);
+
 var postSchema = new mongoose.Schema({
     id: {type:Number, required:true},
-    from: {type: String, required:true},
-    to: {type: String, required:true},
+    from: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
+    to: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     title: String,
     picture:String,
     source: String,
@@ -12,9 +26,9 @@ var postSchema = new mongoose.Schema({
     description: String,
     message: String,
     type: String,
-    pictureUser : String,
     created_time: {type: Date, default: Date.now},
-    updated_time: {type: Date, default: Date.now}
+    updated_time: {type: Date, default: Date.now},
+    comments : [{id:Number, from:{username:String,name:String,picture:String},message:String, created_time:Date}]
 }, {collection: 'posts'});
 
 

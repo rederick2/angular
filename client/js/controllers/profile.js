@@ -1,28 +1,43 @@
 angular.module('angular-client-side-auth')
 .controller('ProfileCtrl',
-['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', function($rootScope, $routeParams, $scope, $filter, Profiles, Users) {
+['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth) {
 
+    $scope.authUser = Auth.user.username;
     
-    Profiles.getByUsername({username: $routeParams.id}, function(res) {
+    $scope.userProfile = $routeParams.id;
 
-        $scope.user = res[0]; 
+    $scope.idProfile = 0;
 
+    $scope.educations = [];
+
+    Profiles.getByUsername({username: $scope.userProfile}, function(res) {
+
+        $scope.user = res.profile; 
+
+        $scope.idProfile = res.profile.id;
         //console.log(res[0]);
+        if(res.educations != 0){
+            //console.log(res.educations);//$scope.educations = res.educations;
+            res.educations.forEach(function(r){
+                $scope.educations.push(r);
+                //console.log(r);
+            });
+        }
 
     });
 
     //$scope.email = "rederick2@hotmail.com"
 
-    Users.getByUsername({username:$routeParams.id} , 
+    Users.getByUsername({username:$scope.userProfile} , 
         function(res){
 
-            console.log(res[0]);
-
-            $scope.email = res[0].email;
+            if(res.length != 0 ) $scope.email = res.email;
 
         }, function(err){
             $rootScope.error = err;
     });
+
+    
 
     $scope.dateOptions = {
         changeYear: true,
@@ -85,27 +100,91 @@ angular.module('angular-client-side-auth')
 
     $scope.saveUser = function() {
         // $scope.user already updated!
-        console.log($scope.user);
+        //console.log($scope.user);
         $scope.user.location = $('#google_places_ac').val();
 
-        Profiles.add(
-            {
-                username:$routeParams.id,
-                fullname : $scope.user.fullname,
-                location : $('#google_places_ac').val(),
-                dob: $scope.user.dob,
-                marital: $scope.user.marital,
-                gender: $scope.user.gender
+        if(Auth.user.username == $scope.userProfile ){
 
-            } , 
+            Profiles.update(
+                {
+                    username:Auth.user.username,
+                    fullname : $scope.user.fullname,
+                    location : $('#google_places_ac').val(),
+                    dob: $scope.user.dob,
+                    marital: $scope.user.marital,
+                    gender: $scope.user.gender
+
+                } , 
+            
+            function(res){
+
+                    return true;
+
+            }, function(err){
+                    $rootScope.error = err;
+            });
+
+        }
+
         
-        function(res){
+    };
 
-                return true;
+    $scope.addEducation = function() {
+        // $scope.user already updated!
+       // console.log($scope.user);
 
-        }, function(err){
-                $rootScope.error = err;
-        });
+        if(Auth.user.username == $scope.userProfile ){
+
+            Profiles.addEducation(
+                {
+                    id: $scope.idProfile,
+                    school:$scope.school,
+                    yearRange: '',
+                    schoolDegree: '',
+                    career:'',
+                    description : ''
+
+                } , 
+            
+            function(res){
+
+                    return true;
+
+            }, function(err){
+                    $rootScope.error = err;
+            });
+
+        }
+
+        
+    };
+
+    $scope.saveEducation = function(index, id) {
+        // $scope.user already updated!
+       // console.log($scope.user);
+
+        if(Auth.user.username == $scope.userProfile ){
+
+            Profiles.updateEducation(
+                {
+                    id: id,
+                    school: $scope.educations[index].school,
+                    yearRange: '',
+                    schoolDegree: '',
+                    career:'',
+                    description : ''
+
+                } , 
+            
+            function(res){
+
+                    return true;
+
+            }, function(err){
+                    $rootScope.error = err;
+            });
+
+        }
 
         
     };

@@ -171,7 +171,7 @@ angular.module('angular-client-side-auth').directive('activeNav', ['$location', 
 
 }]);
 
-angular.module('angular-client-side-auth').directive('uniqueUsername', function () {
+angular.module('angular-client-side-auth').directive('uniqueUsername', [ 'Users', function(Users) {
     return {
         require:'ngModel',
         restrict:'A',
@@ -182,22 +182,16 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
 
                // console.log(viewValue.trim() + '|');
 
-                   new Firebase('https://rederick2.firebaseio.com/users/')
-                    .on('value', function(snapshot) {
+                   Users.getByUsername({username: viewValue.trim()}, function(res) {
 
-                        var data = snapshot.val();
-
-                        var result = _.where(data, {username: viewValue.trim()});
-
-                        
-
-                      if(!result[0]) {
+                      if(res.success == 0) {
                         //console.log('not exist.');
                         ctrl.$setValidity('uniqueUsername', true);
                       } else {
                         //console.log('exist.');
                         ctrl.$setValidity('uniqueUsername', false);
                       }
+
                     });
 
                     return viewValue;
@@ -206,7 +200,7 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', function 
 
         }
     }
-});
+}]);
 
 angular.module('angular-client-side-auth').directive('active', function() {
   return function(scope, element, attrs) {
@@ -470,7 +464,7 @@ angular.module('angular-client-side-auth')
   };
 });
 
-angular.module('angular-client-side-auth')
+/*angular.module('angular-client-side-auth')
 .directive('pictureProfile', ['Users', function(Users) {
     return {
       restrict: 'A',
@@ -492,7 +486,7 @@ angular.module('angular-client-side-auth')
             //element.attr('src' , attrs.username);
         }
     };
-}]);
+}]);*/
 
 angular.module('angular-client-side-auth')
 .directive('googlePlaces', function(){

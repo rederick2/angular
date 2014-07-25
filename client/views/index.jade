@@ -21,6 +21,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(rel="stylesheet", href="/js/vendor/codemirror/theme/neo.css")
         link(rel="stylesheet", href="/js/vendor/codepad/firepad.css")
         link(rel="stylesheet", href="/js/vendor/codepad/firepad-userlist.css")
+        link(rel="stylesheet", href="/js/vendor/bootstrap-notify.css")
 
         script(type="text/javascript", src="http://platform.linkedin.com/in.js")
             api_key:75pza9t7zd2w4k
@@ -34,6 +35,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                 window.location = window.location.href.replace(/#.*/, '');
             }
     body(data-ng-cloak)
+        .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
         .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation")
             .container
@@ -51,17 +53,17 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                         a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
                             i.fa.fa-envelope
                         li.dropdown(data-toggle="dropdown", style="float: left;list-style: none;")   
-                            a.navbar-brand.active.dropdown(href="./", data-access-level='accessLevels.user', data-toggle="dropdown")
+                            a.navbar-brand.active.dropdown(href="#", data-access-level='accessLevels.user', data-toggle="dropdown", data-ng-click="getNotifications(1)")
                                 i.fa.fa-globe
-                                span.badge(ng-show="notify")  {{ count_notifications }}
+                                span.badge(ng-show="count_notifications")  {{ count_notifications }}
                             ul.dropdown-menu.notifications
-                                li 
-                                    .imgProfile
-                                        a(href="./{{message.from}}") 
-                                            img(src="http://placehold.it/50x50", picture-profile, username="{{user.username}}", align='left', valign='middle', style='margin:5px', width="50")
-                                    .content   UR ha comentado una publicacion en tu muro y ha indicado que te gusta su mensaje.
-                                        h6
-                                            span(am-time-ago="created_time", title="{{created_time | amCalendar}}")
+                                li(ng-repeat="not in notifications")
+                                    a.clearfix(href="{{not.link}}")
+                                        div 
+                                            img(src="{{not.from.picture}}", align='left', valign='middle', width="50")
+                                            .content {{not.title}}
+                                                h6
+                                                    span(am-time-ago="not.datetime", title="{{not.datetime | amCalendar}}")
 
                     .menu-hidden
                         div.divider-vertical(data-access-level='accessLevels.user')
@@ -87,7 +89,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
                         a.btn-profile.navbar-text(style="padding: 10px 10px;",href="/{{user.username}}")
                             img(ng-src="{{imgProfile}}", height="30")
-                            strong &nbsp;{{ user.username }}&nbsp;
+                            strong &nbsp;{{ fullname }}&nbsp;
                             //span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
                         li.dropdown(data-toggle="dropdown")
 
@@ -139,6 +141,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/hogan.js")
         script(src="/js/vendor/xeditable.js")
         script(src="/js/vendor/date.js")
+        script(src="/js/vendor/bootstrap-notify.js")
 
         script(src="/js/vendor/codemirror/lib/codemirror.js")
         script(src="/js/vendor/codemirror/mode/javascript/javascript.js")

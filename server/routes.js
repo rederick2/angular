@@ -4,9 +4,10 @@ var _ =           require('underscore')
     , AuthCtrl =  require('./controllers/auth')
     , UserCtrl =  require('./controllers/user')
     , PostCtrl =  require('./controllers/post')
-    //, FileCtrl =  require('./controllers/file')
+    , FileCtrl =  require('./controllers/file')
     , ProfileCtrl = require('./controllers/profile')
     , InboxCtrl = require('./controllers/inbox')
+    , NotifyCtrl = require('./controllers/notify')
     , User =      require('./models/User.js')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
@@ -140,7 +141,7 @@ var routes = [
         path: '/users/getbyusername',
         httpMethod: 'POST',
         middleware: [UserCtrl.getByUsername],
-        accessLevel: accessLevels.user
+        accessLevel: accessLevels.public
     },
 
     {
@@ -195,6 +196,13 @@ var routes = [
     },
 
     {
+        path: '/posts/getcomments',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.getComments],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/inbox/add',
         httpMethod: 'POST',
         middleware: [InboxCtrl.add],
@@ -209,6 +217,13 @@ var routes = [
     },
 
     {
+        path: '/inbox/getmessages',
+        httpMethod: 'POST',
+        middleware: [InboxCtrl.getMessages],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/inbox/getbyto',
         httpMethod: 'POST',
         middleware: [InboxCtrl.getByTo],
@@ -216,9 +231,16 @@ var routes = [
     },
 
     {
-        path: '/profile/add',
+        path: '/inbox/unread',
         httpMethod: 'POST',
-        middleware: [ProfileCtrl.add],
+        middleware: [InboxCtrl.unread],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/update',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.update],
         accessLevel: accessLevels.user
     },
 
@@ -227,7 +249,35 @@ var routes = [
         httpMethod: 'POST',
         middleware: [ProfileCtrl.getByUsername],
         accessLevel: accessLevels.user
-    },/*
+    },
+
+    {
+        path: '/profile/getEducations',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.getEducations],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/addEducation',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.addEducation],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/removeEducation',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.removeEducation],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/updateEducation',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.updateEducation],
+        accessLevel: accessLevels.user
+    },
 
     {
         path: '/file',
@@ -241,7 +291,25 @@ var routes = [
         httpMethod: 'POST',
         middleware: [FileCtrl.destroy],
         accessLevel: accessLevels.user
-    },*/
+    },
+    {
+        path: '/notify',
+        httpMethod: 'POST',
+        middleware: [NotifyCtrl.index],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/notify/add',
+        httpMethod: 'POST',
+        middleware: [NotifyCtrl.add],
+        accessLevel: accessLevels.user
+    },
+    {
+        path: '/notify/unread',
+        httpMethod: 'POST',
+        middleware: [NotifyCtrl.unread],
+        accessLevel: accessLevels.user
+    },
 
     // All other get requests should be handled by AngularJS's client-side routing system
     {

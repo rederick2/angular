@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     userRoles =       require('../../client/js/routingConfig').userRoles,
     User = mongoose.model('User');
+    Infosocial = mongoose.model('Infosocial');
 
 module.exports = {
 
@@ -39,9 +40,9 @@ module.exports = {
         name : profile.name,
         email : profile.email,
         password: profile.password,
-        //picture: 'https://graph.facebook.com/'+profile.username+'/picture',
+        picture: profile.social != null ? profile.social.picture : 'http://placehold.it/50x50',
+        social : profile.social,
         //link: profile.link,
-        red: 'password',
         //redId: profile.id,
         //token: profile.accessToken,
         role : userRoles.user
@@ -51,7 +52,7 @@ module.exports = {
 
               req.logIn(user, function(err) {
                   if(err)     { next(err); }
-                  else        { res.json(200, { "role": user.role, "username": user.username, "email" : user.email, "password" : user.password }); }
+                  else        { res.json(200, { "role": user.role, "username": user.username }); }
               });
           });
   },
@@ -62,7 +63,37 @@ module.exports = {
     //console.log("BUSCARRRRRFACEEEEE");
     var profile = req.body;
 
-    User.findOrCreate({
+    /*User.findOne({username:profile.username}, function(err, user){
+
+      if(err) return res.send(500, err);
+
+      if(!user) return res.json(profile);*/
+
+      Infosocial.findOne({providerId:profile.id, provider:'facebook'}, function(err, social){
+
+        if(err) return res.send(500, err);
+
+        if(!social) return res.json(profile);
+
+        User.findOne({username:social.user}, function(err, user){
+
+          if(err) return res.send(500, err);
+
+          if(!user) return res.json(profile);
+
+          req.logIn(user, function(err) {
+                    if(err)     { next(err); }
+                    else        { res.json(200, { login: 'true', "role": user.role, "username": user.username, email: user.email, name:user.name }); }
+                });
+        });
+
+      });
+
+    //});
+
+    //return res.json(profile);
+
+   /* User.findOrCreate({
         username: profile.username,
         name : profile.displayName,
         email : profile.email,
@@ -78,9 +109,9 @@ module.exports = {
 
               req.logIn(user, function(err) {
                   if(err)     { next(err); }
-                  else        { res.json(200, { "role": user.role, "username": user.username }); }
+                  else        { res.json(200, { "role": user.role, "username": user.username, email: user.email, name:user.name }); }
               });
-          });
+          });*/
   },
 
   login : function(req, res, next) {
@@ -96,7 +127,7 @@ module.exports = {
 
               req.logIn(user, function(err) {
                   if(err)     { next(err); }
-                  else        { res.json(200, { "role": user.role, "username": user.username, "email" : user.email, "password" : user.password }); }
+                  else        { res.json(200, { "role": user.role, "username": user.username, "email" : user.email, "password" : user.password, name:user.name }); }
               });
           });
   },

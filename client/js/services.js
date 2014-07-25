@@ -103,9 +103,44 @@ angular.module('angular-client-side-auth')
             //console.log(sort);
             $http.post('/profile/getbyusername', data).success(success).error(error);
         },
+        update: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/update', data).success(success).error(error);
+        },
+        getEducations: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/getEducations', data).success(success).error(error);
+        },
+        updateEducation: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/updateEducation', data).success(success).error(error);
+        },
+        removeEducation: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/removeEducation', data).success(success).error(error);
+        },
+        addEducation: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/addEducation', data).success(success).error(error);
+        }
+
+    };
+});
+
+angular.module('angular-client-side-auth')
+.factory('Notify', function($http) {
+    return {
+        getAll: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/notify', data).success(success).error(error);
+        },
         add: function(data, success, error) {
             //console.log(sort);
-            $http.post('/profile/add', data).success(success).error(error);
+            $http.post('/notify/add', data).success(success).error(error);
+        },
+        unread: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/notify/unread', data).success(success).error(error);
         }
 
     };
@@ -125,6 +160,14 @@ angular.module('angular-client-side-auth')
         add: function(data, success, error) {
             //console.log(sort);
             $http.post('/inbox/add', data).success(success).error(error);
+        },
+        getMessages: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/inbox/getmessages', data).success(success).error(error);
+        },
+        unread: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/inbox/unread', data).success(success).error(error);
         }
 
     };
@@ -160,6 +203,11 @@ angular.module('angular-client-side-auth')
         getByUsername: function(data, success, error) {
             //console.log(sort);
             $http.post('/posts/getbyusername', data).success(success).error(error);
+        },
+
+        getComments: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/getcomments', data).success(success).error(error);
         }
 
     };

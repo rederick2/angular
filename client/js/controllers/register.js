@@ -5,9 +5,11 @@ angular.module('angular-client-side-auth')
     $scope.userRoles = Auth.userRoles;
     $scope.username = '';
 
+    //console.log($rootScope.userRegister);
+
     var url = "https://rederick2.firebaseio.com/";
 
-    var Ref = new Firebase(url);
+    /*var Ref = new Firebase(url);
     var authFirebase = new FirebaseSimpleLogin(Ref, function(error, user) {
       if (error) {
         // an error occurred while attempting login
@@ -30,7 +32,15 @@ angular.module('angular-client-side-auth')
         // user is logged out
 
       }
-    });
+    });*/
+
+    if($rootScope.userRegister)
+    {
+
+        $scope.username = $rootScope.userRegister.username;
+        $scope.email = $rootScope.userRegister.email;
+        $scope.name = $rootScope.userRegister.displayName;
+    }
 
 
     $scope.$watch('username', function() {
@@ -38,20 +48,33 @@ angular.module('angular-client-side-auth')
     });
 
     $scope.register = function() {
+        var social = null;
+        var picture = "";
+
+        if($rootScope.userRegister)
+        {
+            if($rootScope.userRegister.provider == 'facebook'){
+                picture = 'https://graph.facebook.com/'+$rootScope.userRegister.username+'/picture';
+            }
+
+            social = {provider: $rootScope.userRegister.provider, providerId: $rootScope.userRegister.id, token: $rootScope.userRegister.accessToken, picture:picture, link: $rootScope.userRegister.link} 
+        }
+
         Auth.register({
                 username: $scope.username,
                 password: $scope.password,
                 email: $scope.email,
                 name: $scope.name,
-                role: $scope.role
+                role: $scope.role,
+                social : social
             },
             function(res) {
-                authFirebase.createUser(res.email, res.password, function(error, user) {
+                /*authFirebase.createUser(res.email, res.password, function(error, user) {
                   if (!error) {
                     console.log('User Id: ' + user.uid + ', Email: ' + user.email);
                     authFirebase.login('password', {email: res.email, password: res.password});
                   }
-                });
+                });*/
                 $location.path('/');
             },
             function(err) {

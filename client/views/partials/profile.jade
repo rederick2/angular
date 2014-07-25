@@ -1,3 +1,19 @@
+.modal.fade(id="modalEducation", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type="button", data-dismiss="modal")
+					span(aria-hidden="true")	&times;
+					span.sr-only	Close
+				h4.modal-title(id="myModalLabel")	Agregar Estudios
+			.modal-body
+				form(id="formEducation", onaftersave="saveEducation()")
+					.controls
+						input.form-control(type="text", data-ng-model="school", placeholder="Nombre de la Intitución", name="school", required)
+			.modal-footer
+				button.btn.btn-default(type="button", data-dismiss="modal")	Close
+				button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting", ng-click="addEducation()")	Save Changes
+
 .row
 	.div.col-xs-12.col-sm-4.col-md-3(style="background:white; padding:0")
 		ul.menuProfile
@@ -31,11 +47,24 @@
 				span.editable.editable-text {{email}}
 
 			.buttons
-				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible") Editar
+				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
 				span(ng-show="editableForm.$visible")
 					button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
 					button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
+		button.btn.btn-primary.btn-lg(data-toggle="modal" data-target="#modalEducation")	Agregar Estudios
+
+		form(id="formProfile", editable-form, ng-repeat="education in educations" name="editableForm", onaftersave="saveEducation($index, education.id)")
+			div.btn-group.col-md-12
+				span.title Nombre de la Institución Educativa
+				span(editable-text="educations[$index].school", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.school || 'empty' }}
+
+
+			.buttons
+				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
+				span(ng-show="editableForm.$visible")
+					button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+					button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
 		img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
 

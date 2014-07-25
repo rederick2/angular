@@ -3,6 +3,7 @@ var _ =           require('underscore')
     , Post = mongoose.model('Post')
     , User = mongoose.model('User')
     , Counter = mongoose.model('Counter')
+    , Comment = mongoose.model('Comment')
     , userRoles = require('../../client/js/routingConfig').userRoles
     , Firebase = require('../models/Firebase.js');
 
@@ -17,47 +18,85 @@ var postsmongo = db.collection('posts');*/
 module.exports = {
     index: function(req, res) {
         
-        Post.find().limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
-            if (err) {
-                res.send(403, err);
-            } else {
 
-                var usernames = docs.map(function(doc) { return doc.from; });
+        var docs = [];
 
-                User.find({ username : { $in : usernames } }, function(err, users) {
-                    // create a mapping of username -> first name for easy lookup
-                    var usernames = {};
-                    users.forEach(function(user) {
-                        if(user.picture){
-                            usernames[user.username] = user.picture;
-                        }else{
-                            usernames[user.username] = 'http://placehold.it/50x50';
-                        }
+        var sm = Post.find().limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).populate('from' , 'username name picture').populate('to' , 'username name picture').stream();
+        
+        sm.on('data', function (doc) {
+          // do something with the mongoose document
+          if(!doc) return res.json({success:'true'});
+
+          if(doc) this.pause();
+
+          var self = this;
+
+          Comment.find({post:doc}).populate('from' , 'username name picture').exec(function(err, comments){
+
+                if(!comments) return res.json({success:'true'});
+
+                var comment = [];
+
+                if(comments){
+
+                    comments.forEach(function(x){
                         
+                        console.log(x);
+                        
+                        comment = { id: x.id, from:{username:x.from.username, name:x.from.name, picture:x.from.picture}, message:x.message, created_time: x.created_time};
+                        
+                        doc.comments.push(comment);
                     });
 
-                    docs.forEach(function(doc) {
-                      doc.pictureUser = usernames[doc.from];
-                    });
+                }
+                
 
-                    res.json(docs);
-                });
-            }
+                docs.push(doc);
 
+                self.resume();
+
+                
+
+          });
+
+        }).on('error', function (err) {
+
+          // handle the error
+          return res.send(403, err);
+
+        }).on('close', function () {
+
+          // the stream is closed
+
+          res.json(docs);
+          
         });
+
+
     },
 
     remove: function(req,res){
 
         try{
 
-            Post.remove({id:req.body.id}).exec();
+            Post.findOne({id:req.body.id}).populate('to' , 'username').exec(function(err, doc){
 
-            var myRootRef = Firebase.getRef('posts/' + req.body.username + '/' + req.body.id);
+                if(!doc) return res.json({message: 'No se encontro post'});
 
-            myRootRef.remove();
+                if(err) return res.send(500, err);
 
-            res.json({success:'true'}); 
+                var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.id);
+
+                myRootRef.remove();
+
+                doc.remove();
+
+                res.json({success:'true'});
+
+
+            });
+
+             
 
         }catch(e){
             console.log(e);
@@ -71,13 +110,21 @@ module.exports = {
 
         try{
 
-            Post.update({id:req.body.idpost}, {$pull: {'comments': {'id': req.body.id}}});
+            Post.findOne({id:req.body.idpost}).populate('to' , 'username').exec(function(err, doc){
 
-            var myRootRef = Firebase.getRef('posts/' + req.body.from + '/' + req.body.idpost + '/comments/' + req.body.id);
+                var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.idpost + '/comments/' + req.body.id);
 
-            myRootRef.remove();
+                myRootRef.remove();
 
-            res.json({success:'true'}); 
+                Comment.remove({id:req.body.id}).exec();
+
+                //doc.remove();
+
+                res.json({success:'true'});
+
+            });
+
+             
 
         }catch(e){
             console.log(e);
@@ -90,90 +137,108 @@ module.exports = {
 
     addComment: function(req, res) {
 
-        Post.find({id:req.body.idpost},function(err, docs){
+        Post.findOne({id:req.body.idpost}).populate('to' , 'username').exec(function(err, doc){
+
+            if(err) return res.send(500, err);
+
+            if(!doc) return res.json({mensaje : 'No se encontro el post'});
 
             
-            var id = _.max(docs[0].comments, function(doc) { return doc.id; }).id + 1;
+            Counter.getNextSequence("commentid" , function(err, count){
+
+                User.findOne({username:req.body.from}, function(err, user){
+
+                    var comment = new Comment({id:count, from: user, post:doc, message:req.body.message});
+
+                    comment.save();
+
+                    var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + doc.id + '/comments/' + count);
+
+                    myRootRef.set({id:count, from: user.username, fromPicture: user.picture, fromName: user.name, message:req.body.message, time:req.body.time});
+
+                    res.json({success:'true' , to:doc.to.username, name: user.name,  id: doc.id}); 
+                });
+
+            });
            
-
-            //console.log(docs);
-
-            if(_.isNaN(id)){
-                id = 1;
-            }
-
-            var comment = {
-                id: id,
-                from : req.body.from,
-                comment:req.body.comment,
-                created_time: req.body.created_time, 
-                updated_time: req.body.updated_time
-            }
-
-            try{
-
-                Post.update({id:req.body.idpost},{$push:{'comments':comment}});
-
-                var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + req.body.idpost + '/comments/' + id);
-
-                myRootRef.set(comment);
-
-                res.json({success:'true'});  
-
-            }catch(e){
-                 console.log(e);
-            }
-
-                 
 
         });
 
+    },
+
+    getComments : function(req, res){
+        Post.findOne({id : req.body.id}, function(err, doc){
+            
+            if(err) return res.send(500, err);
+
+            Comment.find({post:doc}).limit(20).sort({created_time:'desc'}).populate('from' , 'username name picture').exec(function(err,comments){
+
+                res.json(comments);
+
+            });
+
+
+        });
         
-
-
     },
 
     add: function(req, res) {
 
         try{
 
-            Counter.getNextSequence("postid", function(err, count){
+            User.findOne({username:req.body.from}, function(err, from){
+                
+                if(err) return res.send(500, err);
 
-                if(count != 0){
+                User.findOne({username:req.body.to}, function(err, to){
 
-                    var model = {
-                            id: count,
-                            from : req.body.from,
-                            to : req.body.to,
-                            title : req.body.title,
-                            picture : req.body.picture,
-                            source : req.body.source,
-                            url : req.body.url,
-                            fuente : req.body.fuente,
-                            description : req.body.description,
-                            message : req.body.message,
-                            type : req.body.type,
-                            picture : req.body.picture,
-                            created_time: Date.now
-                        }
+                    if(err) return res.send(500, err);
 
-                    var post = new Post(model);
+                    Counter.getNextSequence("postid", function(err, count){
 
-                    post.save();
+                            var model = {
+                                    id: count,
+                                    from : from,
+                                    to : to,
+                                    title : req.body.title,
+                                    picture : req.body.picture,
+                                    source : req.body.source,
+                                    url : req.body.url,
+                                    fuente : req.body.fuente,
+                                    description : req.body.description,
+                                    message : req.body.message,
+                                    type : req.body.type
+                                }
 
-                    var myRootRef = Firebase.getRef('posts/' + req.body.to + '/' + count);
+                            var post = new Post(model);
 
-                    myRootRef.set(model);
+                            post.save();
 
-                    res.json({success:'true'});  
+                            var myRootRef = Firebase.getRef('posts/' + to.username + '/' + count);
 
-                }else{
+                            myRootRef.set({
+                                    id: count,
+                                    from : from.username,
+                                    to : to.username,
+                                    title : req.body.title,
+                                    picture : req.body.picture,
+                                    source : req.body.source,
+                                    url : req.body.url,
+                                    fuente : req.body.fuente,
+                                    description : req.body.description,
+                                    message : req.body.message,
+                                    type : req.body.type
+                                });
 
-                    res.json({success:'false'});  
-                }
+                            res.json({success:'true'});  
 
+                    });
+
+
+                });
             });
 
+            
         }catch(e){
              console.log(e);
         }
@@ -181,36 +246,60 @@ module.exports = {
     },
     getByUsername: function(req, res) {
 
-        Post.find({to : req.body.username}).limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
-            if (err) {
-                res.render('error', {
-                    status: 500
-                });
-            } else {
+        User.findOne({username:req.body.username} , function(err, user){
 
-                var usernames = docs.map(function(doc) { return doc.from; });
+            var docs = [];
 
-                User.find({ username : { $in : usernames } }, function(err, users) {
-                    // create a mapping of username -> first name for easy lookup
-                    var usernames = {};
-                    users.forEach(function(user) {
-                        if(user.picture){
-                            usernames[user.username] = user.picture;
-                        }else{
-                            usernames[user.username] = 'http://placehold.it/50x50';
-                        }
-                        
-                    });
+            var sm = Post.find({to:user}).limit(req.body.limit).sort({_id:-1}).skip((req.body.page) * req.body.limit).populate('from' , 'username name picture').populate('to' , 'username name picture').stream();
+            
+            sm.on('data', function (doc) {
+              // do something with the mongoose document
+              if(doc) this.pause();
 
-                    docs.forEach(function(doc) {
-                      doc.pictureUser = usernames[doc.from];
-                    });
+              var self = this;
 
-                    res.json(docs);
-                });
-            }
+              Comment.find({post:doc}).populate('from' , 'username name picture').exec(function(err, comments){
+
+                    var comment = [];
+
+                    if(comments){
+
+                        comments.forEach(function(x){
+                            
+                            console.log(x);
+                            
+                            comment = { id: x.id, from:{username:x.from.username, name:x.from.name, picture:x.from.picture}, message:x.message, created_time: x.created_time};
+                            
+                            doc.comments.push(comment);
+                        });
+
+                    }
+                    
+
+                    docs.push(doc);
+
+                    self.resume();
+
+                    
+
+              });
+
+            }).on('error', function (err) {
+
+              // handle the error
+              return res.send(403, err);
+
+            }).on('close', function () {
+
+              // the stream is closed
+
+              res.json(docs);
+              
+            });
 
         });
+
+        
 
     }
 };

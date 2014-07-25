@@ -12,8 +12,8 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
 
     $routeProvider.when('/',
         {
-            templateUrl:    'home',
-            controller:     'HomeCtrl',
+            templateUrl:    'user',
+            controller:     'UserCtrl',
             access:         access.user
         });
 
@@ -164,8 +164,9 @@ angular.module('angular-client-side-auth', ['ngCookies', 'ngRoute', 'firebase' ,
                 function(res){
 
                     //console.log(res[0]);
-                    if(res[0].picture){
-                        $rootScope.imgProfile = res[0].picture + '?' + (Math.random()*10);
+                    if(res.length != 0){
+                        $rootScope.imgProfile = res.picture + '?' + (Math.random()*10);
+                        $rootScope.fullname = res.name;
                     }
 
                 }, function(err){

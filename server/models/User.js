@@ -6,6 +6,9 @@ var User
 
     var mongoose = require('mongoose');
     var request = require('request');
+    var Profile = mongoose.model('Profile');
+    var Counter = mongoose.model('Counter');
+    var Infosocial = mongoose.model('Infosocial');
 
 var message = new mongoose.Schema({update: {type: Date, default:Date.now, to: String, id: Number}});
 
@@ -16,11 +19,6 @@ var userSchema = new mongoose.Schema({
     email : {type: String, 'default' : 'email@example.com'},
     password : String,
     picture: String,
-    link: String,
-    red: String,
-    redId: String,
-    token: String,
-    tokenSecret: String,
     pais: String,
     ip: String,
     activado: { type: Boolean, 'default': true },
@@ -41,7 +39,14 @@ userSchema.statics.findOrCreate = function (profile, done) {
     var myRootRef = Firebase.getRef('users/'+ profile.username);
 
     myRootRef.set(profile);
-    
+
+    if(profile.social){
+
+        var i = new Infosocial({user:profile.username, provider:profile.social.provider, providerId: profile.social.providerId, token: profile.social.token, link: profile.social.link});
+
+        i.save();
+    }
+
     user.save(done);
 
   });
@@ -56,6 +61,18 @@ userSchema.statics.AllUsers = function (done) {
 
   });
 };
+
+userSchema.post('save' , function(user){
+
+    Counter.getNextSequence("profileid", function(err, count){
+
+        p = new Profile({id:count, user: user, fullname:user.name});
+        
+        p.save();
+
+    });
+
+});
 
 /* Guardamos modelo de mongoose */
 

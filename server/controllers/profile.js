@@ -1,6 +1,8 @@
 var _ =           require('underscore')
     , mongoose = require('mongoose')
     , Profile = mongoose.model('Profile')
+    , Education = mongoose.model('Education')
+    , Experience = mongoose.model('Experience')
     , User = mongoose.model('User')
     , Counter = mongoose.model('Counter')
     , userRoles = require('../../client/js/routingConfig').userRoles
@@ -9,62 +11,145 @@ var _ =           require('underscore')
 
 module.exports = {
     
-    add: function(req, res) {
+    update: function(req, res) {
 
-        try{
+        User.findOne({username:req.body.username}, function(err, user){
 
-            Profile.findOrCreate({
-                id: 0,
-                username: req.body.username,
-                fullname: req.body.fullname,
-                location: req.body.location,
-                dob : req.body.dob,
-                marital : req.body.marital,
-                gender : req.body.gender
+            if(err) return res.send(403, err);
 
-            }, function(err, doc){
-                if(doc){
+            if(!user) return res.json({success:'true'});
 
-                    var p = {
-                                fullname: req.body.fullname,
-                                location: req.body.location,
-                                dob : req.body.dob,
-                                marital : req.body.marital,
-                                gender : req.body.gender
-                            };
+            Profile.update({user:user}, 
+                    {
+                        fullname: req.body.fullname, 
+                        location: req.body.location,           
+                        dob : req.body.dob,
+                        marital : req.body.marital,
+                        gender : req.body.gender
+                    }).exec();
 
-                    Profile.update({username:req.body.username}, p).exec();
+        });
 
-                    var myRootRef = Firebase.getRef('profiles/' + req.body.username );
-
-                    myRootRef.update(p);
-
-                    res.json({success:'true'});
-
-                }else if(err){
-
-                    res.send(403, err);
-                }
-
-            });
-
-        }catch(e){
-
-            console.log(e);
-        }
 
     },
 
     getByUsername: function(req, res) {
 
-        Profile.find({username : req.body.username} , function(err, docs) {
-            if (err) {
-                res.send(403, err);
-            } else {
+        User.findOne({username:req.body.username}, function(err, user){
+            
+            if(err) return res.send(500,err);
 
-                res.json(docs);
+            if(!user) return res.json({success:'true'});
 
-            }
+            Profile.findOne({user : user} , function(err, profile) {
+                
+                if (err) return res.send(403, err);
+
+                if(!profile) return res.json({success:'true'});
+
+                Education.find({profile : profile } , function(err, educations) {
+
+                    var r = 0;
+            
+                    if (err) return res.send(403, err);
+
+                    if(educations) r = educations;
+
+                    res.json({success:'true', profile: profile, educations: r});
+
+                });
+
+
+            });
+
+        });
+
+        
+
+    }, 
+
+    getEducations: function(req, res){
+
+        Profile.findOne({id : req.body.id } , function(err, profile) {
+                
+            if (err) return res.send(403, err);
+
+            if(!profile) return res.json({success:'true'});
+
+            Education.find({profile : profile } , function(err, educations) {
+            
+                if (err) return res.send(403, err);
+
+                if(!educations) return res.json({success:'true', result:0});
+
+                res.json({success:'true', result: educations});
+
+            });
+        });
+
+    },
+
+    addEducation: function(req, res){
+
+        Profile.findOne({id : req.body.id } , function(err, profile) {
+                
+                if (err) return res.send(403, err);
+
+                if(!profile) return res.json({success:'true'});
+
+                Counter.getNextSequence("educationid", function(err, count){
+
+                        var e = new Education({
+                                                id: count,
+                                                profile: profile,
+                                                school: req.body.school,
+                                                yearRange: req.body.yearRange,
+                                                schoolDegree: req.body.schoolDegree,
+                                                career:req.body.career,
+                                                description : req.body.description
+                                            });
+
+                        e.save();
+
+                        return res.json({success:'true'});
+
+                    });
+
+            });
+    },
+
+    updateEducation: function(req, res) {
+
+        Education.update({id:req.body.id}, 
+                {
+                    school: req.body.school,
+                    yearRange: req.body.yearRange,
+                    schoolDegree: req.body.schoolDegree,
+                    career:req.body.career,
+                    description : req.body.description
+
+                }, function(err, numberAffected, rawResponse){
+
+                    if (err) return res.send(403, err);
+
+                    res.json({success:'true', numberAffected: numberAffected , rawResponse: rawResponse });
+
+                });
+
+    },
+
+    removeEducation: function(req, res){
+
+        Education.findOne({id:req.body.id} , function(err, e){
+
+            if(!e) return res.json({message: 'No se encontro'});
+
+            if(err) return res.send(500, err);
+
+            e.remove();
+
+            res.json({success:'true'});
+
 
         });
 

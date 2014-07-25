@@ -1,15 +1,21 @@
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
-['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files) {
+['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', 'Notify', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files, Notify) {
 
     //$scope.username = $routeParams.id;
     //$scope.userRoles = Auth.userRoles;
-    $scope.username = $routeParams.id;
+    if($routeParams.id)
+        $scope.username = $routeParams.id;
+    else
+        $scope.username = Auth.user.username;
+    
     $scope.authUser = Auth.user.username;
 
     $scope.video = [];
 
     $scope.comments = [];
+
+    $scope.comments2 = [];
 
     $scope.id = '';
     $scope.idpost = 45;
@@ -129,19 +135,19 @@ angular.module('angular-client-side-auth')
 
     }
     
-        Users.getByUsername({username:$routeParams.id} , 
-            function(res){
+    Users.getByUsername({username:$scope.username} , 
+        function(res){
 
-                //console.log(res[0]);
-                if(res[0].picture){
-                    $scope.imgProfile = res[0].picture;
-                }
+            //console.log(res[0]);
+            if(res.length != 0){
+                $scope.imgProfile = res.picture;
+            }
 
-                $scope.user = res[0];
+            $scope.user = res;
 
-            }, function(err){
-                $rootScope.error = err;
-            });
+        }, function(err){
+            $rootScope.error = err;
+        });
 
     $scope.page = 0;
     $scope.busy = false;
@@ -153,88 +159,118 @@ angular.module('angular-client-side-auth')
         if ($scope.busy) return;
         $scope.busy = true;
 
-        Posts.getByUsername({
-            username : $scope.username,
-            limit:20, 
-            page:$scope.page
-        },
-        function(res){
+        if($routeParams.id){
 
-            res.forEach(function(r){
+            Posts.getByUsername({ username : $scope.username, limit:20, page:$scope.page },
+            function(res){
+                $scope.afterGetPost(res);
+            },
+            function(err) {
+                    $rootScope.error = err;
+            });
+        }else{
+
+            Posts.getAll({ limit:20, page:$scope.page },
+            function(res){
+                $scope.afterGetPost(res);
+            },
+            function(err) {
+                    $rootScope.error = err;
+            });
+        }
+    }
+
+    $scope.afterGetPost = function(res){
+        res.forEach(function(r){
                 $scope.posts.push(r);
             });
 
             for (var p in res){
 
-                var url = new Firebase('https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments');
+                var pt = res[p];
 
-                var data = angularFireCollection(url.limit(50));
-                
-                $scope.comments.push(data);
+                //console.log(pt);*/
 
-                var ref = url;
+                //Posts.getComments({id:pt.id}, function(c){
 
-                ref.limit(1).on('child_added', function(snap){
+                    var ref = new Firebase('https://rederick2.firebaseio.com/posts/'+pt.to.username+'/'+pt.id+'/comments');
 
-                    //console.log('Hola');
+                    //console.log('https://rederick2.firebaseio.com/posts/'+pt.to.username+'/'+pt.id+'/comments');
 
-                    setTimeout(function() {
+                    ref.remove();
 
-                        $('div.comments').animate({scrollTop : ($('div.comments').children().size() + 1) * 300 });
+                    var m = _.last(pt.comments);
 
-                        $('.masonry').masonry();
 
-                    }, 10);
 
-                });
+                    if(pt.comments.length != 0){
 
-                ref.on('child_removed', function(snap){
+                       // console.log(m);
 
-                    setTimeout(function() {
+                        var ref2 = new Firebase('https://rederick2.firebaseio.com/posts/'+pt.to.username+'/'+pt.id+'/comments/' + m.id);
 
-                        $('.masonry').masonry();
+                        ref2.set({id:m.id, from: m.from.username, fromPicture: m.from.picture, fromName: m.from.name, message: m.message, time: m.created_time});
 
-                    }, 10);
+                    }
+                    
+                    $scope.comments.push(angularFireCollection(ref));
 
-                });
+                    $scope.comments2.push(_.without(pt.comments, _.last(pt.comments)));
+
+                    ref.limit(1).on('child_added', function(snap){
+
+                        //console.log('Hola');
+
+                        setTimeout(function() {
+
+                            $('div.comments').animate({scrollTop : ($('div.comments').children().size() + 1) * 300 });
+
+                            $('.masonry').masonry();
+
+                        }, 10);
+
+                    });
+
+                    ref.on('child_removed', function(snap){
+
+                        setTimeout(function() {
+
+                            $('.masonry').masonry();
+
+                        }, 10);
+
+                    });
+
+                //});
 
 
             }
-
-
-            //console.log($scope.comments);
             
 
             $scope.page++;
             $scope.busy = false;
-
-            //$scope.posts = res;
-
-
-        },
-        function(err) {
-                $rootScope.error = err;
-        });
     }
     //$scope.posts = angularFireCollection('https://rederick2.firebaseio.com/posts/' + $scope.username);
-    $scope.addCommentPost = function(id, comment, to){
+    $scope.addCommentPost = function(id, message){
 
         //$scope.loading = true;
 
         Posts.addComment({
             idpost: id,
             from : Auth.user.username,
-            to : to,
-            comment : comment,
-            created_time: new Date(), 
-            updated_time: new Date()
-
+            message : message,
+            time: new Date()
         },
         function(res){
-            $scope.comment = '';
+            $scope.message = '';
             //$scope.getPost();
             //$('.close').click();
             $scope.loading = false;
+
+            if(Auth.user.username != res.to){
+
+                Notify.add({from:Auth.user.username, to:res.to, title: res.name + ' comento un post tuyo. "' + message + '"' , link:'./post/' + res.id , time: new Date()}, function(res){ return true;});
+            }
 
             setTimeout(function() {
 
@@ -255,31 +291,38 @@ angular.module('angular-client-side-auth')
 
     }
 
-    $scope.removeCommentPost = function(to, from, idpost, id){
+    $scope.removeCommentPost = function(from, idpost, id){
 
-        //$scope.loading = true;
 
-        if(to == $scope.authUser || from == $scope.authUser){
+        Posts.removeComment({
+            idpost: idpost,
+            id:id,
+            from : from
+        },
+        function(res){
 
-            Posts.removeComment({
-                idpost: idpost,
-                id:id,
-                from : $routeParams.id
-            },
-            function(res){
+            if(res.success == 'true'){
 
-                setTimeout(function() {
+                for(var x in $scope.comments2){
 
-                    $('.masonry').masonry();
+                    $scope.comments2[x] = _.without($scope.comments2[x], _.findWhere($scope.comments2[x], {id:id}));
 
-                }, 500);
+                };
+                
+            }
 
-            },
-            
-            function(err) {
-                $rootScope.error = err;
-            });
-        }
+            setTimeout(function() {
+
+                $('.masonry').masonry();
+
+            }, 500);
+
+        },
+        
+        function(err) {
+            $rootScope.error = err;
+        });
+
 
        // console.log(comment);
 
@@ -333,6 +376,7 @@ angular.module('angular-client-side-auth')
             $scope.busy = false;
             $scope.posts = [];
             $scope.comments = [];
+            $scope.comments2 = [];
             $scope.getPost();
             //document.location.reload();
             $('.close').click();
@@ -356,7 +400,7 @@ angular.module('angular-client-side-auth')
     }
 
     $scope.remove = function(id){
-        Posts.remove({id:id, username:Auth.user.username},
+        Posts.remove({id:id},
             function(res){
                 $scope.page = 0;
                 $scope.busy = false;

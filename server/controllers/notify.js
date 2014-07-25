@@ -13,6 +13,29 @@ module.exports = {
 
         try{
 
+            User.findOne({username:req.body.from}, function(err, from){
+                
+                if(err) return res.send(403, err);
+
+                User.findOne({username:req.body.to}, function(err, to){
+                    
+                    if(err) return res.send(403, err);
+
+                    Counter.getNextSequence("notifyid", function(err, count){
+
+                        var n = new Notify({id:count, from:from, to: to, title:req.body.title, link: req.body.link});
+
+                        n.save();
+
+                        var ref = Firebase.getRef('notifications/' + to.username );
+
+                        ref.push({id:count, from:from.username, fromName: from.name, fromPicture: from.picture, title:req.body.title, link: req.body.link, datetime: req.body.time});
+
+                        return res.json({success:'true'});
+
+                    });
+                });
+            });
           // try
 
         }catch(e){
@@ -22,31 +45,39 @@ module.exports = {
 
     },
 
-    getByUsername: function(req, res) {
+    unread: function(req, res) {
 
-        Inbox.find({username : req.body.username} , function(err, docs) {
-            if (err) {
-                res.send(403, err);
-            } else {
+        User.findOne({username:req.body.to}, function(err, user){
+            
+            if(err) return res.send(500, err);
 
-                res.json(docs);
+            Notify.update({to:user}, {unread:true}, { multi: true }).exec();
 
-            }
+            var ref = Firebase.getRef('notifications/' + user.username );
+
+            ref.remove();
+
+            return res.json({success:'true'});
 
         });
+        
 
     },
 
-    getByTo: function(req, res) {
+    index: function(req, res) {
 
-        Inbox.findOne({username : req.body.username, to: req.body.to} , function(err, docs) {
-            if (err) {
-                res.send(403, err);
-            } else {
+        User.findOne({username:req.body.to}, function(err, user){
+            
+            if(err) return res.send(500, err);
 
-                res.json(docs);
+            Notify.find({to:user}).sort({_id:-1}).limit(10).populate('from', 'username name picture').exec(function(err, nots){
 
-            }
+                if(err) return res.send(500, err);
+
+                return res.json(nots);
+
+            });
+
 
         });
 
