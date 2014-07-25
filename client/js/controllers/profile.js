@@ -139,7 +139,8 @@ angular.module('angular-client-side-auth')
                 {
                     id: $scope.idProfile,
                     school:$scope.school,
-                    yearRange: '',
+                    yearStart: $scope.yearStart,
+                    yearEnd: $scope.yearEnd,
                     schoolDegree: '',
                     career:'',
                     description : ''
@@ -169,10 +170,11 @@ angular.module('angular-client-side-auth')
                 {
                     id: id,
                     school: $scope.educations[index].school,
-                    yearRange: '',
-                    schoolDegree: '',
-                    career:'',
-                    description : ''
+                    yearStart: $scope.educations[index].yearStart,
+                    yearEnd: $scope.educations[index].yearEnd,
+                    schoolDegree: $scope.educations[index].schoolDegree,
+                    career:$scope.educations[index].career,
+                    description : $scope.educations[index].description
 
                 } , 
             

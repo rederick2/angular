@@ -103,7 +103,8 @@ module.exports = {
                                                 id: count,
                                                 profile: profile,
                                                 school: req.body.school,
-                                                yearRange: req.body.yearRange,
+                                                yearStart: req.body.yearStart,
+                                                yearEnd: req.body.yearEnd,
                                                 schoolDegree: req.body.schoolDegree,
                                                 career:req.body.career,
                                                 description : req.body.description
@@ -123,7 +124,8 @@ module.exports = {
         Education.update({id:req.body.id}, 
                 {
                     school: req.body.school,
-                    yearRange: req.body.yearRange,
+                    yearStart: req.body.yearStart,
+                    yearEnd: req.body.yearEnd,
                     schoolDegree: req.body.schoolDegree,
                     career:req.body.career,
                     description : req.body.description
