@@ -1,5 +1,5 @@
 angular.module('angular-client-side-auth')
-.controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', 'Users', 'angularFireCollection', '_', 'Notify',  function($rootScope, $scope, $location, Auth, Users, angularFireCollection, _, Notify) {
+.controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', 'Users', '$firebase', '_', 'Notify',  function($rootScope, $scope, $location, Auth, Users, $firebase, _, Notify) {
     
     var url = "https://rederick2.firebaseio.com/";
    
@@ -118,7 +118,7 @@ angular.module('angular-client-side-auth')
             }
         });
 
-        $scope.count_notifications = angularFireCollection(notifyRef).length;
+        $scope.count_notifications = $firebase(notifyRef).$asArray().length;
 
         //////////////////////////////////////
 

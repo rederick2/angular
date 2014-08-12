@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('MessagesCtrl',
-['$rootScope', '$http', '$location', '$scope', 'Users', 'Inboxes', 'Auth', 'angularFireCollection', '_', function($rootScope, $http, $location, $scope, Users, Inboxes, Auth, angularFireCollection, _) {
+['$rootScope', '$http', '$location', '$scope', 'Users', 'Inboxes', 'Auth', '$firebase', '_', function($rootScope, $http, $location, $scope, Users, Inboxes, Auth, $firebase, _) {
 
     $scope.messages = [];
 
@@ -152,11 +152,13 @@ angular.module('angular-client-side-auth')
 
             messageRef.push({content : m.content, from: m.from.username, name: m.from.name, picture: m.from.picture, datetime: m.datetime});
 
-            $scope.messages = angularFireCollection(messageRef);
+            var obj = $firebase(messageRef);
+
+            $scope.messages = obj.$asArray();
 
             $scope.messages2 = _.without(res, _.last(res));
 
-            $scope.writes = angularFireCollection('https://rederick2.firebaseio.com/inboxes/' + id +'/write');
+            $scope.writes = $firebase(new Firebase('https://rederick2.firebaseio.com/inboxes/' + id +'/write')).$asObject();
             
             $scope.to=to; 
 
@@ -178,7 +180,7 @@ angular.module('angular-client-side-auth')
 
                     $('.contentMessages').animate({scrollTop : ($('.contentMessages').children().size() + 1) * 300 });
 
-                    console.log(2);
+                    //console.log(2);
 
                     $('.loading').hide();
 

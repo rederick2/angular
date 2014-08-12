@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('HomeCtrl',
-['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files) {
+['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', '$firebase', 'Files', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, $firebase, Files) {
 
     //$scope.username = $routeParams.id;
     //$scope.userRoles = Auth.userRoles;
@@ -167,7 +167,7 @@ angular.module('angular-client-side-auth')
 
                 var url = new Firebase('https://rederick2.firebaseio.com/posts/'+res[p].to+'/'+res[p].id+'/comments');
 
-                var data = angularFireCollection(url.limit(50));
+                var data = $firebase(url.limit(50));
                 
                 $scope.comments.push(data);
 
@@ -215,7 +215,7 @@ angular.module('angular-client-side-auth')
                 $rootScope.error = err;
         });
     }
-    //$scope.posts = angularFireCollection('https://rederick2.firebaseio.com/posts/' + $scope.username);
+    //$scope.posts = $firebase('https://rederick2.firebaseio.com/posts/' + $scope.username);
     $scope.addCommentPost = function(id, comment, to){
 
         //$scope.loading = true;

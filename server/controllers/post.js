@@ -13,6 +13,13 @@ var db = mongojs(config.URIMONGODB);
 
 var postsmongo = db.collection('posts');*/
 
+var cloudinary = require('cloudinary');
+
+cloudinary.config({ 
+  cloud_name: 'dfupn8503', 
+  api_key: '146899337669494', 
+  api_secret: 'mjxMBhNgaHqOWqLZU8OMln7VdgU' 
+});
 
 
 module.exports = {
@@ -89,10 +96,26 @@ module.exports = {
 
                 myRootRef.remove();
 
-                doc.remove();
+                if(doc.type == 'photo'){
 
-                res.json({success:'true'});
+                    cloudinary.uploader.destroy(doc.picture_id, function(result) { 
+                            
+                            doc.remove();
+                            
+                            res.json({success:'true' , result: result});
+                        }, 
+                        { 
+                          invalidate: true 
+                        }
+                    );
 
+                }else{
+
+                    doc.remove();
+
+                    res.json({success:'true'});
+
+                }
 
             });
 
@@ -202,6 +225,7 @@ module.exports = {
                                     to : to,
                                     title : req.body.title,
                                     picture : req.body.picture,
+                                    picture_id : req.body.picture_id,
                                     source : req.body.source,
                                     url : req.body.url,
                                     fuente : req.body.fuente,

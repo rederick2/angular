@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
-['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', 'angularFireCollection', 'Files', 'Notify', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, angularFireCollection, Files, Notify) {
+['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', '$firebase', 'Files', 'Notify', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, $firebase, Files, Notify) {
 
     //$scope.username = $routeParams.id;
     //$scope.userRoles = Auth.userRoles;
@@ -212,8 +212,10 @@ angular.module('angular-client-side-auth')
                         ref2.set({id:m.id, from: m.from.username, fromPicture: m.from.picture, fromName: m.from.name, message: m.message, time: m.created_time});
 
                     }
+
+                    var obj = $firebase(ref);
                     
-                    $scope.comments.push(angularFireCollection(ref));
+                    $scope.comments.push(obj.$asArray());
 
                     $scope.comments2.push(_.without(pt.comments, _.last(pt.comments)));
 
@@ -250,7 +252,7 @@ angular.module('angular-client-side-auth')
             $scope.page++;
             $scope.busy = false;
     }
-    //$scope.posts = angularFireCollection('https://rederick2.firebaseio.com/posts/' + $scope.username);
+    //$scope.posts = $firebase('https://rederick2.firebaseio.com/posts/' + $scope.username);
     $scope.addCommentPost = function(id, message){
 
         //$scope.loading = true;
@@ -339,6 +341,7 @@ angular.module('angular-client-side-auth')
         var source = '';
         var url = '';
         var fuente = '';
+        var picture_id = '';
 
         $scope.loading = true;
 
@@ -353,6 +356,7 @@ angular.module('angular-client-side-auth')
             source = $scope.source;
         }else if($scope.typepost == 'photo'){
             picture = $scope.picture;
+            picture_id = $rootScope.public_id;
         }
 
         Posts.add({
@@ -360,6 +364,7 @@ angular.module('angular-client-side-auth')
             to : $scope.username,
             title : title,
             picture : picture,
+            picture_id : picture_id,
             source : source,
             url : url,
             fuente:fuente,
@@ -372,6 +377,7 @@ angular.module('angular-client-side-auth')
         },
         function(res){
             $scope.message = '';
+            $scope.picture = '';
             $scope.page = 0;
             $scope.busy = false;
             $scope.posts = [];
@@ -381,7 +387,7 @@ angular.module('angular-client-side-auth')
             //document.location.reload();
             $('.close').click();
             $scope.loading = false;
-            $scope.selectedFiles = [];
+            $scope.selectedFiles = null;
             $scope.photo = false;
             $rootScope.photo = false;
         },

@@ -37,7 +37,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
     body(data-ng-cloak)
         .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
-        .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation", style="border: 0; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);")
+        .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation")
             .container
                 .navbar-header
                     .navbar-toggle(type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
@@ -117,18 +117,12 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src='http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=es')
         script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
             //script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
-        script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js')
-        script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js')
-        script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
-
-        script(src='https://cdn.firebase.com/v0/firebase.js')
-        script(src='https://cdn.firebase.com/libs/angularfire/0.8.0/angularfire.min.js')
-        script(src='https://cdn.firebase.com/v0/firebase-simple-login.js')
-        
+        script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js')
+        script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.min.js')
         script(src='http://code.angularjs.org/1.2.0/angular-sanitize.min.js')
         script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-cookies.min.js')
-        
-        
+        script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js')
+        script(src="https://cdn.firebase.com/js/simple-login/1.5.0/firebase-simple-login.js")
         script(src='/js/vendor/bootstrap.min.js')
         script(src='/js/vendor/underscore-min.js')
         script(src='/js/vendor/angular-moment.js')
@@ -178,8 +172,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         script(src='/js/linkedin.js')
 
-        
-        
+        script(src='https://cdn.firebase.com/v0/firebase.js')
+        script(src='http://firebase.github.io/angularFire/angularFire.js')
+        script(src='https://cdn.firebase.com/v0/firebase-simple-login.js')
+        script(src='https://www.firebase.com/js/libs/idle.js')
 
         script(src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js")
         

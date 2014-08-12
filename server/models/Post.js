@@ -21,6 +21,7 @@ var postSchema = new mongoose.Schema({
     to: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     title: String,
     picture:String,
+    picture_id:String,
     source: String,
     url: String,
     description: String,

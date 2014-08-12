@@ -1,12 +1,13 @@
 angular.module('angular-client-side-auth')
 .controller('LoginCtrl',
-['$rootScope', '$scope', '$location', '$window', 'Auth', 'angularFireAuth', function($rootScope, $scope, $location, $window, Auth, angularFireAuth) {
+['$rootScope', '$scope', '$location', '$window', 'Auth', '$firebase', function($rootScope, $scope, $location, $window, Auth, $firebase) {
 
     $scope.rememberme = true;
 
     var url = "https://rederick2.firebaseio.com/";
 
     var Ref = new Firebase(url);
+    
     var authFirebase = new FirebaseSimpleLogin(Ref, function(error, user) {
       if (error) {
         // an error occurred while attempting login

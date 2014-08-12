@@ -12,7 +12,7 @@ angular.module('angular-client-side-auth')
 
 
 
-angular.module('angular-client-side-auth')
+/*angular.module('angular-client-side-auth')
 .controller('ListCtrl',
 ['$rootScope', '$scope', 'Users', 'Auth', 'angularFireCollection', 'Usersregistered', function($rootScope, $scope, Users, Auth, angularFireCollection, Usersregistered ) {
     $scope.loading = false;
@@ -22,7 +22,7 @@ angular.module('angular-client-side-auth')
 
     $scope.users = angularFireCollection('https://rederick2.firebaseio.com/users/');
 
-}]);
+}]);*/
 
 
 

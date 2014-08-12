@@ -10,6 +10,8 @@ angular.module('angular-client-side-auth')
 
     $scope.educations = [];
 
+    $scope.experiences = [];
+
     Profiles.getByUsername({username: $scope.userProfile}, function(res) {
 
         $scope.user = res.profile; 
@@ -20,6 +22,14 @@ angular.module('angular-client-side-auth')
             //console.log(res.educations);//$scope.educations = res.educations;
             res.educations.forEach(function(r){
                 $scope.educations.push(r);
+                //console.log(r);
+            });
+        }
+
+        if(res.experiences != 0){
+            //console.log(res.educations);//$scope.educations = res.educations;
+            res.experiences.forEach(function(r){
+                $scope.experiences.push(r);
                 //console.log(r);
             });
         }
