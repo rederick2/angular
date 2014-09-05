@@ -94,7 +94,7 @@ passport.deserializeUser(auth.user);
 
 
 app.configure(function(){
-    app.set('port', process.env.VCAP_APP_PORT || config.port);
+    app.set('port', process.env.PORT || config.port);
     app.set('views', __dirname + '/client/views');
     app.set('view engine', 'jade');
 
