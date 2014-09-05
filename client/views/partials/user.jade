@@ -6,6 +6,13 @@ div.row
 				i.fa.fa-camera
 			div.caption
 				h3 {{user.username}}
+			ul.menuProfile
+				li(active)
+					a(href="{{user.username}}/profile") Perfil
+				li(active)
+					a(href="#") Eventos
+				li(active)
+					a(href="firepad#{{user.username}}") Coding Grupal
 	div.col-xs-12.col-sm-8.col-md-7
 		div.panel.panel-default
 			form(ng-submit="addPost()", name="postForm")

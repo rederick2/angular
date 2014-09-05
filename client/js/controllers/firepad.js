@@ -15,7 +15,7 @@ function($rootScope, $scope, Auth, Users, _ ) {
         $scope.loading = false;
     });
 
-    var firepadRef = getExampleRef();
+    var firepadRef = getExampleRef(Auth.user.username);
     // TODO: Replace above line with:
     // var ref = new Firebase('<YOUR FIREBASE URL>');
 
@@ -27,7 +27,7 @@ function($rootScope, $scope, Auth, Users, _ ) {
     });
 
     // Create a random ID to use as our user ID (we must give this to firepad and FirepadUserList).
-    var userId = Math.floor(Math.random() * 9999999999).toString();
+    var userId = Auth.user.username;//Math.floor(Math.random() * 9999999999).toString();
 
     //// Create Firepad (with rich text features and our desired userId).
     var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,

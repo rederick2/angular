@@ -22,7 +22,7 @@ inboxSchema.statics.findOrCreate = function(fromUser, toUser, content, time, num
 
         User.findOne({username : toUser}, function(err, to){
 
-            self.findOneAndUpdate({ user : from, to: to}, {$set:{'update': time}}, function(err, doc){
+            self.findOneAndUpdate({ user : from, to: to}, {$set:{'update': time}}).populate('user', 'username name').exec(function(err, doc){
 
                 if(err) done(err);
 
@@ -62,7 +62,13 @@ inboxSchema.statics.findOrCreate = function(fromUser, toUser, content, time, num
 
                             }
 
-                            return done(null, inbox);
+                            Inbox.findOne({id:count}).populate('user', 'username name').exec(function(err, doc){
+
+                                return done(null, doc);
+
+                            });
+
+                            
 
                         });
 
@@ -81,7 +87,7 @@ inboxSchema.statics.findOrCreate = function(fromUser, toUser, content, time, num
 
                             myRootRef = Firebase.getRef('inboxes/' + doc.id + '/messages');
 
-                            myRootRef.push({ from: from.username, to:to.name, picture:from.picture, name:from.name, content: content, time: time });
+                            myRootRef.push({ from: from.username, to:to.name, picture:from.picture, name:from.name, content: content, datetime: time });
 
                             Inbox.update({id : doc.id} , {unread:true}).exec();
 
@@ -93,7 +99,7 @@ inboxSchema.statics.findOrCreate = function(fromUser, toUser, content, time, num
 
                             myRootRef = Firebase.getRef('inboxes/' + doc.id + '/messages');
 
-                            myRootRef.push({ from: to.username, to:to.name, picture:to.picture, name:to.name, content: content, time: time });
+                            myRootRef.push({ from: to.username, to:to.name, picture:to.picture, name:to.name, content: content, datetime: time });
 
                             Inbox.update({id : doc.id} , {unread:false}).exec();
 

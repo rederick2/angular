@@ -24,7 +24,8 @@ angular.module('angular-client-side-auth')
                     if(res.login == 'true')
                     {
 
-                        $location.path('/');
+                        //$location.path('/');
+                        window.location.href = '/';
 
                     }else{
 
@@ -56,7 +57,8 @@ angular.module('angular-client-side-auth')
             function(res) {
                 console.log(res);
                 authFirebase.login('password', {email: res.email, password: res.password});
-                $location.path('/');
+                //$location.path('/');
+                window.location.href = '/';
             },
             function(err) {
                 $rootScope.error = "Failed to login";

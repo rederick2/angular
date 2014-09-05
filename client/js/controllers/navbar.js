@@ -70,7 +70,7 @@ angular.module('angular-client-side-auth')
         });
     };
 
-    console.log(Auth.user);
+    //console.log(Auth.user);
 
 
     $scope.user = Auth.user;

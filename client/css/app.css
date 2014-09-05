@@ -4,7 +4,7 @@
 
 form[name="editableForm"] > div {
   height: auto;
-  padding: 5px 0;
+  /*padding: 5px 0;*/
 }
 
 form[name="editableForm"] .title {
@@ -113,7 +113,7 @@ a.btn-profile{
 
 .s_name{
   float: left;
-  width: 90%;
+  width: 70%;
 }
 
 .s_results{
@@ -133,7 +133,6 @@ a.btn-profile{
 .listUsers{
   background: white;
   width: 100%;
-  height: 520px;
   overflow: auto;
 }
 
@@ -164,10 +163,6 @@ a.btn-profile{
   background-color: rgba(0,0,0,0.05);
 }
 
-.me{
-  background-color: #f4f4f4;
-}
-
 .activo{
   cursor: pointer;
   background-color: rgba(0,0,0,0.05);
@@ -189,7 +184,7 @@ a.btn-profile{
 .messages{
   border: 1px solid #ddd;
   padding: 0px;
-  height: 630px;
+ /*height: 630px;*/
 }
 
 .unread {
@@ -205,18 +200,32 @@ a.btn-profile{
 }
 
 .messages .actions{
-  height: 74px;
+  height: 40px;
   border-bottom: 1px solid #ddd;
-  padding: 20px 10px;
+  padding: 2px 10px;
 }
 
 .message .content{
-  width: 90%;
+  width: 83%;
+  /*background: #F4F4F4;*/
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.me{
+  background-color: #fff;
+  float: right;
+}
+
+.you{
+  background-color: #f7f7f7;
   float: left;
+  
 }
 
 .message .imgProfile{
-  width: 65px;
+  width: 45px;
   float: left;
 }
 
@@ -527,17 +536,27 @@ li.active{
   background: #eee;
 }
 
-#formProfile > div{
-  padding: 15px 30px;
+#formProfile .btn-group{
+  padding: 10px 0px;
   border-bottom: 1px solid #ddd;
-}
-
-.editable-text, .editable-places{
-  width: 70%;
 }
 
 #formProfile .title{
   width: 30%;
+}
+
+.formProfileOthers > div{
+  padding: 15px 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+.formProfileOthers .title{
+  width: 30%;
+}
+
+
+.editable-text, .editable-places, .editable-textarea{
+  width: 62%;
 }
 
 .loading{
@@ -549,6 +568,15 @@ li.active{
   background: rgba(255,255,255,0.65);
   text-align: center;
   line-height: 25em;
+  z-index: 1;
+}
+
+#formAddEducation .controls{
+  margin: 15px;
+}
+
+form .btn{
+  margin: 5px;
 }
 
 /**************************************************************/

@@ -1,7 +1,7 @@
-function getExampleRef() {
+function getExampleRef(id) {
   // Get hash from end of URL or generate a random one.
 
-  var id = Math.floor(Math.random() * 9999999999).toString();
+  var id = id;//Math.floor(Math.random() * 9999999999).toString();
 
   //var ref = new Firebase('https://rederic2013.firebaseio.com/codepad/');
   var hash = window.location.hash.replace(/#/g, '');

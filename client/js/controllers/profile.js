@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('ProfileCtrl',
-['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth) {
+['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', '_', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth, _) {
 
     $scope.authUser = Auth.user.username;
     
@@ -8,33 +8,102 @@ angular.module('angular-client-side-auth')
 
     $scope.idProfile = 0;
 
-    $scope.educations = [];
+    $scope.imgProfile = '';
 
-    $scope.experiences = [];
+    $scope.edad;
 
-    Profiles.getByUsername({username: $scope.userProfile}, function(res) {
+    $scope.id = 0;
 
-        $scope.user = res.profile; 
+    $scope.index = 0;
 
-        $scope.idProfile = res.profile.id;
-        //console.log(res[0]);
-        if(res.educations != 0){
-            //console.log(res.educations);//$scope.educations = res.educations;
-            res.educations.forEach(function(r){
-                $scope.educations.push(r);
-                //console.log(r);
-            });
-        }
+    $scope.tipo = 0;
 
-        if(res.experiences != 0){
-            //console.log(res.educations);//$scope.educations = res.educations;
-            res.experiences.forEach(function(r){
-                $scope.experiences.push(r);
-                //console.log(r);
-            });
-        }
+    $scope.Init = function(){
 
-    });
+        /*$('a').on('click' , function(e){
+            e.preventDefault();
+        });*/
+
+        $scope.educations = [];
+
+        $scope.experiences = [];
+
+        $('.loading').show();
+
+        Profiles.getByUsername({username: $scope.userProfile}, function(res) {
+
+            $scope.user = res.profile; 
+
+            $scope.idProfile = res.profile.id;
+            //console.log(res[0]);
+            if(res.educations != 0){
+                //console.log(res.educations);//$scope.educations = res.educations;
+                res.educations.forEach(function(r){
+                    $scope.educations.push(r);
+                    //console.log(r);
+                });
+            }
+
+            //console.log(res.experiences);
+            if(res.experiences != 0){
+                //console.log(res.educations);//$scope.educations = res.educations;
+                res.experiences.forEach(function(r){
+                    $scope.experiences.push(r);
+                    //console.log(r);
+                });
+            }
+
+            if(res.profile.dob) $scope.edad = $scope.calcular_edad(res.profile.dob);
+
+            $('.loading').hide();
+
+        });
+
+
+    };
+
+    $scope.scroll = function(id){
+
+        //console.log(id);
+
+        $("#" + id).scrolld();
+    }
+
+    
+    $scope.calcular_edad = function (fecha) {
+
+            //console.log(fecha);
+
+            var fechaActual = new Date()
+            var diaActual = fechaActual.getDate();
+            var mmActual = fechaActual.getMonth() + 1;
+            var yyyyActual = fechaActual.getFullYear();
+            FechaNac = fecha.split("-");
+            var diaCumple = FechaNac[2];
+            var mmCumple = FechaNac[1];
+            var yyyyCumple = FechaNac[0];
+            //retiramos el primer cero de la izquierda
+            if (mmCumple.substr(0,1) == 0) {
+                mmCumple= mmCumple.substring(1, 2);
+            }
+            //retiramos el primer cero de la izquierda
+            if (diaCumple.substr(0, 1) == 0) {
+                diaCumple = diaCumple.substring(1, 2);
+            }
+            var edad = yyyyActual - yyyyCumple;
+
+            //validamos si el mes de cumpleaños es menor al actual
+            //o si el mes de cumpleaños es igual al actual
+            //y el dia actual es menor al del nacimiento
+            //De ser asi, se resta un año
+            if ((mmActual < mmCumple) || (mmActual == mmCumple && diaActual < diaCumple)) {
+                edad--;
+            }
+
+            //console.log(edad);
+
+            return edad;
+    };
 
     //$scope.email = "rederick2@hotmail.com"
 
@@ -42,6 +111,8 @@ angular.module('angular-client-side-auth')
         function(res){
 
             if(res.length != 0 ) $scope.email = res.email;
+
+            if(res.length != 0 ) $scope.imgProfile = res.picture;
 
         }, function(err){
             $rootScope.error = err;
@@ -128,6 +199,8 @@ angular.module('angular-client-side-auth')
             
             function(res){
 
+                    $scope.edad = $scope.calcular_edad($scope.user.dob);
+
                     return true;
 
             }, function(err){
@@ -151,13 +224,21 @@ angular.module('angular-client-side-auth')
                     school:$scope.school,
                     yearStart: $scope.yearStart,
                     yearEnd: $scope.yearEnd,
-                    schoolDegree: '',
-                    career:'',
-                    description : ''
+                    schoolDegree: $scope.schoolDegree,
+                    career: $scope.career,
+                    description : $scope.description,
+                    created_time : new Date()
 
                 } , 
             
             function(res){
+
+                    //$scope.Init();
+                    $scope.educations.push(res.o);
+
+                    $('#formAddEducation')[0].reset();
+
+                    $('#modalEducation').modal('hide');
 
                     return true;
 
@@ -200,5 +281,152 @@ angular.module('angular-client-side-auth')
 
         
     };
+
+    $scope.beforeRemove = function(index, id, tipo) {
+        // $scope.user already updated!
+
+        $scope.index = index;
+        $scope.id = id;
+        $scope.tipo = tipo;
+        
+    };
+
+
+    $scope.remove = function(){
+
+        if(Auth.user.username == $scope.userProfile){
+
+            if($scope.tipo == 1){
+
+                Profiles.removeEducation(
+                    {
+                        id: $scope.id
+
+                    } , 
+                
+                    function(res){
+
+                            $scope.educations = _.without($scope.educations, $scope.educations[$scope.index]);
+
+                            $scope.id = 0;
+
+                            $scope.index = 0;
+
+                            $scope.tipo = 0;
+
+                            $('#modalRemove').modal('hide');
+
+                            return true;
+
+                    }, function(err){
+                            $rootScope.error = err;
+                });
+
+            }else if($scope.tipo == 2){
+
+                Profiles.removeExperience(
+                    {
+                        id: $scope.id
+
+                    } , 
+                
+                    function(res){
+
+                            $scope.experiences = _.without($scope.experiences, $scope.experiences[$scope.index]);
+
+                            $scope.id = 0;
+
+                            $scope.index = 0;
+
+                            $scope.tipo = 0;
+
+                            $('#modalRemove').modal('hide');
+
+                            return true;
+
+                    }, function(err){
+                            $rootScope.error = err;
+                });
+
+            }
+
+        }
+    }
+
+
+    $scope.addExperience = function() {
+        // $scope.user already updated!
+       // console.log($scope.user);
+
+        if(Auth.user.username == $scope.userProfile ){
+
+            Profiles.addExperience(
+                {
+                    id: $scope.idProfile,
+                    company: $scope.company,
+                    position: $scope.position,
+                    location: $scope.locationExp,
+                    startDate: $scope.startDate,
+                    endDate:$scope.endDate,
+                    description : $scope.descriptionExp,
+                    created_time : new Date()
+
+                } , 
+            
+            function(res){
+
+                    $scope.experiences.push(res.o);
+
+                    $('#formAddExperience')[0].reset();
+
+                    $('#modalExperience').modal('hide');
+
+                    return true;
+
+            }, function(err){
+                    $rootScope.error = err;
+            });
+
+        }
+
+        
+    };
+
+    $scope.saveExperience = function(index, id) {
+        // $scope.user already updated!
+       // console.log($scope.user);
+       //console.log($('#locationExp_' + index).val());
+
+        if(Auth.user.username == $scope.userProfile ){
+
+            $scope.experiences[index].location = $('#locationExp_' + index).val();
+
+            Profiles.updateExperience(
+                {
+                    id: id,
+                    company: $scope.experiences[index].company,
+                    position: $scope.experiences[index].position,
+                    location: $('#locationExp_' + index).val(),
+                    startDate: $scope.experiences[index].startDate,
+                    endDate:$scope.experiences[index].endDate,
+                    description : $scope.experiences[index].description == null ? "" : $scope.experiences[index].description
+                    
+
+                } , 
+            
+            function(res){
+
+                    return true;
+
+            }, function(err){
+                    $rootScope.error = err;
+            });
+
+        }
+
+        
+    };
+
+    $scope.Init();
 
 }]);

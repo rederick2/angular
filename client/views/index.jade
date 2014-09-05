@@ -111,9 +111,71 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             hr(data-ng-show="error")
             .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 
+        div(data-ng-controller="MessagesCtrl", role="navigation")
+            div.row
+                div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; background:white")
+                    //input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
+                    .input-group
+                        input.form-control.search(name="search", ng-model="search", placeholder="Buscar", ng-change="searchUsers(search); isSeach= true; newMessage = true;")
+                        span.input-group-btn
+                            button.btn.btn-default(type='submit') 
+                                i.fa.fa-search
+                    .to(ng-show="newMessage")
+                        .listUsers(ng-show="isSeach")
+                            .s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username, s_user.name);")
+                                .picture
+                                    img(src="{{s_user.picture}}", style='margin:5px', width="50")
+                                .s_name
+                                    h3 {{s_user.name}}
+                    div.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-class="{activo:id == inbox.id, unread:inbox.unread == false}")
+                        div(style="width:74%;display:inline-block; vertical-align:middle", ng-click="viewMessages(inbox.id, inbox.to.username, inbox.to.name);", title=" {{inbox.update | amCalendar}}")
+                            div(id="status_{{inbox.to.username}}", style="position:absolute; right:88px; top:18px")
+                            .picture
+                                img(src="{{inbox.to.picture}}", username="{{inbox.to.username}}", align='left', valign='middle',style='margin:5px', width="50")
+                                //img(src="", align='left', valign='middle',style='margin:5px', width="50")
+                            .name
+                                h3 {{inbox.to.name}}
+                        button.btn.btn-default(styles="display:inline-block; vertical-align:middle")  Seguir
 
-        script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.1/jquery.min.js')
-        script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js')
+                div.messages(data-access-level='accessLevels.user', style="position:fixed; bottom:0px; left:0; background:white; width:305px;", ng-show="viewInbox == 1")
+                    .actions(style="#F3F3F3")
+                        div(id="status_{{UserChatStatus}}", style="position:absolute; left: 5px; top: 10px;")
+                        span(style="position:absolute; left: 5px; top: 10px;") 
+                            strong  {{UserChat}}
+                        span(ng-click="viewInbox = 0", style="position: absolute;top: 0;right: 0;padding: 10px; cursor:pointer")
+                            i.fa.fa-times
+                    .contentMessages
+                        .loading(style='display:none')
+                            i.fa.fa-spinner.fa-spin
+                        .message.clearfix.comment(ng-repeat="message in messages2", style="border:0")
+                            .imgProfile(ng-show="message.from.username != username")
+                                a(href="./{{message.from.username}}", data-toggle="tooltip",  data-placement="right", title="{{message.from.username}}") 
+                                    img(src="{{message.from.picture}}", align='left', valign='middle', style='margin:5px', width="35")
+                            .content(ng-class="{me:message.from.username == username, you:message.from.username != username}")
+                                //a(href="./{{message.from}}") {{message.from.name}}
+                                p {{message.content}}
+                                h6
+                                    span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
+                        .message.clearfix.comment(ng-repeat="message in messages", style="border:0")
+                            .imgProfile(ng-show="message.from != username")
+                                a(href="./{{message.from}}", data-toggle="tooltip",  data-placement="right", title="{{message.from}}") 
+                                    img(src="{{message.picture}}", align='left', valign='middle', style='margin:5px', width="35")
+                            .content(ng-class="{me:message.from == username, you:message.from != username}")
+                                //a(href="./{{message.from}}") {{message.name}}
+                                p {{message.content}}
+                                h6
+                                    span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
+                        .write(ng-repeat="write in writes", style="height: 20px;line-height: 20px;color: #999")
+                            span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
+                    form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px; border-top: 1px solid #ddd;")
+                        textarea.form-control(id="messageChat", style="width:85%; display:inline-block", rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-change="writeMessage(comment);", ng-blur="unWriteMessage();", required)
+                        button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;", style="padding:0; background: none; border:0") 
+                            i.fa.fa-check-square(style="font-size: xx-large;color: #ccc;")
+
+
+
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+        script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js')
         script(src='http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places&language=es')
         script(src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
             //script(src='http://netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js')
@@ -154,6 +216,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/codepad/firepad.js")
         script(src="/js/vendor/codepad/firepad-userlist.js")
         script(src="/js/vendor/codepad/example-helper.js")
+        script(src="/js/vendor/scrolld.min.js")
+        script(src="/js/vendor/ngAutocomplete.js")
+        script(src="/js/vendor/idle.js")   
+
 
         script(src='/js/routingConfig.js')
         script(src='/js/app.js')
@@ -178,9 +244,6 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         script(src='/js/linkedin.js')
 
-        
-        
-
         script(src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.6.0/ui-bootstrap-tpls.min.js")
         
         
@@ -200,6 +263,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                 // this return the first found url data
               }
             });
+
+        
 
 
         // Partial views... Load up front to make transitions smoother
@@ -231,3 +296,5 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/listMessages
         script(type="text/ng-template", id="firepad")
             include partials/firepad
+
+            

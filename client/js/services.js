@@ -122,6 +122,22 @@ angular.module('angular-client-side-auth')
         addEducation: function(data, success, error) {
             //console.log(sort);
             $http.post('/profile/addEducation', data).success(success).error(error);
+        },
+        getExperiences: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/getExperiences', data).success(success).error(error);
+        },
+        updateExperience: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/updateExperience', data).success(success).error(error);
+        },
+        removeExperience: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/removeExperience', data).success(success).error(error);
+        },
+        addExperience: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/profile/addExperience', data).success(success).error(error);
         }
 
     };

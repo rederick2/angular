@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap'])
+angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
     
     /*.value('fbURL', 'https://rederick2.firebaseio.com/users/')
     .factory('Usersregistered', function(angularFireCollection, fbURL) {

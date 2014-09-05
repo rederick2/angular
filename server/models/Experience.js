@@ -12,7 +12,7 @@ var experienceSchema = new mongoose.Schema({
     startDate : { type: Date },
     endDate : { type: Date },
     description : String,
-    created_time: {type: Date, default: Date.now},
+    created_time: Date,
     updated_time: {type: Date, default: Date.now}
 }, {collection: 'experience'});
 

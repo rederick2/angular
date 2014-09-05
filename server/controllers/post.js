@@ -48,7 +48,7 @@ module.exports = {
 
                     comments.forEach(function(x){
                         
-                        console.log(x);
+                        //console.log(x);
                         
                         comment = { id: x.id, from:{username:x.from.username, name:x.from.name, picture:x.from.picture}, message:x.message, created_time: x.created_time};
                         
@@ -290,7 +290,7 @@ module.exports = {
 
                         comments.forEach(function(x){
                             
-                            console.log(x);
+                            //console.log(x);
                             
                             comment = { id: x.id, from:{username:x.from.username, name:x.from.name, picture:x.from.picture}, message:x.message, created_time: x.created_time};
                             

@@ -25,7 +25,7 @@ module.exports = {
 
         if(req.body.q !== ''){
 
-            User.find({username:{$regex:req.body.q}}).limit(10).sort({id:-1}).exec(function(err, users) {
+            User.find({name:{$regex:req.body.q}}, '_id username picture name').limit(10).sort({id:-1}).exec(function(err, users) {
                 if (err) {
                     res.send(403, err);
                 } else {
@@ -41,7 +41,7 @@ module.exports = {
 
     getUsers: function(req, res) {
 
-        User.find().limit(req.body.limit).sort({id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
+        User.find(null, '_id username picture name').limit(req.body.limit).sort({id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
             if (err) {
                 res.render('error', {
                     status: 500
@@ -55,7 +55,7 @@ module.exports = {
     },
     getByUsername: function(req, res) {
 
-        User.findOne({username:req.body.username} ,function(err, doc) {
+        User.findOne({username:req.body.username}, '_id username picture name' ,function(err, doc) {
             
             if (err) return res.send(500, err);
             
@@ -106,7 +106,7 @@ module.exports = {
                 
                 if(err) return res.send(403, err);
 
-                res.json({success:'true'}); 
+                res.json({success:'true', inbox: inbox}); 
             });
         });
     }

@@ -12,7 +12,7 @@ var educationSchema = new mongoose.Schema({
     schoolDegree: String, // Grado de Estudios: Diplomado, Bachillerato, Licenciatura, etc
     career:String, // Carrera
     description : String,
-    created_time: {type: Date, default: Date.now},
+    created_time: Date,
     updated_time: {type: Date, default: Date.now}
 }, {collection: 'education'});
 

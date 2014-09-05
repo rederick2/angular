@@ -280,6 +280,34 @@ var routes = [
     },
 
     {
+        path: '/profile/getExperiences',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.getExperiences],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/addExperience',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.addExperience],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/removeExperience',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.removeExperience],
+        accessLevel: accessLevels.user
+    },
+
+    {
+        path: '/profile/updateExperience',
+        httpMethod: 'POST',
+        middleware: [ProfileCtrl.updateExperience],
+        accessLevel: accessLevels.user
+    },
+
+    {
         path: '/file',
         httpMethod: 'POST',
         middleware: [FileCtrl.index],

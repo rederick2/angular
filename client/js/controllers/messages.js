@@ -2,25 +2,7 @@ angular.module('angular-client-side-auth')
 .controller('MessagesCtrl',
 ['$rootScope', '$http', '$location', '$scope', 'Users', 'Inboxes', 'Auth', '$firebase', '_', function($rootScope, $http, $location, $scope, Users, Inboxes, Auth, $firebase, _) {
 
-    $scope.messages = [];
 
-    $scope.messages2 = [];
-
-    $scope.typeahead = [];
-
-    $scope.s_users = [];
-
-    $scope.to = '';
-
-    $scope.id = 0;
-
-    $scope.idTo = 0;
-
-    $scope.inboxes = [];
-
-    $scope.username = Auth.user.username;
-
-    $scope.writes = false;
 
 
     $scope.checkStatus = function(){
@@ -53,50 +35,41 @@ angular.module('angular-client-side-auth')
 
     }
 
-
-    Inboxes.getByUsername({username: Auth.user.username}, function(res) {
-
-        //console.log(res[0].messages);
-
-        res.forEach(function(r){
-
-           // if($scope.to != r.id)
-
-            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + r.id + '/messages');
-
-            ref.limit(1).on('child_added' , function(snap){
-
-                //console.log(snap.val());
-
-                if(snap.val().from !== $scope.to){
-                    $scope.viewInboxes();
-                }
-
-            });
-
-        });
-
-    });
-
-    $scope.writeMessage = function(){
+    $scope.writeMessage = function(message){
 
         if($scope.to != '' && $scope.id != 0){
 
             //console.log('write');
+            if(message != ''){
 
-            var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo + '/write' );
+                var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + $scope.idTo + '/write' );
 
-            ref.update({estado: {valor : 'true', from : Auth.user.username}});
+                ref.update({estado: {valor : 'true', from : Auth.user.username}});
 
-            Inboxes.getByTo({username:Auth.user.username, to: $scope.to}, function(res){
+                Inboxes.getByTo({username:Auth.user.username, to: $scope.to}, function(res){
 
-                Inboxes.unread({id: res.id});
+                    Inboxes.unread({id: res.id});
 
-            });
+                });
+            }
+            else{
+                $scope.unWriteMessage();
+            }
 
         }
 
+
+
         
+    }
+
+    setIdleTimeout(10000); // 2 seconds
+
+    document.onIdle = function() {$scope.unWriteMessage();}
+
+
+    window.onbeforeunload = function () {
+        $scope.unWriteMessage();
     }
 
     $scope.unWriteMessage = function(){
@@ -108,6 +81,26 @@ angular.module('angular-client-side-auth')
 
         }
     }
+
+    $("textarea#messageChat").keydown(function(e){
+        if (e.keyCode == 13 && !e.shiftKey)
+        {
+            e.preventDefault();
+
+            var message = $(this).val();
+
+            if(message != ''){
+
+                $scope.addMessage(message);
+
+                $(this).val('');
+
+            }
+
+            
+
+        }
+    });
 
     $scope.viewInboxes = function(){
 
@@ -122,7 +115,7 @@ angular.module('angular-client-side-auth')
     }
 
 
-    $scope.selectUser = function(user){
+    $scope.selectUser = function(user, name){
 
         $scope.to = user;
 
@@ -134,13 +127,32 @@ angular.module('angular-client-side-auth')
 
         $scope.isSeach=false;
 
+        $scope.viewInbox = 1;
+
+        $scope.UserChat = name;
+
+        $('.search').val('');
+
+        $('#messageChat').focus();
+
     }
 
-    $scope.viewMessages = function(id, to){
+    $scope.viewMessages = function(id, to, name){
 
         //$('a.inboxes').removeClass('activo');
 
         //$('#inbox_' + id).addClass('activo');
+        $scope.viewInbox = 1;
+
+        $scope.UserChat  = name;//('#inbox_' + id).children('.name').children().html();
+
+        $scope.UserChatStatus = id;
+
+        $scope.messages = [];
+
+        $scope.messages2 = [];
+
+        $('.loading').show();
 
         Inboxes.getMessages({ id: id}, function(res) {
 
@@ -172,7 +184,6 @@ angular.module('angular-client-side-auth')
 
             var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + id + '/messages');
 
-            $('.loading').show();
 
             ref.limit(1).on('child_added' , function(snap){
 
@@ -194,18 +205,20 @@ angular.module('angular-client-side-auth')
                 $scope.idTo = res.id;
             });
 
+
+
         });
 
         //console.log($scope.messages);
 
     }
 
-    $scope.searchUsers = function(username){
+    $scope.searchUsers = function(name){
 
         var result = [];
         
 
-        Users.query({q:username}, function(res) {
+        Users.query({q:name}, function(res) {
 
             $scope.s_users = [];
 
@@ -220,11 +233,22 @@ angular.module('angular-client-side-auth')
                     }
 
                     result = {
+                        _id : r._id,
                         username: r.username,
+                        name : r.name,
                         picture : pic
                     }
 
-                    $scope.s_users.push(result);
+                    //console.log($scope.inboxes);
+
+                    var o = _.filter($scope.inboxes, function(r){ return r.to.username == result.username;});
+
+                    if(o == ''){
+
+                        $scope.s_users.push(result);
+                    } else{
+                        console.log(o);
+                    }
                 }
             });
 
@@ -253,8 +277,9 @@ angular.module('angular-client-side-auth')
 
                 if($scope.newMessage){
 
-                    //$scope.viewInboxes();
-                    $scope.viewMessages(res.id, $scope.to);
+                    $scope.viewMessages(res.inbox.id, $scope.to, res.inbox.user.name);
+
+                    //$scope.UserChat = res.inbox.user.name;
 
                     $scope.newMessage=false;
 
@@ -282,14 +307,98 @@ angular.module('angular-client-side-auth')
 
     }
 
-    var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+    if(Auth.user.username != ''){  
 
-    ref.limit(1).on('child_added' , function(snap){
+        $scope.messages = [];
 
-       $scope.viewInboxes();
+        $scope.messages2 = [];
+
+        $scope.typeahead = [];
+
+        $scope.s_users = [];
+
+        $scope.to = '';
+
+        $scope.id = 0;
+
+        $scope.idTo = 0;
+
+        $scope.inboxes = [];
+
+        $scope.username = Auth.user.username;
+
+        $scope.writes = false;
+
+        $scope.viewInbox = 0;
+
+        $scope.band = 0;
+
+        $scope.UserChat = "";
+
+        Inboxes.getByUsername({username: Auth.user.username}, function(res) {
+
+            //console.log(res[0].messages);
+            var i = 0;
 
 
-    });
+
+            res.forEach(function(r){
+
+               // if($scope.to != r.id)
+
+                var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/' + r.id + '/messages');
+
+                ref.limit(1).on('child_added' , function(snap){
+
+                    //console.log(snap.val());
+                    i++;
+
+                    if(snap.val().from !== $scope.to){
+                        
+                        $scope.viewInboxes();
+                        //console.log(snap.val());
+                        if($scope.band == 1 && $scope.viewInbox == 0){
+                            
+                            var from = snap.val().from;
+                            
+                            var id = $('#status_' + from).parent().attr('id').split('_')[1];
+
+                            $scope.viewMessages(id, from, r.to.name);
+                        }
+
+                        //console.log(id);
+                    }
+
+                    if( i == res.length){
+
+                        $scope.band = 1;
+
+                        console.log(res.length);
+
+                    }
+
+                    
+
+                });
+
+                
+
+            });
+
+            
+
+        });
+
+        var ref = new Firebase('https://rederick2.firebaseio.com/inboxes/');
+
+        ref.limit(1).on('child_added' , function(snap){
+
+           $scope.viewInboxes();
+
+
+        });
+
+    }
 
     //$scope.viewInboxes();
 
