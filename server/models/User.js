@@ -2,7 +2,6 @@ var User
     , _ =               require('underscore')
     , check =           require('validator').check
     , userRoles =       require('../../client/js/routingConfig').userRoles
-    , Firebase = require('../models/Firebase.js');
 
     var mongoose = require('mongoose');
     var request = require('request');
@@ -15,9 +14,9 @@ var message = new mongoose.Schema({update: {type: Date, default:Date.now, to: St
 /* Tomamos todos los datos de usuario para guardarlos en base de datos */
 var userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
-    name : String,
+    name : {type: String, required: true},
     email : {type: String, 'default' : 'email@example.com'},
-    password : String,
+    password : {type: String, required: true},
     picture: String,
     pais: String,
     ip: String,
@@ -32,13 +31,10 @@ userSchema.statics.findOrCreate = function (profile, done) {
 
     if(err) return done(err);
 
-    if(user) return done(null, user);
+    if(user) return done({message: 'Usuario ya Existe'});
 
     user = new User(profile);
     
-    var myRootRef = Firebase.getRef('users/'+ profile.username);
-
-    myRootRef.set(profile);
 
     if(profile.social){
 

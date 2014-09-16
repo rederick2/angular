@@ -482,8 +482,8 @@ h6,
 .h5,
 .h6 {
   font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 500;
-  line-height: 1.1;
+  font-weight: 300;
+  line-height: 1.2;
   color: inherit;
 }
 
@@ -2415,8 +2415,8 @@ fieldset[disabled] .btn-warning.active {
 
 .btn-danger {
   color: #ffffff;
-  background-color: #d9534f;
-  border-color: #d43f3a;
+  background-color: #D82F4B;
+  border-color: #D82F4B;
 }
 
 .btn-danger:hover,
@@ -2450,8 +2450,8 @@ fieldset[disabled] .btn-danger:active,
 .btn-danger.disabled.active,
 .btn-danger[disabled].active,
 fieldset[disabled] .btn-danger.active {
-  background-color: #d9534f;
-  border-color: #d43f3a;
+  background-color: #D82F4B;
+  border-color: #D82F4B;
 }
 
 .btn-success {

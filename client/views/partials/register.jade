@@ -1,5 +1,8 @@
-.container
-    .col-xs-12.col-sm-8.col-md-5.col-md-offset-3(style="background:white")
+.keeper
+    .cover(style="background-image: url(img/zbz-bg-lights.jpg);")
+    .tint-curtain
+.container(style="padding:10%")
+    .col-xs-12.col-sm-8.col-md-5.col-md-offset-3(style="color: white; background: rgba(0,0,0,0.15);")
         form.form-signin.form-register(ng-submit="register()", name="registerForm")
             h2.form-signin-heading Regístrate
             .alert.alert-danger(ng-show="registerForm.$invalid && registerForm.$dirty")
@@ -60,6 +63,6 @@
                 label.radio.inline
                     input(type="radio", name="role", data-ng-model="role", id="adminRole", data-ng-value="userRoles.user")
                     | Normal user
-            button.btn.btn-lg.btn-primary.btn-block(type="submit", data-ng-disabled="registerForm.$invalid") Registrar
+            button.btn.btn-lg.btn-default.btn-block(type="submit", data-ng-disabled="registerForm.$invalid") Registrar
             hr
     

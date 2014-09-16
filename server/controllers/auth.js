@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     userRoles =       require('../../client/js/routingConfig').userRoles,
-    User = mongoose.model('User');
+    User = mongoose.model('User'),
+    Firebase = require('../models/Firebase.js'),
     Infosocial = mongoose.model('Infosocial');
 
 module.exports = {
@@ -48,7 +49,15 @@ module.exports = {
         role : userRoles.user
         //tokenSecret: refreshToken
     }, function(err, user){
+              
               if(err) return res.send(403, err);
+
+              var myRootRef = Firebase.getRef('users/'+ profile.username);
+
+              myRootRef.set(profile, function(err){
+                  if(err) done(err)
+              });
+
 
               req.logIn(user, function(err) {
                   if(err)     { next(err); }

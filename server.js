@@ -87,7 +87,7 @@ app.use(passport.session());*/
 
 
 passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    if(user)  done(null, user.id);
   });
 
 passport.deserializeUser(auth.user);

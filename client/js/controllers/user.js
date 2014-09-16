@@ -172,7 +172,7 @@ angular.module('angular-client-side-auth')
 
             Posts.getAll({ limit:20, page:$scope.page },
             function(res){
-                $scope.afterGetPost(res);
+                $scope.afterGetPost(res.docs);
             },
             function(err) {
                     $rootScope.error = err;

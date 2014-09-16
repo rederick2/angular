@@ -7,6 +7,8 @@ var _ =           require('underscore')
     , userRoles = require('../../client/js/routingConfig').userRoles
     , Firebase = require('../models/Firebase.js');
 
+var jwt = require('jwt-simple');
+
 
 module.exports = {
     index: function(req, res) {
@@ -109,5 +111,24 @@ module.exports = {
                 res.json({success:'true', inbox: inbox}); 
             });
         });
+    }, 
+
+    token : function(req, res){
+
+        var username = req.body.username;
+        var password = req.body.password;
+
+        User.findOne({username: username, password: password}, function(err, user){
+            
+            if(err) return res.send(403, err);
+
+            if(!user) return res.json({message: 'Datos incorrectos'} )
+
+            var token = jwt.encode({username: username}, config.token.secret);
+            
+            res.json({token : token});
+
+        });
+
     }
 };

@@ -1,0 +1,73 @@
+/*-------------------------------------------------------------------
+
+Pace loader styles
+
+[Table of contents]
+
+1. Pace loader styles
+2. Page styles while loading
+
+-------------------------------------------------------------------*/
+/* Styles for Pace */
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  z-index: 2000;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  width: 50%;
+  background: transparent;
+  border: 1px solid #CCC;
+  border-radius: 10px;
+}
+.pace .pace-progress {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: width 1s ease-in-out 1s linear;
+  -moz-transition: width 1s ease-in-out 1s linear;
+  -ms-transition: width 1s ease-in-out 1s linear;
+  -o-transition: width 1s ease-in-out 1s linear;
+  transition: width 1s ease-in-out 1s linear;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  max-width: 100%;
+  position: fixed;
+  z-index: 2000;
+  display: block;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  background: #CCC;
+}
+.pace.pace-inactive {
+  display: none;
+}
+/* Styles for page elements while loading */
+body .zbz-side-nav,
+body.pace-running .zbz-side-nav,
+body .zbz-slide-keeper,
+body.pace-running .zbz-slide-keeper {
+  opacity: 0;
+}
+body.pace-done .zbz-side-nav,
+body.pace-done .zbz-slide-keeper {
+  opacity: 1;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition: opacity 0.5s linear;
+  transition: opacity 0.5s linear;
+}

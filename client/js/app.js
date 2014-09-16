@@ -17,19 +17,26 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
             access:         access.user
         });
 
-    $routeProvider.when('/home/:product',
+    $routeProvider.when('/home',
         {
-            redirectTo: function(routeParams, path, search){
-
-                console.log(routeParams);
-                console.log(path);
-                console.log(search);
-
-                return '/';
-
-            }         
+            templateUrl:    'home',
+            controller:     'HomeCtrl',
+            access:         access.anon
         });
-    
+
+    $routeProvider.when('/live',
+        {
+            templateUrl:    'live',
+            //controller:     'HomeCtrl',
+            access:         access.anon
+        });
+
+    $routeProvider.when('/python',
+        {
+            templateUrl:    'python',
+            controller:     'PythonCtrl',
+            access:         access.user
+        });
     $routeProvider.when('/login',
         {
             templateUrl:    'login',
@@ -121,7 +128,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
         function error(response) {
 
             if(response.status === 401) {
-                $location.path('/login');
+                $location.path('/home');
                 return $q.reject(response);
             }
             else {
@@ -155,7 +162,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
             $rootScope.error = null;
             if (!Auth.authorize(next.access)) {
                 if(Auth.isLoggedIn()) $location.path('/');
-                else                  $location.path('/login');
+                else                  $location.path('/home');
             }
 
             if(Auth.isLoggedIn()){

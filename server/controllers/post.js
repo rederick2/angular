@@ -75,7 +75,15 @@ module.exports = {
 
           // the stream is closed
 
-          res.json(docs);
+          Post.count({}, function(err, count){
+
+            if (err) return res.send(403, err);
+
+            res.json({docs : docs, count : count});
+
+          });
+
+          
           
         });
 

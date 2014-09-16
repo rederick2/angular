@@ -16,10 +16,11 @@
     "mongoose": "3.5.0",
     "firebase": "*",
     "q": "*",
-    "cloudinary" : "*",
+    "cloudinary" : "1.0.10",
     "request" : "*",
     "raven" : "*",
-    "async" : "*"
+    "async" : "*",
+    "jwt-simple" : "*"
   },
   "repository": {
     "type": "git",

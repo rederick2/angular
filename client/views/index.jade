@@ -11,6 +11,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         //link(href="/css/bootstrap-theme.css", rel="stylesheet")
         link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css", rel="stylesheet")
 
+        link(href='http://fonts.googleapis.com/css?family=Roboto:400,400italic,300,300italic,100italic,100,500,700italic,700,500italic,900,900italic', rel='stylesheet', type='text/css')
+
             //link(href="/css/bootstrap-responsive.css", rel="stylesheet")
         link(href="/js/vendor/liveurl.css", rel="stylesheet")
         link(href="/css/jquery.Jcrop.css", rel="stylesheet")
@@ -24,9 +26,9 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(rel="stylesheet", href="/js/vendor/bootstrap-notify.css")
 
         script(type="text/javascript", src="http://platform.linkedin.com/in.js")
-            api_key:75pza9t7zd2w4k
-            onLoad: onLinkedInLoad
-            authorize: true
+          //  api_key:75pza9t7zd2w4k
+          //  onLoad: onLinkedInLoad
+          //  authorize: true
 
 
             // This is needed because Facebook login redirects add #_=_ at the end of the URL
@@ -45,7 +47,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                         span.icon-bar
                         span.icon-bar
                     .menu-hidden
-                        a.navbar-brand(href="./") RSU
+                        a.navbar-brand(href="/", style="padding:5px") 
+                            img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
                         div.divider-vertical
                     .menu-display
                         a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
@@ -111,7 +114,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             hr(data-ng-show="error")
             .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 
-        div(data-ng-controller="MessagesCtrl", role="navigation")
+        div(data-ng-controller="MessagesCtrl", role="navigation" , ng-show="user.username != ''")
             div.row
                 div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; background:white")
                     //input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
@@ -219,6 +222,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/vendor/scrolld.min.js")
         script(src="/js/vendor/ngAutocomplete.js")
         script(src="/js/vendor/idle.js")   
+         
 
 
         script(src='/js/routingConfig.js')
@@ -296,5 +300,10 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/listMessages
         script(type="text/ng-template", id="firepad")
             include partials/firepad
+        script(type="text/ng-template", id="live")
+            include partials/live
+        script(type="text/ng-template", id="python")
+            include partials/python
+
 
             

@@ -12,7 +12,7 @@
 
 			.modal-footer
 				button.btn.btn-danger(type="button", data-dismiss="modal")	Cancelar
-				button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting", ng-click="remove()")	Aceptar
+				button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting", ng-click="remove()")	Aceptar
 
 .modal.fade(id="modalEducation", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
 	.modal-dialog
@@ -41,7 +41,7 @@
 
 			.modal-footer
 				button.btn.btn-danger(type="button", data-dismiss="modal")	Cancelar
-				button.btn.btn-primary(type="submit", data-ng-disabled="formAddEducation.$invalid", ng-click="addEducation()")	Guardar
+				button.btn.btn-danger(type="submit", data-ng-disabled="formAddEducation.$invalid", ng-click="addEducation()")	Guardar
 
 .modal.fade(id="modalExperience", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
 	.modal-dialog
@@ -69,7 +69,7 @@
 						textarea.form-control(rows="5", data-ng-model="descriptionExp", placeholder="Descripción", name="descriptionExp")
 			.modal-footer
 				button.btn.btn-danger(type="button", data-dismiss="modal")	Cancelar
-				button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting", ng-click="addExperience()")	Guardar
+				button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting", ng-click="addExperience()")	Guardar
 .row
 	.col-xs-12.col-sm-4.col-md-3(style="background:white; padding:0; width: 300px; position:fixed")
 		ul.menuProfile
@@ -113,13 +113,13 @@
 			.buttons(style="padding-left: 30px;")
 				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="authUser == userProfile") Editar
 				span(ng-show="editableForm.$visible")
-					button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+					button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
 					button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
 		div(id="formEducation")
 			div(style="text-align: center; margin-bottom: 5px;")
-				button.btn.btn-primary(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
-			form.formProfileOthers(editable-form, ng-repeat="education in educations" name="editableForm", onaftersave="saveEducation($index, education.id)", style="background: white; margin-bottom: 5px; border-left: 5px #428bca solid;")
+				button.btn.btn-danger(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
+			form.formProfileOthers(editable-form, ng-repeat="education in educations" name="editableForm", onaftersave="saveEducation($index, education.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
 				ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
 							li.dropdown(data-toggle="dropdown")
 								a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
@@ -148,14 +148,14 @@
 				.buttons
 					button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
 					span(ng-show="editableForm.$visible")
-						button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+						button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
 						button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
 		div(style="text-align: center; margin-bottom: 5px;")
-			button.btn.btn-primary(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
+			button.btn.btn-danger(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
 
 		div(id="formExperience")
-			form.formProfileOthers(id="formExperience", editable-form, ng-repeat="experience in experiences" name="editableForm", onaftersave="saveExperience($index, experience.id)", style="background: white; margin-bottom: 5px; border-left: 5px #428bca solid;")
+			form.formProfileOthers(id="formExperience", editable-form, ng-repeat="experience in experiences" name="editableForm", onaftersave="saveExperience($index, experience.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
 				ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
 							li.dropdown(data-toggle="dropdown")
 								a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
@@ -184,12 +184,12 @@
 				.buttons
 					button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
 					span(ng-show="editableForm.$visible")
-						button.btn.btn-primary(type="submit", ng-disabled="editableForm.$waiting") Guardar
+						button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
 						button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
 div(style="display:none")		
 	img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
-	a.btn.btn-primary(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
+	a.btn.btn-danger(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
 	a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
 
 script(type="in/Login")

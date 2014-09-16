@@ -9,8 +9,12 @@ var _ =           require('underscore')
     , InboxCtrl = require('./controllers/inbox')
     , NotifyCtrl = require('./controllers/notify')
     , User =      require('./models/User.js')
+    , mongoose = require('mongoose')
+    , mUser = mongoose.model('User')
     , userRoles = require('../client/js/routingConfig').userRoles
     , accessLevels = require('../client/js/routingConfig').accessLevels;
+
+var jwt = require('jwt-simple');
 
 var routes = [
 
@@ -106,6 +110,12 @@ var routes = [
         path: '/logout',
         httpMethod: 'POST',
         middleware: [AuthCtrl.logout]
+    },
+
+    {
+        path: '/token',
+        httpMethod: 'POST',
+        middleware: [UserCtrl.token]
     },
 
     // User resource
@@ -388,12 +398,44 @@ module.exports = function(app) {
 }
 
 function ensureAuthorized(req, res, next) {
+    
+    //console.log('req.body.token');
+
+    var token = req.headers.token;
+
     var role;
-    if(!req.user) role = userRoles.public;
-    else          role = req.user.role;
+
+    if(!req.user) {
+
+        role = userRoles.public;
+    }
+    else{
+        role = req.user.role;
+    }
 
     var accessLevel = _.findWhere(routes, { path: req.route.path }).accessLevel || accessLevels.public;
 
-    if(!(accessLevel.bitMask & role.bitMask)) return res.send(403);
+    if(req.headers.token){
+
+            var decoded = jwt.decode(req.headers.token, config.token.secret);
+
+            //console.log(decoded);
+            
+            mUser.findOne({username:decoded.username}, function(err, user){
+
+                //console.log(user);
+
+                if(!user) res.send(403);
+
+                //return next();
+
+            });
+    }else{
+
+        if(!(accessLevel.bitMask & role.bitMask)) return res.send(403);
+    }
+
+    //if(!(accessLevel.bitMask & role.bitMask)) return res.send(403);
+
     return next();
 }

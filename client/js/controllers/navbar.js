@@ -64,7 +64,7 @@ angular.module('angular-client-side-auth')
         Auth.logout(function() {
             //$location.path('/login');
             authFirebase.logout();
-            window.location.href = '/login';
+            window.location.href = '/';
         }, function() {
             $rootScope.error = "Failed to logout";
         });

@@ -20,6 +20,9 @@
     "cookie": {
         "secret": ""
     },
+    "token" :{
+            "secret" : "alex2002"
+        },
     "secure": false,
     "loginsecure": false,
     "key": "",
