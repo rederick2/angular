@@ -1,30 +1,271 @@
 'use strict';
 
-/*angular.module('angular-client-side-auth')
-    .directive('infiniteScroll', [ "$window", function ($window) {
+angular.module('angular-client-side-auth')
+    .directive('modalLogin', [ '$rootScope', '$location', '$window', 'Auth', '$firebase', function ($rootScope, $location, $window, Auth, $firebase) {
         return {
-            link:function (scope, element, attrs) {
-                var offset = parseInt(attrs.threshold) || 0;
+            restrict: 'E',
+            //replace:true,
+            templateUrl: '/partials/login.jade',
+            controller: function ($scope) {
+              
+              if(Auth.user.username == '')
+              {
+                  $scope.rememberme = true;
 
-                if(attrs.element){
-                    element = $(window);
-                    var e = $('body')[0];
-                }else{
-                    var e = element[0];
-                }
-                
+                  var url = "https://rederick2.firebaseio.com/";
 
-                element.bind('scroll', function () {
+                  var ref = new Firebase(url);
+                  
+                  /*var authFirebase = new FirebaseSimpleLogin(ref, function(error, user) {
+                    if (error) {
+                      // an error occurred while attempting login
+                      console.log(error);
+                    } else if (user) {
+                      // user authenticated with Firebase
+                      //console.log(1);
 
-                    if (scope.$eval(attrs.canLoad) && e.scrollTop + e.offsetHeight >= e.scrollHeight - offset) {
-                        scope.$apply(attrs.infiniteScroll);
+                          if(user.provider == 'facebook'){
+                              
+                              Auth.loginFb(user,
+                              function(res) {
 
-                        console.log(attrs.infiniteScroll);
-                    }
-                });
+                                  if(res.login == 'true')
+                                  {
+
+                                      //$location.path('/');
+                                      window.location.href = '/';
+
+                                  }else{
+
+                                      $rootScope.userRegister = user;
+                                      $location.path('/register');
+
+                                  }
+                              },
+                              function(err) {
+                                  $rootScope.error = err;
+                              });
+                              
+                          }
+
+                    } 
+                  });*/
+              }
+
+              $scope.login = function() {
+                  Auth.login({
+                          username: $scope.username,
+                          password: $scope.password,
+                          rememberme: $scope.rememberme
+                      },
+                      function(res) {
+                          console.log(res);
+                          authFirebase.login('password', {email: res.email, password: res.password});
+                          //$location.path('/');
+                          window.location.href = '/';
+                      },
+                      function(err) {
+                          $rootScope.error = "Failed to login";
+                      });
+              };
+
+              $scope.handleAuthResponse = function (promise) {
+                  $.when(promise)
+                      .then(function (authData) {
+
+                        $('#modalLogin').modal('hide');
+
+                        Auth.loginFb(authData,
+                          function(res) {
+
+                            if(res.login == 'true')
+                            {
+
+                                //$location.path('/');
+                                window.location.href = '/';
+
+                            }else{
+
+                                if(authData.provider == 'facebook')
+                                {
+                                  $rootScope.userRegister = authData.facebook;
+                                  $rootScope.userRegister.picture = 'https://graph.facebook.com/'+authData.facebook.username+'/picture';
+                                }
+                                else if(authData.provider == 'twitter')
+                                {
+                                  $rootScope.userRegister = authData.twitter;
+                                  $rootScope.userRegister.picture = authData.twitter.cachedUserProfile.profile_image_url.replace('_normal' , '');
+                                }
+                                else if(authData.provider == 'google')
+                                {
+                                  console.log(authData);
+                                  $rootScope.userRegister = authData.google;
+                                  $rootScope.userRegister.picture = authData.google.cachedUserProfile.picture;
+                                }
+
+                                $rootScope.userRegister.provider = authData.provider;
+
+                                //$location.path('/register');
+                                //console.log(authData);
+
+                                
+                                $('#modalRegister').modal('show');
+
+                            }
+                          },
+                          function(err) {
+                              $rootScope.error = err;
+                          });
+                          //console.log(authData)
+
+                      // route
+                      //routeTo(route);
+
+                  }, function (err) {
+                      console.log(err);
+                      // pop up error
+                      $rootScope.error = "Failed to login";
+
+                  });
+              }
+
+              $scope.loginOauth = function(provider) {
+
+                  //authFirebase.login(provider);
+                  /*if (provider == 'google'){
+                      ref.authWithOAuthPopup("google", function(err, authData) {
+                        if (err) {
+
+                        } else if (authData) {
+                          // user authenticated with Firebase
+                          console.log(authData)
+                        }
+                      }, {scope: 'https://www.googleapis.com/auth/userinfo.email, https://www.googleapis.com/auth/plus.login'});
+
+                  };*/
+                  var socialLoginPromise = $scope.thirdPartyLogin(provider);
+
+                  $scope.handleAuthResponse(socialLoginPromise);
+
+              };
+
+              $scope.thirdPartyLogin = function(provider) {
+
+                  var deferred = $.Deferred();
+
+                  var scope = '';
+
+                  if(provider == 'google')
+                  {
+                      scope = 'https://www.googleapis.com/auth/userinfo.email, https://www.googleapis.com/auth/plus.login';
+                  }
+
+                  ref.authWithOAuthPopup(provider, function (err, user) {
+                      if (err) {
+                          deferred.reject(err);
+                      }
+
+                      if (user) {
+                          deferred.resolve(user);
+                      }
+                  }, {scope: scope});
+
+                  return deferred.promise();
+              };
+
             }
         };
-    }]);*/
+    }])
+
+angular.module('angular-client-side-auth')
+    .directive('modalRegister', [ '$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+        return {
+            restrict: 'E',
+            //replace:true,
+            templateUrl: '/partials/register.jade',
+            controller: function ($scope) {
+
+              $('#modalRegister').on('hidden.bs.modal', function (e) {
+                // do something...
+                $rootScope.userRegister = [];
+              })
+              
+              $scope.role = Auth.userRoles.user;
+              $scope.userRoles = Auth.userRoles;
+              $scope.username = '';
+
+              var url = "https://rederick2.firebaseio.com/";
+
+              /*if($rootScope.userRegister)
+              {
+
+                  $scope.username = $rootScope.userRegister.username;
+                  $scope.email = $rootScope.userRegister.email;
+                  $scope.displayName = $rootScope.userRegister.displayName;
+              }*/
+
+
+              $scope.$watch('username', function() {
+                  $scope.username = $scope.username != undefined ? $scope.username.toLowerCase().replace(/\s+/g,'') : $scope.username;
+              });
+
+              $scope.register = function() {
+                  var social = null;
+                  var picture = "";
+
+                  if($rootScope.userRegister)
+                  {
+
+                      social = {
+                                  provider: $rootScope.userRegister.provider, 
+                                  providerId: $rootScope.userRegister.id, 
+                                  token: $rootScope.userRegister.accessToken, 
+                                  picture:$rootScope.userRegister.picture, 
+                                  link: $rootScope.userRegister.link
+                                } 
+                  }
+
+                  Auth.register({
+                          username: $scope.userRegister.username,
+                          password: $scope.password,
+                          email: $scope.userRegister.email,
+                          name: $scope.userRegister.displayName,
+                          role: $scope.userRegister.role,
+                          social : social
+                      },
+                      function(res) {
+                          /*authFirebase.createUser(res.email, res.password, function(error, user) {
+                            if (!error) {
+                              console.log('User Id: ' + user.uid + ', Email: ' + user.email);
+                              authFirebase.login('password', {email: res.email, password: res.password});
+                            }
+                          });*/
+                          //$location.path('/');
+                          window.location.href = '/';
+                      },
+                      function(err) {
+                          $rootScope.error = err;
+                      });
+              };
+          }
+        }
+    }])
+
+angular.module('angular-client-side-auth').directive('inboxes', ['$location', function($location) {
+    return {
+        restrict: 'E',
+        templateUrl : '/partials/inboxes.jade'
+    };
+
+}]);
+
+angular.module('angular-client-side-auth').directive('messagesChat', ['$location', function($location) {
+    return {
+        restrict: 'E',
+        templateUrl : '/partials/messages-chat.jade'
+    };
+
+}]);
 
 angular.module('angular-client-side-auth')
 .directive('infiniteScroll', [

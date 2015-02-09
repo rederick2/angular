@@ -1,6 +1,6 @@
 angular.module('angular-client-side-auth')
 .controller('UserCtrl',
-['$rootScope', '$scope', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', '$firebase', 'Files', 'Notify', function($rootScope , $scope, $window, $routeParams, $sce, $upload, Users, Posts, Auth, $firebase, Files, Notify) {
+['$rootScope', '$scope', '$location', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', '$firebase', 'Files', 'Notify', function($rootScope , $scope, $location, $window, $routeParams, $sce, $upload, Users, Posts, Auth, $firebase, Files, Notify) {
 
     //$scope.username = $routeParams.id;
     //$scope.userRoles = Auth.userRoles;
@@ -135,19 +135,6 @@ angular.module('angular-client-side-auth')
 
     }
     
-    Users.getByUsername({username:$scope.username} , 
-        function(res){
-
-            //console.log(res[0]);
-            if(res.length != 0){
-                $scope.imgProfile = res.picture;
-            }
-
-            $scope.user = res;
-
-        }, function(err){
-            $rootScope.error = err;
-        });
 
     $scope.page = 0;
     $scope.busy = false;
@@ -419,7 +406,29 @@ angular.module('angular-client-side-auth')
             });
     }
 
-    $scope.getPost();
+    if(Auth.user.username != ''){
+        Users.getByUsername({username:$scope.username} , 
+            function(res){
+
+                //console.log(res);
+                if(res.length != 0){
+                    $scope.imgProfile = res.picture;
+                }
+
+                $scope.user = res;
+
+                if(res.success == 0){
+                    $location.path('/');
+                }else{
+                    $scope.getPost();
+                }
+
+            }, function(err){
+                $rootScope.error = err;
+            });
+    }
+
+    
 
 
 }]);

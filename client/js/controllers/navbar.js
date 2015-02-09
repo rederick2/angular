@@ -49,8 +49,8 @@ angular.module('angular-client-side-auth')
 
     $scope.logout = function() {
 
-        var Ref = new Firebase(url);
-        var authFirebase = new FirebaseSimpleLogin(Ref, function(error, user) {
+        var ref = new Firebase(url);
+        /*var authFirebase = new FirebaseSimpleLogin(Ref, function(error, user) {
           if (error) {
             // an error occurred while attempting login
             console.log(error);
@@ -59,12 +59,13 @@ angular.module('angular-client-side-auth')
             console.log('User ID: ' + user.uid + ', Provider: ' + user.provider);
 
           }
-        });
+        });*/
 
         Auth.logout(function() {
             //$location.path('/login');
-            authFirebase.logout();
-            window.location.href = '/';
+            //authFirebase.logout();
+            ref.unauth();
+            window.location.href = '/home';
         }, function() {
             $rootScope.error = "Failed to logout";
         });

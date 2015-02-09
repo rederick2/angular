@@ -1,0 +1,8 @@
+div.inboxes(id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-class="{activo:id == inbox.id, unread:inbox.unread == false}")
+	div(style="width:74%;display:inline-block; vertical-align:middle", ng-click="viewMessages(inbox.id, inbox.to.username, inbox.to.name);", title=" {{inbox.update | amCalendar}}")
+		div(id="status_{{inbox.to.username}}", style="position:absolute; right:88px; top:18px")
+		.picture
+			img(src="{{inbox.to.picture}}", username="{{inbox.to.username}}", align='left', valign='middle',style='margin:5px', width="50")
+		.name
+			h3 {{inbox.to.name}}
+	button.btn.btn-default(styles="display:inline-block; vertical-align:middle")  Seguir

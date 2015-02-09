@@ -1,0 +1,25 @@
+.contentMessages
+	.loading(style='display:none')
+		i.fa.fa-spinner.fa-spin
+	.message.clearfix.comment(ng-repeat="message in messages2", style="border:0")
+		.imgProfile(ng-show="message.from.username != username")
+			a(href="./{{message.from.username}}", data-toggle="tooltip",  data-placement="right", title="{{message.from.username}}") 
+				img(src="{{message.from.picture}}", align='left', valign='middle', style='margin:5px', width="35")
+		.content(ng-class="{me:message.from.username == username, you:message.from.username != username}")
+			p {{message.content}}
+			h6
+				span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
+	.message.clearfix.comment(ng-repeat="message in messages", style="border:0")
+		.imgProfile(ng-show="message.from != username")
+			a(href="./{{message.from}}", data-toggle="tooltip",  data-placement="right", title="{{message.from}}") 
+				img(src="{{message.picture}}", align='left', valign='middle', style='margin:5px', width="35")
+		.content(ng-class="{me:message.from == username, you:message.from != username}")
+			p {{message.content}}
+			h6
+				span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
+	.write(ng-repeat="write in writes", style="height: 20px;line-height: 20px;color: #999")
+		span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
+form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px; border-top: 1px solid #ddd;")
+	textarea.form-control(id="messageChat", style="width:85%; display:inline-block", rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-change="writeMessage(comment);", ng-blur="unWriteMessage();", required)
+	button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;", style="padding:0; background: none; border:0") 
+		i.fa.fa-check-square(style="font-size: xx-large;color: #ccc;")

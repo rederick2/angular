@@ -28,27 +28,28 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
         {
             templateUrl:    'live',
             //controller:     'HomeCtrl',
-            access:         access.anon
+            access:         access.public
         });
 
-    $routeProvider.when('/python',
+    $routeProvider.when('/cursos/:id',
         {
-            templateUrl:    'python',
-            controller:     'PythonCtrl',
+            templateUrl:    'curso',
+            controller:     'CursoCtrl',
             access:         access.user
         });
-    $routeProvider.when('/login',
+
+   /*$routeProvider.when('/login',
         {
             templateUrl:    'login',
             controller:     'LoginCtrl',
             access:         access.anon
-        });
-    $routeProvider.when('/register',
+        });*/
+    /*$routeProvider.when('/register',
         {
             templateUrl:    'register',
             controller:     'RegisterCtrl',
             access:         access.anon
-        });
+        });*/
     $routeProvider.when('/private',
         {
             templateUrl:    'private',
@@ -156,8 +157,6 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
 
         $rootScope.photo = false;
 
-        var lastRoute = $route.current;
-
         $rootScope.$on("$routeChangeStart", function (event, next, current) {
             $rootScope.error = null;
             if (!Auth.authorize(next.access)) {
@@ -172,7 +171,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
 
                     //console.log(res[0]);
                     if(res.length != 0){
-                        $rootScope.imgProfile = res.picture + '?' + (Math.random()*10);
+                        $rootScope.imgProfile = res.picture; //+ '?' + (Math.random()*10);
                         $rootScope.fullname = res.name;
                     }
 

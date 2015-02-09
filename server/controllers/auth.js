@@ -71,6 +71,7 @@ module.exports = {
 
     //console.log("BUSCARRRRRFACEEEEE");
     var profile = req.body;
+    var uid = profile.uid.split(':');
 
     /*User.findOne({username:profile.username}, function(err, user){
 
@@ -78,7 +79,7 @@ module.exports = {
 
       if(!user) return res.json(profile);*/
 
-      Infosocial.findOne({providerId:profile.id, provider:'facebook'}, function(err, social){
+      Infosocial.findOne({providerId:uid[1], provider: uid[0]}, function(err, social){
 
         if(err) return res.send(500, err);
 

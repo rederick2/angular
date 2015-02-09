@@ -2,7 +2,7 @@ angular.module('angular-client-side-auth')
 .controller('LoginCtrl',
 ['$rootScope', '$scope', '$location', '$window', 'Auth', '$firebase', function($rootScope, $scope, $location, $window, Auth, $firebase) {
 
-    $scope.rememberme = true;
+   /* $scope.rememberme = true;
 
     var url = "https://rederick2.firebaseio.com/";
 
@@ -73,7 +73,7 @@ angular.module('angular-client-side-auth')
                   
                 });*/
 
-        authFirebase.login(provider);
+       // authFirebase.login(provider);
 
         /*$scope.$on("angularFireAuth:login", function(evt, user) {
         // User logged in.
@@ -89,5 +89,5 @@ angular.module('angular-client-side-auth')
                 });
             }
         });*/
-    };
+    //};
 }]);

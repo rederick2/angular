@@ -1,0 +1,28 @@
+h1	{{title}}
+div(ng-show="ver==1", style="background:white; padding:5px;position: relative;")
+	h1
+		i.fa.fa-chevron-circle-right
+		{{curso.title}}
+	span(ng-click="ver = 0; curso.url ='';", style="position: absolute;top: 0;right: 0;padding: 10px; cursor:pointer; font-size:16px")
+		i.fa.fa-times
+	.stream(style="max-width: 100%;height: auto;")
+		.video(style="height: 0;overflow: hidden;padding-bottom: 56.25%;position: relative;text-align: center;")
+			iframe(style="height: 100%;left: 0;position: absolute;top: 0;width: 100%;", src="{{trustSrc(curso.url)}}", width="840", height="560", frameborder="0", allowfullscreen="true")
+
+.container(ng-show="ver==0", style="padding: 5px;")
+	.col-xs-8.col-sm-4.col-md-12( ng-repeat="list in lists", style="margin:5px; background:white;")
+		h1 {{list.title}}
+		table.table.table-hover(ng-init="id = $index")
+			thead
+				tr
+					th 	#
+					th 	Título
+					th 	Enlace
+			tbody
+				tr( ng-repeat="item in list.items")
+					td 	{{$index + 1}}
+					td	{{item.title}}
+					td
+						button.btn.btn-default(id="{{$index}}", ng-click="verVideo(id, $index);")
+							i.fa.fa-youtube-play
+							|	Ver Video
