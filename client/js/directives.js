@@ -59,8 +59,8 @@ angular.module('angular-client-side-auth')
                           rememberme: $scope.rememberme
                       },
                       function(res) {
-                          console.log(res);
-                          authFirebase.login('password', {email: res.email, password: res.password});
+                          //console.log(res);
+                          //authFirebase.login('password', {email: res.email, password: res.password});
                           //$location.path('/');
                           window.location.href = '/';
                       },
