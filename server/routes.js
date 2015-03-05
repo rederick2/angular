@@ -172,6 +172,13 @@ var routes = [
     },
 
     {
+        path: '/posts/getbyid',
+        httpMethod: 'POST',
+        middleware: [PostCtrl.getById],
+        accessLevel: accessLevels.public
+    },
+
+    {
         path: '/posts/add',
         httpMethod: 'POST',
         middleware: [PostCtrl.add],

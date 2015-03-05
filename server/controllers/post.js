@@ -90,6 +90,74 @@ module.exports = {
 
     },
 
+    getById: function(req, res) {
+        
+
+        var docs = [];
+
+        var sm = Post.findOne({id:req.body.id}).populate('from' , 'username name picture').populate('to' , 'username name picture').stream();
+        
+        sm.on('data', function (doc) {
+          // do something with the mongoose document
+          if(!doc) return res.json({success:'true'});
+
+          if(doc) this.pause();
+
+          var self = this;
+
+          Comment.find({post:doc}).populate('from' , 'username name picture').exec(function(err, comments){
+
+                if(!comments) return res.json({success:'true'});
+
+                var comment = [];
+
+                if(comments){
+
+                    comments.forEach(function(x){
+                        
+                        //console.log(x);
+                        
+                        comment = { id: x.id, from:{username:x.from.username, name:x.from.name, picture:x.from.picture}, message:x.message, created_time: x.created_time};
+                        
+                        doc.comments.push(comment);
+                    });
+
+                }
+                
+
+                docs = doc;
+
+                self.resume();
+
+                
+
+          });
+
+        }).on('error', function (err) {
+
+          // handle the error
+          return res.send(403, err);
+
+        }).on('close', function () {
+
+          // the stream is closed
+
+          Post.count({}, function(err, count){
+
+            if (err) return res.send(403, err);
+
+            res.json({docs : docs, count : count});
+
+          });
+
+          
+          
+        });
+
+
+    },
+
+
     remove: function(req,res){
 
         try{

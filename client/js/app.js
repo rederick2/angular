@@ -62,11 +62,11 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
             controller:     'AdminCtrl',
             access:         access.admin
         });
-    $routeProvider.when('/list',
+    $routeProvider.when('/post/:id',
         {
-            templateUrl:    'listado',
-            controller:     'ListCtrl',
-            access:         access.admin
+            templateUrl:    'post',
+            controller:     'PostCtrl',
+            access:         access.public
         });
     $routeProvider.when('/edit/:id',
         {

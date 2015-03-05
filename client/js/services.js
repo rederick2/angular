@@ -33,7 +33,7 @@ angular.module('angular-client-side-auth')
         },
         remove: function(user, success, error) {
 
-            console.log(user);
+            //console.log(user);
 
             $http.post('/remove', user).success(function(res) {
                 //changeUser(res);
@@ -41,6 +41,7 @@ angular.module('angular-client-side-auth')
             }).error(error);
         },
         login: function(user, success, error) {
+            //console.log(user);
             $http.post('/login', user).success(function(user){
                 changeUser(user);
                 success(user);
@@ -220,6 +221,12 @@ angular.module('angular-client-side-auth')
             //console.log(sort);
             $http.post('/posts/getbyusername', data).success(success).error(error);
         },
+
+        getById: function(data, success, error) {
+            //console.log(sort);
+            $http.post('/posts/getbyid', data).success(success).error(error);
+        },
+
 
         getComments: function(data, success, error) {
             //console.log(sort);

@@ -25,7 +25,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         link(rel="stylesheet", href="/js/vendor/codepad/firepad-userlist.css")
         link(rel="stylesheet", href="/js/vendor/bootstrap-notify.css")
 
-        script(type="text/javascript", src="http://platform.linkedin.com/in.js")
+        script(type="text/javascript", src="//platform.linkedin.com/in.js")
           //  api_key:75pza9t7zd2w4k
           //  onLoad: onLinkedInLoad
           //  authorize: true
@@ -63,7 +63,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                                 span.badge(ng-show="count_notifications")  {{ count_notifications }}
                             ul.dropdown-menu.notifications
                                 li(ng-repeat="not in notifications")
-                                    a.clearfix(href="{{not.link}}")
+                                    a.clearfix(href="/{{not.link}}")
                                         div 
                                             img(src="{{not.from.picture}}", align='left', valign='middle', width="50")
                                             .content {{not.title}}
@@ -118,7 +118,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
 
         div(data-ng-controller="MessagesCtrl", role="navigation" , ng-show="user.username != ''")
             div.row
-                div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; width:305px; background:white")
+                div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; width:305px; background:white; height:100%")
                     //input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
                     .input-group
                         input.form-control.search(name="search", ng-model="search", placeholder="Buscar", ng-change="searchUsers(search); isSeach= true; newMessage = true;")
@@ -138,7 +138,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
                     .actions(style="#F3F3F3")
                         div(id="status_{{UserChatStatus}}", style="position:absolute; left: 5px; top: 10px;")
                         span(style="position:absolute; left: 5px; top: 10px;") 
-                            strong  {{UserChat}}
+                            a(href="/{{UsernameChat}}")
+                                strong  {{UserChat}}
                         span(ng-click="viewInbox = 0", style="position: absolute;top: 0;right: 0;padding: 10px; cursor:pointer")
                             i.fa.fa-times
                     messages-chat
@@ -200,7 +201,7 @@ html(lang='en', data-ng-app='angular-client-side-auth')
         script(src="/js/controllers.js")
         script(src="/js/controllers/navbar.js")
         script(src="/js/controllers/admin.js")
-        script(src="/js/controllers/login.js")
+        script(src="/js/controllers/post.js")
         script(src="/js/controllers/home.js")
         script(src="/js/controllers/edituser.js")
         script(src="/js/controllers/messages.js")
@@ -252,8 +253,8 @@ html(lang='en', data-ng-app='angular-client-side-auth')
             include partials/private
         script(type="text/ng-template", id="register")
             include partials/register
-        script(type="text/ng-template", id="listado")
-            include partials/listado
+        script(type="text/ng-template", id="post")
+            include partials/post
         script(type="text/ng-template", id="edit")
             include partials/edit
         script(type="text/ng-template", id="user")

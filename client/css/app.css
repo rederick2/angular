@@ -25,6 +25,14 @@ form[name="editableForm"] select {
   width: 120px;
 }
 
+.thumbnail > img, .thumbnail_p > img, .picture > img, .imgPostProfile > img, .btn-profile > img, .imgProfile > a > img{
+  border-radius: 50%
+}
+
+.badge{
+  background:rgb(216, 47, 75);
+}
+
 .cover{
   background-size: cover;
   background-position: center center;
@@ -185,7 +193,7 @@ a.btn-profile{
 }
 
 .inboxlist{
-  max-height: 400px;
+  /*max-height: 400px;*/
   overflow: auto;
 }
 .inboxes:hover{
@@ -662,6 +670,10 @@ form .btn{
 @media (max-width: 768px) { 
 
   .profile{
+    display: none;
+  }
+
+  .inboxlist{
     display: none;
   }
 

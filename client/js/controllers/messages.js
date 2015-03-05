@@ -148,6 +148,8 @@ angular.module('angular-client-side-auth')
 
         $scope.UserChatStatus = id;
 
+        $scope.UsernameChat = to;
+
         $scope.messages = [];
 
         $scope.messages2 = [];

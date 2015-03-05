@@ -1,7 +1,7 @@
 div.row
 	div.col-xs-12.col-sm-3.col-md-2.profile
 		div.thumbnail(style="position:relative")
-			img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
+			img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="width:150px; height:150px")
 			a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
 				i.fa.fa-camera
 			div.caption
@@ -73,7 +73,7 @@ div.row
 									a(href="#") Repostar abuso o spam
 					div.panel-body
 						.clearfix
-							a(href="./{{post.from.username}}") 
+							a.imgPostProfile(href="./{{post.from.username}}") 
 								img(src="{{post.from.picture}}", align='left', valign='middle', style='margin:5px', width="50")
 							a(href="./{{post.from.username}}") 
 								strong{{post.from.name}}

@@ -34,7 +34,8 @@ angular.module('angular-client-side-auth')
 					items 	: 	[
 									{
 										title 	: 'Introducción a Python',
-										url 	: 'https://mdstrm.com/embed/537126a6ab2460302fe74d47'
+										//url 	: 'https://mdstrm.com/embed/537126a6ab2460302fe74d47'
+										url : '//mediasvcptgg3ng4gws7h.blob.core.windows.net/asset-0434455d-1500-80c2-9df3-f1e4c27aefcc/2315_preview.mp4?sv=2012-02-12&sr=c&si=960ba089-a6c7-41fd-8baf-c4cbbff60ae5&sig=lpA8sCdzeCFOU7OT6vILh%2FlcMXuu7rHBn3owMBKH6Hs%3D&st=2015-03-04T14%3A35%3A38Z&se=2017-03-03T14%3A35%3A38Z'
 									},
 									{
 										title 	: 'Creación de proyecto: Sfotipy',
@@ -193,6 +194,7 @@ angular.module('angular-client-side-auth')
 									{
 										title 	: 'Sesión de preguntas y respuestas',
 										url 	: 'https://mdstrm.com/embed/541b52b4d6882f980ca37148'
+									}
 
 								]
 				},

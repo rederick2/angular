@@ -14,7 +14,10 @@
                       input(type='checkbox', data-ng-model="rememberme", value='remember-me')
                       | Recordarme
                     button.btn.btn-default.btn-lg.btn-block(type='submit', data-ng-disabled="loginForm.$invalid") Iniciar
+                .error(ng-show="messageError")
+                    {{ messageError }}
                 hr
+
                 p ... o también puedes iniciar con las siguientes redes sociales:
                 .btn-group.col-md-12
                     a.btn.btn-primary.btnsocial(href="", data-ng-click="loginOauth('facebook')")
@@ -29,3 +32,4 @@
                         i.fa.fa-google-plus-square
                         |  Google
                 hr
+                

@@ -7,10 +7,20 @@ angular.module('angular-client-side-auth')
             //replace:true,
             templateUrl: '/partials/login.jade',
             controller: function ($scope) {
+
+              $('#modalLogin').on('hidden.bs.modal', function (e) {
+                // do something...
+                $scope.username = "";
+                $scope.password = "";
+                $scope.messageError = "";
+
+              })
               
               if(Auth.user.username == '')
               {
                   $scope.rememberme = true;
+
+                  $scope.messageError = "";
 
                   var url = "https://rederick2.firebaseio.com/";
 
@@ -53,16 +63,24 @@ angular.module('angular-client-side-auth')
               }
 
               $scope.login = function() {
+                  
+                  $scope.messageError = "";
+                  
                   Auth.login({
                           username: $scope.username,
                           password: $scope.password,
                           rememberme: $scope.rememberme
                       },
                       function(res) {
-                          console.log(res);
-                          authFirebase.login('password', {email: res.email, password: res.password});
+                          //console.log(res);
+                          if(res.message)
+                            $scope.messageError = res.message;
+                          else
+                            //authFirebase.login('password', {email: res.email, password: res.password});
+                            window.location.href = '/';
+                          
                           //$location.path('/');
-                          window.location.href = '/';
+                          
                       },
                       function(err) {
                           $rootScope.error = "Failed to login";
@@ -187,7 +205,12 @@ angular.module('angular-client-side-auth')
 
               $('#modalRegister').on('hidden.bs.modal', function (e) {
                 // do something...
-                $rootScope.userRegister = [];
+                $rootScope.userRegister.username = "";
+                $rootScope.userRegister.email = "";
+                $rootScope.userRegister.displayName = "";
+                $scope.password = "";
+                $scope.password_verify = "";
+
               })
               
               $scope.role = Auth.userRoles.user;

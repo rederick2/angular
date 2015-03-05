@@ -135,6 +135,8 @@ module.exports = {
     }, function(err, user){
               if(err) return res.send(403, err);
 
+              if(!user) return res.json({'message' : 'Datos incorrectos. por favor ingrese nuevamente su usuario y/o contraseña.'});
+
               req.logIn(user, function(err) {
                   if(err)     { next(err); }
                   else        { res.json(200, { "role": user.role, "username": user.username, "email" : user.email, "password" : user.password, name:user.name }); }
