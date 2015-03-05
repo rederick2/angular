@@ -73,12 +73,16 @@ angular.module('angular-client-side-auth')
                       },
                       function(res) {
                           //console.log(res);
+<<<<<<< HEAD
                           if(res.message)
                             $scope.messageError = res.message;
                           else
                             //authFirebase.login('password', {email: res.email, password: res.password});
                             window.location.href = '/';
                           
+=======
+                          //authFirebase.login('password', {email: res.email, password: res.password});
+>>>>>>> origin/master
                           //$location.path('/');
                           
                       },
