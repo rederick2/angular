@@ -19,7 +19,9 @@
 				span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
 	.write(ng-repeat="write in writes", style="height: 20px;line-height: 20px;color: #999")
 		span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
-form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px; border-top: 1px solid #ddd;")
-	textarea.form-control(id="messageChat", style="width:85%; display:inline-block", rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-change="writeMessage(comment);", ng-blur="unWriteMessage();", required)
-	button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;", style="padding:0; background: none; border:0") 
+form(ng-show="!isSeach", ng-submit="", name="commentForm", style="padding: 10px; border-top: 1px solid #ddd; padding:0")
+	.loading2(style='display:none;')
+		i.fa.fa-spinner.fa-spin
+	textarea.form-control(id="messageChat", ng-enter="addMessage(comment); comment = '';"  style="display:inline-block; border:0", rows="2", placeholder="Escribir mensaje ...", data-ng-model="comment", ng-change="writeMessage(comment);", ng-blur="unWriteMessage();", required)
+	//button.btn.btn-info(data-ng-disabled="commentForm.$invalid", ng-click="addMessage(comment); comment = ''; viewComment=true; hideComents=true;", style="padding:0; background: none; border:0") 
 		i.fa.fa-check-square(style="font-size: xx-large;color: #ccc;")

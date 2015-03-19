@@ -217,10 +217,20 @@ a.btn-profile{
   margin-top: 5px;
   overflow: auto;
   padding: 0px 10px;
+  background: #f4f4f4;
+  margin: 0;
 }
 
 .messages{
-  border: 1px solid #ddd;
+  position: fixed;
+  bottom: 0px;
+  left: 0;
+  background: white;
+  width: 305px;
+  margin: 5px;
+  box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  border: 1px solid #f4f4f4;
   padding: 0px;
  /*height: 630px;*/
 }
@@ -252,12 +262,13 @@ a.btn-profile{
 }
 
 .me{
-  background-color: #fff;
+  background-color: #333;
+  color: #fff;
   float: right;
 }
 
 .you{
-  background-color: #f7f7f7;
+  background-color: #fff;
   float: left;
   
 }
@@ -608,6 +619,19 @@ li.active{
   line-height: 25em;
   z-index: 1;
 }
+
+.loading2{
+  position: absolute;
+  width: 100%;
+  height: 75px;
+  bottom: 0;
+  left: 0;
+  background: rgba(255,255,255,0.65);
+  text-align: center;
+  line-height: 6em;
+  z-index: 1;
+}
+
 
 #formAddEducation .controls{
   margin: 15px;

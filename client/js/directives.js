@@ -1,6 +1,24 @@
 'use strict';
 
 angular.module('angular-client-side-auth')
+  .directive('ngEnter', function () {
+    return function ($scope, element, attrs) {
+        
+          element.bind("keydown keypress", function (event) {
+              if(event.which === 13) {
+                if (!event.shiftKey) {
+                    $scope.$apply(function (){
+                        $scope.$eval(attrs.ngEnter);
+                    });
+                  event.preventDefault();
+                }
+              }
+          });
+        
+    };
+});
+
+angular.module('angular-client-side-auth')
     .directive('modalLogin', [ '$rootScope', '$location', '$window', 'Auth', '$firebase', function ($rootScope, $location, $window, Auth, $firebase) {
         return {
             restrict: 'E',
@@ -211,12 +229,14 @@ angular.module('angular-client-side-auth')
                 $rootScope.userRegister.displayName = "";
                 $scope.password = "";
                 $scope.password_verify = "";
+                $scope.messageError = '';
 
               })
               
               $scope.role = Auth.userRoles.user;
               $scope.userRoles = Auth.userRoles;
               $scope.username = '';
+              $scope.messageError = '';
 
               var url = "https://rederick2.firebaseio.com/";
 
@@ -236,6 +256,7 @@ angular.module('angular-client-side-auth')
               $scope.register = function() {
                   var social = null;
                   var picture = "";
+                  $scope.messageError = '';
 
                   if($rootScope.userRegister)
                   {
@@ -265,7 +286,10 @@ angular.module('angular-client-side-auth')
                             }
                           });*/
                           //$location.path('/');
-                          window.location.href = '/';
+                          if(res.message)
+                            $scope.messageError = res.message;
+                          else
+                            window.location.href = '/';
                       },
                       function(err) {
                           $rootScope.error = err;

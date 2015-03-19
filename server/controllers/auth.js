@@ -50,7 +50,7 @@ module.exports = {
         //tokenSecret: refreshToken
     }, function(err, user){
               
-              if(err) return res.send(403, err);
+              if(err) return res.json(err);
 
               var myRootRef = Firebase.getRef('users/'+ profile.username);
 

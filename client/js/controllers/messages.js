@@ -260,8 +260,12 @@ angular.module('angular-client-side-auth')
 
     $scope.addMessage = function(text){
 
-        //alert(text);
-        if($scope.to != ''){
+        //console.log(text);
+        
+
+        if($scope.to != '' && text != '' && text != undefined){
+
+            $('.loading2').show();
 
             var message = {
                 to: $scope.to,
@@ -282,9 +286,12 @@ angular.module('angular-client-side-auth')
                     $scope.viewMessages(res.inbox.id, $scope.to, res.inbox.user.name);
 
                     //$scope.UserChat = res.inbox.user.name;
+                    $scope.viewInboxes();
 
                     $scope.newMessage=false;
 
+                }else{
+                    $('.loading2').hide();
                 }
 
                 
@@ -303,7 +310,7 @@ angular.module('angular-client-side-auth')
 
         }else{
 
-            alert('Debe seleccionar un nombre de usuario a enviar.');
+            //alert('Debe seleccionar un nombre de usuario a enviar.');
 
         }
 

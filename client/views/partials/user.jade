@@ -130,6 +130,6 @@ div.row
 											span(am-time-ago="comment.time", title="{{comment.time | amCalendar}}")
 						
 						form(ng-submit="", name="commentForm")
-							textarea.form-control(rows="2", placeholder="Agrega tu comentario ...", data-ng-model="comment", ng-focus="viewButtonComment = true", required)
-							.btn-group(style="margin-top:5px")
+							textarea.form-control(rows="2", ng-enter="idpost = post.id; addCommentPost(post.id, comment); comment = ''; viewComment=true; hideComents=true;", placeholder="Agrega tu comentario ...", data-ng-model="comment", ng-focus="viewButtonComment = true", required)
+							//.btn-group(style="margin-top:5px")
 								button.btn.btn-info(ng-show="viewButtonComment", data-ng-disabled="commentForm.$invalid", ng-click="idpost = post.id; addCommentPost(post.id, comment); comment = ''; viewComment=true; hideComents=true;") Comentar

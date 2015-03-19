@@ -243,38 +243,40 @@ angular.module('angular-client-side-auth')
     $scope.addCommentPost = function(id, message){
 
         //$scope.loading = true;
+        if(message != '' && message != undefined)
+        {
+            Posts.addComment({
+                idpost: id,
+                from : Auth.user.username,
+                message : message,
+                time: new Date()
+            },
+            function(res){
+                $scope.message = '';
+                //$scope.getPost();
+                //$('.close').click();
+                $scope.loading = false;
 
-        Posts.addComment({
-            idpost: id,
-            from : Auth.user.username,
-            message : message,
-            time: new Date()
-        },
-        function(res){
-            $scope.message = '';
-            //$scope.getPost();
-            //$('.close').click();
-            $scope.loading = false;
+                if(Auth.user.username != res.to){
 
-            if(Auth.user.username != res.to){
+                    Notify.add({from:Auth.user.username, to:res.to, title: res.name + ' comento un post tuyo. "' + message + '"' , link:'./post/' + res.id , time: new Date()}, function(res){ return true;});
+                }
 
-                Notify.add({from:Auth.user.username, to:res.to, title: res.name + ' comento un post tuyo. "' + message + '"' , link:'./post/' + res.id , time: new Date()}, function(res){ return true;});
-            }
+                setTimeout(function() {
 
-            setTimeout(function() {
+                    $('#'+id).animate({scrollTop : ($('#'+id).children().size() + 1) * 300 });
 
-                $('#'+id).animate({scrollTop : ($('#'+id).children().size() + 1) * 300 });
+                    $('.masonry').masonry();
 
-                $('.masonry').masonry();
+                }, 500);
 
-            }, 500);
-
-            //console.log($('#'+id).height());
-        },
-        
-        function(err) {
-            $rootScope.error = err;
-        });
+                //console.log($('#'+id).height());
+            },
+            
+            function(err) {
+                $rootScope.error = err;
+            });
+        }
 
        // console.log(comment);
 

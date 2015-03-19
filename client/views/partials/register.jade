@@ -71,4 +71,6 @@
                             | Normal user
                     button.btn.btn-lg.btn-default.btn-block(type="submit", data-ng-disabled="registerForm.$invalid") Registrar
                     hr
+                    .error(ng-show="messageError")
+                        {{ messageError }}
     
