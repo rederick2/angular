@@ -1,0 +1,10 @@
+div(style="background:white; padding:25px")
+	div.messages(data-access-level='accessLevels.user', style="position:absolute; top:0px; left:0; background:white; width:305px;")
+		.actions(style="#F3F3F3")
+			div(id="status_{{UserChatStatus}}", style="position:absolute; left: 5px; top: 10px;")
+			span(style="position:absolute; left: 5px; top: 10px;") 
+				a(href="/{{UsernameChat}}")
+					strong  {{UserChat}}
+			span(ng-click="viewInbox = 0", style="position: absolute;top: 0;right: 0;padding: 10px; cursor:pointer")
+				i.fa.fa-times
+		messages-chat

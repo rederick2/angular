@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('EditCtrl',
 ['$rootScope', '$scope', '$location', 'angularFire', '$routeParams','Users', 'Auth', 
 function($rootScope, $scope, $location, angularFire, $routeParams, Users, Auth) {

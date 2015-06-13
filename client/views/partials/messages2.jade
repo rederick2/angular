@@ -1,8 +1,8 @@
 div(style="background:white; padding:25px")
 	h1 MESSAGES
 
-	div(layout="row", layout-sm="column")
-		md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left_chat", md-is-locked-open="$mdMedia('gt-md')")
+	div.row
+		div.col-md-3.inboxlist(style="padding: 0px;")
 			//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
 			.input-group
 				input.form-control(type='text', placeholder='Search', ng-model="typeaheadValue", bs-typeahead="typeahead")
@@ -11,14 +11,9 @@ div(style="background:white; padding:25px")
 						i.fa.fa-search
 			inboxes
 
-		div(flex)
-			md-toolbar.md-toolbar-tools(role="navigation")
-				md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
-					md-icon.md-primary.md-hue-3(md-svg-icon="navigation:arrow_back")
-				span(flex, style="line-height: 0px;") 
-					md-button(ng-href="/{{UsernameChat}}")
-						strong  {{UserChat}}
-				md-button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
+		div.col-md-9.messages
+			.actions
+				button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
 					i.fa.fa-plus
 					|	Nueva Conversación
 			.to(ng-show="newMessage")

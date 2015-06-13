@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('PictureCtrl',
 ['$rootScope', '$scope', '$location', '$upload', 'Files' , '$sce', 'Users', 'Auth' , function($rootScope, $scope, $location, $upload, Files, $sce, Users, Auth) {
 

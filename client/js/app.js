@@ -1,12 +1,31 @@
 'use strict';
 
-angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
+angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute',  'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
     
     /*.value('fbURL', 'https://rederick2.firebaseio.com/users/')
     .factory('Usersregistered', function(angularFireCollection, fbURL) {
         return angularFireCollection(fbURL);
     })*/
-    .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdIconProvider', function ($routeProvider, $locationProvider, $httpProvider, $mdIconProvider) {
+
+        $mdIconProvider
+            .iconSet('action', 'img/iconsets/action-icons.svg', 24)
+            .iconSet('alert', 'img/iconsets/alert-icons.svg', 24)
+            .iconSet('av', 'img/iconsets/av-icons.svg', 24)
+            .iconSet('communication', 'img/iconsets/communication-icons.svg', 24)
+            .iconSet('content', 'img/iconsets/content-icons.svg', 24)
+            .iconSet('device', 'img/iconsets/device-icons.svg', 24)
+            .iconSet('editor', 'img/iconsets/editor-icons.svg', 24)
+            .iconSet('file', 'img/iconsets/file-icons.svg', 24)
+            .iconSet('hardware', 'img/iconsets/hardware-icons.svg', 24)
+            .iconSet('icons', 'img/iconsets/icons-icons.svg', 24)
+            .iconSet('image', 'img/iconsets/image-icons.svg', 24)
+            .iconSet('maps', 'img/iconsets/maps-icons.svg', 24)
+            .iconSet('navigation', 'img/iconsets/navigation-icons.svg', 24)
+            .iconSet('notification', 'img/iconsets/notification-icons.svg', 24)
+            .iconSet('social', 'img/iconsets/social-icons.svg', 24)
+            .iconSet('toggle', 'img/iconsets/toggle-icons.svg', 24)
+            .defaultIconSet('img/iconsets/core-icons.svg', 24);
 
     var access = routingConfig.accessLevels;
 
@@ -27,7 +46,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
     $routeProvider.when('/live',
         {
             templateUrl:    'live',
-            //controller:     'HomeCtrl',
+            controller:     'LiveCtrl',
             access:         access.public
         });
 
@@ -121,7 +140,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
 
     $locationProvider.html5Mode(true);
 
-    var interceptor = ['$location', '$q', function($location, $q) {
+    /*var interceptor = ['$location', '$q', function($location, $q) {
         function success(response) {
             return response;
         }
@@ -142,7 +161,7 @@ angular.module('angular-client-side-auth', ['ngRoute', 'firebase' , 'ngCookies',
         }
     }];
 
-    $httpProvider.responseInterceptors.push(interceptor);
+    $httpProvider.responseInterceptors.push(interceptor);*/
 
 }])
 

@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('ProfileCtrl',
 ['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', '_', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth, _) {
 

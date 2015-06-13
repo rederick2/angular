@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('PostCtrl',
 ['$rootScope', '$scope', '$routeParams', '$location', '$window', 'Auth', '$firebase', 'Posts', function($rootScope, $scope, $routeParams, $location, $window, Auth, $firebase, Posts) {
 

@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('FirepadCtrl',
 ['$rootScope', '$scope', 'Auth', 'Users', '_' , 
 function($rootScope, $scope, Auth, Users, _ ) {

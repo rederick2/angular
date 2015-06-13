@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
   .directive('ngEnter', function () {
     return function ($scope, element, attrs) {
         
@@ -18,7 +18,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
     .directive('modalLogin', [ '$rootScope', '$location', '$window', 'Auth', '$firebase', function ($rootScope, $location, $window, Auth, $firebase) {
         return {
             restrict: 'E',
@@ -214,7 +214,7 @@ angular.module('angular-client-side-auth')
         };
     }])
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
     .directive('modalRegister', [ '$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
         return {
             restrict: 'E',
@@ -286,6 +286,8 @@ angular.module('angular-client-side-auth')
                             }
                           });*/
                           //$location.path('/');
+                          //console.log(res);
+
                           if(res.message)
                             $scope.messageError = res.message;
                           else
@@ -299,7 +301,7 @@ angular.module('angular-client-side-auth')
         }
     }])
 
-angular.module('angular-client-side-auth').directive('inboxes', ['$location', function($location) {
+angular.module('unsApp').directive('inboxes', ['$location', function($location) {
     return {
         restrict: 'E',
         templateUrl : '/partials/inboxes.jade'
@@ -307,7 +309,7 @@ angular.module('angular-client-side-auth').directive('inboxes', ['$location', fu
 
 }]);
 
-angular.module('angular-client-side-auth').directive('messagesChat', ['$location', function($location) {
+angular.module('unsApp').directive('messagesChat', ['$location', function($location) {
     return {
         restrict: 'E',
         templateUrl : '/partials/messages-chat.jade'
@@ -315,7 +317,7 @@ angular.module('angular-client-side-auth').directive('messagesChat', ['$location
 
 }]);
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .directive('infiniteScroll', [
   '$rootScope', '$window', '$timeout', function($rootScope, $window, $timeout) {
     return {
@@ -373,7 +375,7 @@ angular.module('angular-client-side-auth')
   }
 ]);
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .directive('accessLevel', ['Auth', function(Auth) {
     return {
         restrict: 'A',
@@ -406,7 +408,7 @@ angular.module('angular-client-side-auth')
     };
 }]);
 
-angular.module('angular-client-side-auth').directive("passwordVerify", function() {
+angular.module('unsApp').directive("passwordVerify", function() {
    return {
       require: "ngModel",
       restrict: 'A',
@@ -439,7 +441,7 @@ angular.module('angular-client-side-auth').directive("passwordVerify", function(
    };
 });
 
-angular.module('angular-client-side-auth').directive('activeNav', ['$location', function($location) {
+angular.module('unsApp').directive('activeNav', ['$location', function($location) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -460,7 +462,7 @@ angular.module('angular-client-side-auth').directive('activeNav', ['$location', 
 
 }]);
 
-angular.module('angular-client-side-auth').directive('uniqueUsername', [ 'Users', function(Users) {
+angular.module('unsApp').directive('uniqueUsername', [ 'Users', function(Users) {
     return {
         require:'ngModel',
         restrict:'A',
@@ -491,7 +493,7 @@ angular.module('angular-client-side-auth').directive('uniqueUsername', [ 'Users'
     }
 }]);
 
-angular.module('angular-client-side-auth').directive('active', function() {
+angular.module('unsApp').directive('active', function() {
   return function(scope, element, attrs) {
     var clickingCallback = function() {
       //alert('clicked!')
@@ -502,7 +504,7 @@ angular.module('angular-client-side-auth').directive('active', function() {
   }
 });
 
-angular.module('angular-client-side-auth').directive('uniqueEmail', ['_' ,  function (_) {
+angular.module('unsApp').directive('uniqueEmail', ['_' ,  function (_) {
     return {
         require:'ngModel',
         restrict:'A',
@@ -539,7 +541,7 @@ angular.module('angular-client-side-auth').directive('uniqueEmail', ['_' ,  func
 }]);
 
 
-angular.module('angular-client-side-auth').directive('liveUrl', function () {
+angular.module('unsApp').directive('liveUrl', function () {
     return {
         require:'ngModel',
         restrict:'A',
@@ -694,7 +696,7 @@ angular.module('angular-client-side-auth').directive('liveUrl', function () {
     }
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .directive("fileread", [function () {
     return {
         scope: {
@@ -712,7 +714,7 @@ angular.module('angular-client-side-auth')
     }
 }]);
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .directive('imgCropped', function() {
   return {
     restrict: 'E',
@@ -753,7 +755,7 @@ angular.module('angular-client-side-auth')
   };
 });
 
-/*angular.module('angular-client-side-auth')
+/*angular.module('unsApp')
 .directive('pictureProfile', ['Users', function(Users) {
     return {
       restrict: 'A',
@@ -777,7 +779,7 @@ angular.module('angular-client-side-auth')
     };
 }]);*/
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .directive('googlePlaces', function(){
     return {
         restrict:'E',

@@ -1,4 +1,4 @@
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('UserCtrl',
 ['$rootScope', '$scope', '$location', '$window','$routeParams', '$sce', '$upload', 'Users', 'Posts', 'Auth', '$firebase', 'Files', 'Notify', function($rootScope , $scope, $location, $window, $routeParams, $sce, $upload, Users, Posts, Auth, $firebase, Files, Notify) {
 
@@ -40,6 +40,11 @@ angular.module('angular-client-side-auth')
         return false;
 
     });
+
+    $scope.link = function(l){
+
+        $location.path(l);
+    }
 
     $scope.refresh = function(){
 
@@ -229,8 +234,6 @@ angular.module('angular-client-side-auth')
                         }, 10);
 
                     });
-
-                //});
 
 
             }

@@ -1,0 +1,76 @@
+.modal.fade(id="modalRegister", tabindex="-1", role="dialog", aria-labelledby="myModalLabel", aria-hidden="true")
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type="button", data-dismiss="modal")
+                    span(aria-hidden="true")    &times;
+                    span.sr-only    Close
+                h4.modal-title(id="myModalLabel")   Regístrate
+            .modal-body
+                form.form-signin.form-register(ng-submit="register()", name="registerForm")
+                    .alert.alert-danger(ng-show="registerForm.$invalid && registerForm.$dirty")
+                        strong Please correct the following errors:
+                        ul
+                            
+                            li(ng-show="registerForm.username.$error.required") Username required
+                            li(ng-show="registerForm.username.$error.minlength") Username has to be at least 1 character long
+                            li(ng-show="registerForm.username.$error.maxlength") Username has to be at most 20 character long
+                            li(ng-show="registerForm.password.$error.required") Password is required
+                            li(ng-show="registerForm.confirm_password.$error.passwordVerify") Password not is equal
+                            li(ng-show="registerForm.username.$error.uniqueUsername") Username exists
+                            li(ng-show="registerForm.password.$error.minlength") Password must be at least 5 characters long
+                            li(ng-show="registerForm.password.$error.maxlength") Password must be at most 60 characters long
+                            li(ng-show="registerForm.name.$error.required") Firstname is required
+                            li(ng-show="registerForm.email.$error.required") Email is required
+                            li(ng-show="registerForm.email.$error.email") Invalid email
+                            li(ng-show="registerForm.email.$error.uniqueEmail") Email exists
+                    .control-group
+                        .controls
+                            input.form-control(type="text", data-ng-model="userRegister.username", ng-trim='false', unique-username, placeholder="Nombre de Usuario", name="username", required, data-ng-minlength="6", data-ng-maxlength="20", autofocus)
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.required && registerForm.username.$dirty") 
+                                span Usuario es requirido
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.minlength && registerForm.username.$dirty")
+                                span  6 mínimo
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.maxlength && registerForm.username.$dirty")
+                                span  20 máximo
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.username.$error.uniqueUsername && registerForm.username.$dirty")
+                                span Usuario ya existe
+                            i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.username.$valid")
+                        .controls
+                            input.form-control(type="email", data-ng-model="userRegister.email", unique-email, placeholder="email@example.com", name="email", required)
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.email.$error.required && registerForm.email.$dirty")
+                                span Email es requirido
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.email.$error.email && registerForm.email.$dirty")
+                                span Email inválido
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.email.$error.uniqueEmail && registerForm.email.$dirty")
+                                span Email ya existe
+                            i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.email.$valid")
+                        .controls
+                            input.form-control(type="password", data-ng-model="password", placeholder="Contraseña", name="password", required, data-ng-minlength="5", data-ng-maxlength="60")
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.password.$error.required && registerForm.password.$dirty")
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.password.$error.minlength && registerForm.password.$dirty")
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.password.$error.maxlength && registerForm.$dirty")
+                            i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.password.$valid")
+                        .controls
+                            input.form-control(ng-model='password_verify', type='password', name='confirm_password', placeholder='Confirma tu contraseña', required, data-ng-minlength="5", data-ng-maxlength="60", data-password-verify='password')
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.confirm_password.$error.required && registerForm.confirm_password.$dirty")
+                            i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.confirm_password.$valid")
+                    hr
+                    .control-group
+                        .controls
+                            input.form-control(type="text", data-ng-model="userRegister.displayName", placeholder="Nombre", name="name", required, data-ng-minlength="1", data-ng-maxlength="200")
+                            i.error.fa.fa-times-circle-o.fa-2x(ng-show="registerForm.name.$error.required && registerForm.name.$dirty")
+                            i.valid.fa.fa-check-circle-o.fa-2x(ng-show="registerForm.name.$valid")
+                    hr
+                    //.control-group
+                        label.radio.inline
+                            input(type="radio", name="role", data-ng-model="role", id="adminRole", data-ng-value="userRoles.admin")
+                            | Administrator
+                        label.radio.inline
+                            input(type="radio", name="role", data-ng-model="role", id="adminRole", data-ng-value="userRoles.user")
+                            | Normal user
+                    button.btn.btn-lg.btn-default.btn-block(type="submit", data-ng-disabled="registerForm.$invalid") Registrar
+                    hr
+                    .error(ng-show="messageError")
+                        {{ messageError }}
+    

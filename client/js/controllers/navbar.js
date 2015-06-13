@@ -1,7 +1,25 @@
-angular.module('angular-client-side-auth')
-.controller('NavCtrl', ['$rootScope', '$scope', '$location', 'Auth', 'Users', '$firebase', '_', 'Notify',  function($rootScope, $scope, $location, Auth, Users, $firebase, _, Notify) {
+angular.module('unsApp')
+.controller('NavCtrl', ['$rootScope', '$scope', '$location', '$timeout', '$mdSidenav', '$mdUtil', '$log', 'Auth', 'Users', '$firebase', '_', 'Notify',  function($rootScope, $scope, $location, $timeout, $mdSidenav, $mdUtil, $log, Auth, Users, $firebase, _, Notify) {
     
+    $scope.toggleLeft = buildToggler('left');
+    $scope.toggleRight = buildToggler('right');
+
     var url = "https://rederick2.firebaseio.com/";
+
+    /**
+     * Build handler to open/close a SideNav; when animation finishes
+     * report completion in console
+     */
+    function buildToggler(navID) {
+      var debounceFn =  $mdUtil.debounce(function(){
+            $mdSidenav(navID)
+              .toggle()
+              .then(function () {
+                $log.debug("toggle " + navID + " is done");
+              });
+          },300);
+      return debounceFn;
+    }
    
     $scope.getNotifications = function(unread){
 

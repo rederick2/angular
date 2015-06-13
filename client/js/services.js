@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Auth', function($http, $cookieStore){
 
     var accessLevels = routingConfig.accessLevels
@@ -68,7 +68,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Users', function($http) {
     return {
         getAll: function(success, error) {
@@ -97,7 +97,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Profiles', function($http) {
     return {
         getByUsername: function(data, success, error) {
@@ -144,7 +144,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Notify', function($http) {
     return {
         getAll: function(data, success, error) {
@@ -163,7 +163,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Inboxes', function($http) {
     return {
         getByUsername: function(data, success, error) {
@@ -190,7 +190,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Posts', function($http) {
     return {
         getAll: function(data, success, error) {
@@ -236,7 +236,7 @@ angular.module('angular-client-side-auth')
     };
 });
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('Files', function($http) {
     return {
 
@@ -254,7 +254,7 @@ angular.module('angular-client-side-auth')
 });
 
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .factory('_', function() {
         return window._; // assumes underscore has already been loaded on the page
     });  

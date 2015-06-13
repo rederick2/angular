@@ -2,6 +2,139 @@
     display: none;
 }
 
+#appBody{
+    min-height: 100%;
+    overflow-y: hidden;
+    position: relative;
+}
+
+html, body {position:relative;}
+
+.md-whiteframe-glow-z1 {
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 0px 2px 2px rgba(0, 0, 0, 0.098), 0px 0px 5px 1px rgba(0, 0, 0, 0.084);
+}
+
+.chipsdemoContactChips md-content.autocomplete {
+  min-height: 250px; 
+}
+.chipsdemoContactChips .md-item-text.compact {
+  padding-top: 8px;
+  padding-bottom: 8px; 
+}
+.chipsdemoContactChips .contact-item {
+  box-sizing: border-box; 
+}
+.chipsdemoContactChips .contact-item.selected {
+  opacity: 0.5; 
+}
+.chipsdemoContactChips .contact-item.selected h3 {
+  opacity: 0.5; 
+}
+.chipsdemoContactChips .contact-item .md-list-item-text {
+  padding: 14px 0; 
+}
+.chipsdemoContactChips .contact-item .md-list-item-text h3 {
+  margin: 0 !important;
+  padding: 0;
+  line-height: 1.2em !important; 
+}
+.chipsdemoContactChips .contact-item .md-list-item-text h3, .chipsdemoContactChips .contact-item .md-list-item-text p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; 
+}
+@media (min-width: 900px) {
+  .chipsdemoContactChips .contact-item {
+    float: left;
+    width: 33%; 
+  } 
+}
+.chipsdemoContactChips .md-chips {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0 0.8rem;
+  margin-bottom: 1rem; 
+}
+
+md-list-item > .md-avatar:first-child, md-list-item .md-list-item-inner > .md-avatar:first-child {
+  width: 40px;
+  height: 40px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-right: 16px;
+  border-radius: 50%;
+  box-sizing: content-box;
+}
+
+.md-contact-chips .md-chips .md-chip .md-contact-name {
+  display: inline-block;
+  height: 3.2rem;
+  margin-left: 0.8rem;
+}
+
+md-list-item.md-no-proxy, md-list-item .md-no-style {
+  position: relative;
+  padding: 0px 16px;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  transition: background-color 0.15s linear;
+}
+
+.md-chips {
+  display: block;
+  font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 1.3rem;
+  padding: 0 0 0.8rem 0;
+  vertical-align: middle;
+  cursor: text;
+}
+
+.chipsdemoContactChips md-contact-chips {
+  margin-bottom: 1rem;
+}
+
+.md-contact-chips .md-chips .md-chip {
+  padding: 0 0.8rem 0 0;
+}
+
+.md-chips .md-chip .md-chip-content {
+  display: block;
+  padding-right: 0.4rem;
+  float: left;
+  white-space: nowrap;
+}
+
+.md-chips .md-chip .md-chip-remove-container {
+  display: inline-block;
+  margin-right: -0.5rem;
+}
+
+.md-chips .md-chip .md-chip-remove md-icon {
+  height: 1.8rem;
+  width: 1.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.md-chips .md-chip .md-chip-remove {
+  text-align: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  position: relative;
+}
+
+
+/****************************/
+
 form[name="editableForm"] > div {
   height: auto;
   /*padding: 5px 0;*/
@@ -440,7 +573,7 @@ h3{
 body {
    /* font-size: 1em;*/
    background-color: #e5e5e5;
-    padding-top: 65px;
+   /* padding-top: 65px;*/
     line-height: 1.4;
 }
 
@@ -505,7 +638,7 @@ body {
   position: relative;
   font-size: 16px;
   height: auto;
-  padding: 10px;
+  padding: 0px;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;

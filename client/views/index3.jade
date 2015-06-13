@@ -36,103 +36,108 @@ html(lang='en', ng-app='unsApp')
         modal-register
         .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
-    section(layout="row", flex, ng-controller="NavCtrl")
-        md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
-            md-toolbar.md-toolbar-tools(role="navigation")
-                md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
-                    md-icon.md-primary.md-hue-3(md-svg-icon="navigation:menu")
-                a.navbar-brand(href="/", style="padding:5px") 
-                    img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
-                a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
-                    i.fa.fa-users
-                a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
-                    i.fa.fa-envelope
-                li.dropdown(data-toggle="dropdown", style="float: left;list-style: none;")   
-                    a.navbar-brand.active.dropdown(href="#", data-access-level='accessLevels.user', data-toggle="dropdown", data-ng-click="getNotifications(1)")
-                        i.fa.fa-globe
-                        span.badge(ng-show="count_notifications")  {{ count_notifications }}
-                    ul.dropdown-menu.notifications
-                        li(ng-repeat="not in notifications")
-                            a.clearfix(href="/{{not.link}}")
-                                div 
-                                    img(src="{{not.from.picture}}", align='left', valign='middle', width="50")
-                                    .content {{not.title}}
-                                        h6
-                                            span(am-time-ago="not.datetime", title="{{not.datetime | amCalendar}}")
-                span(flex)
-                ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
-                    li.dropdown(data-toggle="dropdown")
+        .navbar.navbar-default.navbar-fixed-top(data-ng-controller="NavCtrl", role="navigation", style="border: 0; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);")
+            .container
+                .navbar-header
+                    .navbar-toggle(type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1")
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    .menu-hidden
+                        a.navbar-brand(href="/", style="padding:5px") 
+                            img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
+                        div.divider-vertical
+                    .menu-display
+                        a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
+                            i.fa.fa-users
+                        a.navbar-brand.active(href="/messages", data-access-level='accessLevels.user')
+                            i.fa.fa-envelope
+                        li.dropdown(data-toggle="dropdown", style="float: left;list-style: none;")   
+                            a.navbar-brand.active.dropdown(href="#", data-access-level='accessLevels.user', data-toggle="dropdown", data-ng-click="getNotifications(1)")
+                                i.fa.fa-globe
+                                span.badge(ng-show="count_notifications")  {{ count_notifications }}
+                            ul.dropdown-menu.notifications
+                                li(ng-repeat="not in notifications")
+                                    a.clearfix(href="/{{not.link}}")
+                                        div 
+                                            img(src="{{not.from.picture}}", align='left', valign='middle', width="50")
+                                            .content {{not.title}}
+                                                h6
+                                                    span(am-time-ago="not.datetime", title="{{not.datetime | amCalendar}}")
 
-                        a.dropdown-toggle(data-toggle="dropdown" , href="#")
-                            i.fa.fa-cog
-                            //b.caret
-                        ul.dropdown-menu
-                            li(data-access-level='accessLevels.user')
-                                a(href="/{{ user.username }}/profile")
-                                    | Perfil
-                            li(data-access-level='accessLevels.user')
-                                a(href="", data-ng-click="logout()")
-                                    | Salir         
-            md-content(ng-controller="UserCtrl")
-                md-list
-                    md-list-item(style="border-bottom: solid 1px rgba(0,0,0,0.12);")
-                        div.thumbnail(style="position:relative")
-                            img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="width:150px; height:150px")
-                            a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
-                                i.fa.fa-camera
-                            div.caption
-                                h3 {{user.username}}
-                    md-list-item  
-                        md-button.md-list-item-content(ng-href="{{user.username}}/profile") 
-                            md-icon.md-hue-3(md-svg-icon="social:person")  
-                            span.md-inline-list-icon-label      Perfil
-                    md-list-item
-                        md-button.md-list-item-content
-                            md-icon.md-hue-3(md-svg-icon="notification:event_note")  
-                            span.md-inline-list-icon-label      Eventos
-                    md-list-item
-                        md-button.md-list-item-content(ng-href="firepad#{{user.username}}") 
-                            md-icon.md-hue-3(md-svg-icon="communication:forum")
-                            span.md-inline-list-icon-label      Coding Grupal
-
-        div(layout="column", flex)
-            md-toolbar.md-whiteframe-glow-z1.site-content-toolbar.md-default-theme(aria-hidder="false", style="background-color: rgb(216, 47, 75);")
-                .md-toolbar-tools
-                    md-button(data-toggle="modal", data-access-level='accessLevels.anon', data-target="#modalLogin") Iniciar Sesión
-                    md-button(data-access-level='accessLevels.anon', data-toggle="modal", data-target="#modalRegister") Registrarse
-                    md-button(ng-href='/', data-access-level='accessLevels.user') Inicio
-                    md-button(ng-href='/firepad', data-access-level='accessLevels.user') Firepad
-                    md-button(ng-href='/admin',data-access-level='accessLevels.admin') Admin
-                    span(flex)
-                    md-button.btn-profile.navbar-text(style="padding: 0px;", ng-href="/{{user.username}}")
-                        img(ng-src="{{imgProfile}}", height="30")
-                        strong &nbsp;{{ fullname }}&nbsp;
-                    md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
-                        md-icon.md-hue-3(md-svg-icon="communication:chat")
-            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view', id="appBody")
-                hr(data-ng-show="error")
-                .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
-
-        md-sidenav.md-sidenav-right.md-whiteframe-z2(md-component-id="right")
-            md-list(ng-controller="MessagesCtrl", role="navigation" , ng-show="user.username != ''")
-                    div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; width:305px; background:white; height:100%")
-                        //input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
+                    .menu-hidden
+                        div.divider-vertical(data-access-level='accessLevels.user')
+                .collapse.navbar-collapse#bs-example-navbar-collapse-1
+                    .col-sm-3(style="padding:8px",role='search', data-access-level='accessLevels.user')
                         .input-group
-                            input.form-control.search(name="search", ng-model="search", placeholder="Buscar", ng-change="searchUsers(search); isSeach= true; newMessage = true;")
+                            input.form-control(type='text', placeholder='Search')
                             span.input-group-btn
                                 button.btn.btn-default(type='submit') 
                                     i.fa.fa-search
-                        .to(ng-show="newMessage")
-                            .listUsers(ng-show="isSeach")
-                                .s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username, s_user.name);")
-                                    .picture
-                                        img(src="{{s_user.picture}}", style='margin:5px', width="50")
-                                    .s_name
-                                        h3 {{s_user.name}}
-                        inboxes
-                    
+                    ul.nav.navbar-nav
+                        li(data-access-level='accessLevels.anon', active-nav)
+                            a(href="#", data-toggle="modal", data-target="#modalLogin") Iniciar Sesión
+                        li(data-access-level='accessLevels.anon', active-nav)
+                            a(href="#", data-toggle="modal", data-target="#modalRegister") Registrarse
+                        li(data-access-level='accessLevels.user', active-nav)
+                            a(href='/') Inicio
+                        li(data-access-level='accessLevels.user', active-nav)
+                            a(href='/firepad') Firepad
+                        li(data-access-level='accessLevels.admin', active-nav)
+                            a(href='/admin') Admin
 
-        
+                    ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
+                        a.btn-profile.navbar-text(style="padding: 10px 10px;",href="/{{user.username}}")
+                            img(ng-src="{{imgProfile}}", height="30")
+                            strong &nbsp;{{ fullname }}&nbsp;
+                            //span.label(data-ng-class='{"label-info": user.role.title == userRoles.user.title, "label-success": user.role.title == userRoles.admin.title}') {{ user.role.title }}
+                        li.dropdown(data-toggle="dropdown")
+
+                            a.dropdown-toggle(data-toggle="dropdown" , href="#")
+                                i.fa.fa-cog
+                                //b.caret
+                            ul.dropdown-menu
+                                li(data-access-level='accessLevels.user')
+                                    a(href="/{{ user.username }}/profile")
+                                        | Perfil
+                                li(data-access-level='accessLevels.user')
+                                    a(href="", data-ng-click="logout()")
+                                        | Salir
+                        
+
+
+        .container
+            div(data-ng-view='ng-view', id="appBody")
+            hr(data-ng-show="error")
+            .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
+
+        md-list(ng-controller="MessagesCtrl", role="navigation" , ng-show="user.username != ''")
+            md-subheader.md-no-sticky   Lista de Usuarios
+                div.col-md-2.inboxlist(data-access-level='accessLevels.user', style="padding: 0px; position:fixed; top:50px; right:0; width:305px; background:white; height:100%")
+                    //input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
+                    .input-group
+                        input.form-control.search(name="search", ng-model="search", placeholder="Buscar", ng-change="searchUsers(search); isSeach= true; newMessage = true;")
+                        span.input-group-btn
+                            button.btn.btn-default(type='submit') 
+                                i.fa.fa-search
+                    .to(ng-show="newMessage")
+                        .listUsers(ng-show="isSeach")
+                            .s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username, s_user.name);")
+                                .picture
+                                    img(src="{{s_user.picture}}", style='margin:5px', width="50")
+                                .s_name
+                                    h3 {{s_user.name}}
+                    inboxes
+
+                div.messages(data-access-level='accessLevels.user', style="position:fixed; bottom:0px; left:0; background:white; width:305px;", ng-show="viewInbox == 1")
+                    .actions(style="#F3F3F3")
+                        div(id="status_{{UserChatStatus}}", style="position:absolute; left: 5px; top: 10px;")
+                        span(style="position:absolute; left: 5px; top: 10px;") 
+                            a(href="/{{UsernameChat}}")
+                                strong  {{UserChat}}
+                        span(ng-click="viewInbox = 0", style="position: absolute;top: 0;right: 0;padding: 10px; cursor:pointer")
+                            i.fa.fa-times
+                    messages-chat
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
     script(src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js')

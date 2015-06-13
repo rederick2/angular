@@ -1,17 +1,70 @@
 'use strict';
 
 /* Controllers */
+angular.module('unsApp')
+.controller('LiveCtrl', ['$scope', '$timeout', '$q', function($scope, $timeout, $q) {
+    //var self = this;
+    
+    /**
+     * Search for contacts.
+     */
+    $scope.querySearch = function (query) {
+    	
+      var results = query ?
+          $scope.allContacts.filter(createFilterFor(query)) : [];
+      console.log(results)
+      return results;
+    }
+    /**
+     * Create filter function for a query string
+     */
+    $scope.createFilterFor = function(query) {
+      var lowercaseQuery = angular.lowercase(query);
+      return function filterFn(contact) {
+        return (contact._lowername.indexOf(lowercaseQuery) != -1);;
+      };
+    }
+    $scope.loadContacts = function() {
+      var contacts = [
+        'Marina Augustine',
+        'Oddr Sarno',
+        'Nick Giannopoulos',
+        'Narayana Garner',
+        'Anita Gros',
+        'Megan Smith',
+        'Tsvetko Metzger',
+        'Hector Šimek',
+        'Some-guy withalongalastaname'
+      ];
+      return contacts.map(function (c, index) {
+        var cParts = c.split(' ');
+        var contact = {
+          name: c,
+          email: cParts[0][0].toLowerCase() + '.' + cParts[1].toLowerCase() + '@example.com',
+          image: 'http://lorempixel.com/50/50/people?' + index
+        };
+        contact._lowername = contact.name.toLowerCase();
+        return contact;
+      });
+    }
+
+    $scope.querySearch = $scope.querySearch();
+    $scope.allContacts = $scope.loadContacts();
+    $scope.contacts = [$scope.allContacts[0]];
+    $scope.filterSelected = true;
+
+}]);
 
 
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('PrivateCtrl',
 ['$rootScope', function($rootScope) {
 }]);
 
 
 
-angular.module('angular-client-side-auth')
+angular.module('unsApp')
 .controller('CursoCtrl',
 ['$rootScope', '$scope', '$sce', '$window','$routeParams', function($rootScope , $scope, $sce, $window, $routeParams) {
 

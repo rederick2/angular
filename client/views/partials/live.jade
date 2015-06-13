@@ -1,5 +1,19 @@
-h1
-  |  MEJORANDO.LA - LIVE CURSOS
-.stream(style="max-width: 100%;height: auto;")
-   .video(style="height: 0;overflow: hidden;padding-bottom: 56.25%;position: relative;text-align: center;")
-        iframe(style="height: 100%;left: 0;position: absolute;top: 0;width: 100%;", src="//mdstrm.com/live-stream/54134e5aa53d041318534191?player=mdstrm", width="840", height="560", frameborder="0", allowfullscreen="true")
+.chipsdemoContactChips(layout='column', style="padding-top: 50px")
+  md-content.md-padding.autocomplete(layout='column')
+    p
+      | Contact Chips.   
+    md-contact-chips(ng-model='contacts', md-contacts='querySearch($query)', md-contact-name='name', md-contact-image='image', md-contact-email='email', md-require-match='', filter-selected='filterSelected', placeholder='To')  
+    md-checkbox(ng-model='filterSelected') Filter selected contacts from options    
+    br    
+    md-list
+      md-subheader.md-no-sticky Contacts
+      md-list-item.md-2-line.contact-item(ng-repeat='(index, contact) in allContacts', ng-if='contacts.indexOf(contact) < 0')
+        img.md-avatar(ng-src='{{contact.image}}', alt='{{contact.name}}')       
+        .md-list-item-text.compact
+          h3 {{contact.name}}         
+          p {{contact.email}}    
+      md-list-item.md-2-line.contact-item.selected(ng-repeat='(index, contact) in contacts')
+        img.md-avatar(ng-src='{{contact.image}}', alt='{{contact.name}}')     
+        .md-list-item-text.compact
+          h3 {{contact.name}}      
+          p {{contact.email}}
