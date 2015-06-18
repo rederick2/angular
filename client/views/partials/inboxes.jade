@@ -1,5 +1,5 @@
 md-list-item(style="border-bottom: solid 1px rgba(0,0,0,0.12);", id="inbox_{{inbox.id}}", ng-repeat="inbox in inboxes", ng-class="{activo:id == inbox.id, unread:inbox.unread == false}", ng-click="viewMessages(inbox.id, inbox.to.username, inbox.to.name);")
 	img.md-avatar(src="{{inbox.to.picture}}", username="{{inbox.to.username}}", align='left', valign='middle',style='margin:5px', width="50")
 	p {{inbox.to.name}}
-	md-icon.md-secondary.md-hue-3(md-svg-icon="communication:messenger", aria-label="Open Chat", ng-class="{'md-primary': inbox.unread == false}")
+	md-icon.md-secondary.md-hue-3(md-svg-icon="communication:messenger", aria-label="Open Chat", ng-class="{'md-primary': inbox.unread == false}", style="margin: 0;")
 	//button.btn.btn-default(styles="display:inline-block; vertical-align:middle")  Seguir

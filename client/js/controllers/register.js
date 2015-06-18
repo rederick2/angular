@@ -54,7 +54,7 @@ angular.module('unsApp')
         if($rootScope.userRegister)
         {
             if($rootScope.userRegister.provider == 'facebook'){
-                picture = 'https://graph.facebook.com/'+$rootScope.userRegister.username+'/picture';
+                picture = 'https://graph.facebook.com/'+$rootScope.userRegister.id+'/picture';
             }
 
             social = {provider: $rootScope.userRegister.provider, providerId: $rootScope.userRegister.id, token: $rootScope.userRegister.accessToken, picture:picture, link: $rootScope.userRegister.link} 

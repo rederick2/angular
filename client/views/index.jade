@@ -9,7 +9,8 @@ html(lang='en', ng-app='unsApp')
         
         link(href="/css/bootstrap.css", rel="stylesheet")
         link(rel='stylesheet', href='/css/app.css')
-        link(rel='stylesheet', href='/css/docs.css')
+        //link(rel='stylesheet', href='/css/docs.css')
+        
         link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto')
         //link(href="/css/bootstrap-theme.css", rel="stylesheet")
         link(href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css", rel="stylesheet")
@@ -29,6 +30,7 @@ html(lang='en', ng-app='unsApp')
         link(rel="stylesheet", href="/js/vendor/bootstrap-notify.css")
         
         //link(href="//ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css", rel="stylesheet")
+        link(href="//ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css", rel="stylesheet")
         
 
     body(data-ng-cloak)
@@ -36,7 +38,7 @@ html(lang='en', ng-app='unsApp')
         modal-register
         .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
-    section(layout="row", flex, ng-controller="NavCtrl")
+    section(layout="row", flex, ng-controller="NavCtrl" style="height:100%")
         md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar.md-toolbar-tools(role="navigation")
                 md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
@@ -109,7 +111,7 @@ html(lang='en', ng-app='unsApp')
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
-            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view', id="appBody")
+            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view')
                 hr(data-ng-show="error")
                 .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 
