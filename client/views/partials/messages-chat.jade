@@ -1,6 +1,7 @@
 md-content.contentMessages(flex, layout-padding, style="height:70vh")
-	.loading(style='display:none')
-		i.fa.fa-spinner.fa-spin
+	.loading(style='display:none',layout="row", layout-sm="column", layout-align="space-around")
+		//i.fa.fa-spinner.fa-spin
+		md-progress-circular(md-mode="indeterminate")
 	.message.clearfix.comment(ng-repeat="message in messages2", style="border:0")
 		.imgProfile(ng-show="message.from.username != username")
 			a(href="./{{message.from.username}}", data-toggle="tooltip",  data-placement="right", title="{{message.from.username}}") 

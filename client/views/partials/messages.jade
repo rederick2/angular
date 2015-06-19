@@ -15,9 +15,8 @@ md-content(layout="row", flex, layout-padding, md-scroll-y, style="height:89vh; 
 			span(flex, style="line-height: 0px;") 
 				md-button(ng-href="/{{UsernameChat}}")
 					strong  {{UserChat}}
-			md-button.btn.btn-default(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
-				i.fa.fa-plus
-				|	Nueva Conversación
+			md-button.md-fab.md-mini.md-primary(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
+				md-icon.md-primary.md-hue-3(md-svg-icon="content:add")
 		.to(ng-show="newMessage")
 			form.form-horizontal(style="background: white; padding:5px")
 				.form-group
