@@ -41,8 +41,6 @@ html(lang='en', ng-app='unsApp')
     section(layout="row", flex, ng-controller="NavCtrl" style="height:100%")
         md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar.md-toolbar-tools(role="navigation")
-                md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
-                    md-icon.md-primary.md-hue-3(md-svg-icon="navigation:menu")
                 a.navbar-brand(href="/", style="padding:5px") 
                     img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
                 a.navbar-brand.active(href="./", data-access-level='accessLevels.user')
@@ -75,31 +73,32 @@ html(lang='en', ng-app='unsApp')
                             li(data-access-level='accessLevels.user')
                                 a(href="", data-ng-click="logout()")
                                     | Salir         
-            md-content(ng-controller="UserCtrl")
-                md-list
+            md-content(ng-controller="UserCtrl", layout="column")
+                md-list(flex)
                     md-list-item(style="border-bottom: solid 1px rgba(0,0,0,0.12);")
-                        div.thumbnail(style="position:relative")
-                            img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="width:150px; height:150px")
+                        md-card(style="margin: 10px auto;")
+                            img.md-card-image(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="width:150px; height:150px")
                             a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="{{user.username}}/picture", ng-show="viewUpload && user.username == authUser",ng-mouseover="viewUpload = true") 
                                 i.fa.fa-camera
-                            div.caption
-                                h3 {{user.username}}
-                    md-list-item  
-                        md-button.md-list-item-content(ng-href="{{user.username}}/profile") 
-                            md-icon.md-hue-3(md-svg-icon="social:person")  
-                            span.md-inline-list-icon-label      Perfil
-                    md-list-item
-                        md-button.md-list-item-content
-                            md-icon.md-hue-3(md-svg-icon="notification:event_note")  
-                            span.md-inline-list-icon-label      Eventos
-                    md-list-item
-                        md-button.md-list-item-content(ng-href="firepad#{{user.username}}") 
-                            md-icon.md-hue-3(md-svg-icon="communication:forum")
-                            span.md-inline-list-icon-label      Coding Grupal
+                            md-card-content
+                                h3 {{username}}
+                    md-list-item(ng-click="goToPerson(user.username, $event)")
+                        md-icon(md-svg-icon="social:person")  
+                        p Perfil
+                        md-divider
+                    md-list-item(ng-click="navigateTo('/events', $event)")
+                        md-icon(md-svg-icon="notification:event_note")  
+                        p Eventos
+                        md-divider
+                    md-list-item(ng-click="navigateTo('/messages', $event)")
+                        md-icon(md-svg-icon="communication:chat")
+                        p Mensajes
 
         div(layout="column", flex)
             md-toolbar.md-whiteframe-glow-z1.site-content-toolbar.md-default-theme(aria-hidder="false", style="background-color: rgb(216, 47, 75);")
                 .md-toolbar-tools
+                    md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
+                        md-icon.md-hue-3(md-svg-icon="navigation:menu")
                     md-button(data-toggle="modal", data-access-level='accessLevels.anon', data-target="#modalLogin") Iniciar Sesión
                     md-button(data-access-level='accessLevels.anon', data-toggle="modal", data-target="#modalRegister") Registrarse
                     md-button(ng-href='/', data-access-level='accessLevels.user') Inicio
@@ -111,7 +110,7 @@ html(lang='en', ng-app='unsApp')
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
-            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view')
+            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0;")
                 hr(data-ng-show="error")
                 .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 

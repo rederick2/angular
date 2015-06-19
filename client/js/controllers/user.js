@@ -41,6 +41,24 @@ angular.module('unsApp')
 
     });
 
+    $scope.goToPerson = function(to, event) {
+
+        $location.path('/' + to + '/profile');
+    }
+
+
+    $scope.navigateTo = function(to, event) {
+
+        $location.path(to);
+    }
+
+    $scope.navigateToFirepad = function(to, event) {
+
+        $location.path('/Firepad#' + to);
+    }
+
+
+
     $scope.link = function(l){
 
         $location.path(l);
