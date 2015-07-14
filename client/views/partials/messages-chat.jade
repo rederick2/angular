@@ -1,4 +1,4 @@
-md-content.contentMessages(flex, layout-padding, style="height:70vh")
+md-content.contentMessages(flex)
 	.loading(style='display:none',layout="row", layout-sm="column", layout-align="space-around")
 		//i.fa.fa-spinner.fa-spin
 		md-progress-circular(md-mode="indeterminate")
@@ -20,7 +20,7 @@ md-content.contentMessages(flex, layout-padding, style="height:70vh")
 				span(style="float: right;", am-time-ago="message.datetime", title="{{message.datetime | amCalendar}}")
 	.write(ng-repeat="write in writes", style="height: 20px;line-height: 20px;color: #999")
 		span(ng-show="write.valor == 'true' && write.from !== username") Escribiendo ...
-section(layout="row",layout-sm="column", flex, layout-align="center center", style="background:rgb(244, 244, 244); padding:0px; width:90% position:absolute; bottom:0")
+section(layout="row",layout-sm="column", layout-align="center center", style="background:rgb(244, 244, 244); padding:0px;")
 	md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()")
 		md-icon.md-primary.md-hue-3(md-svg-icon="file:attachment")
 	span(flex)

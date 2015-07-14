@@ -110,7 +110,7 @@ html(lang='en', ng-app='unsApp')
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
-            md-content(flex, layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0;")
+            md-content(flex, layout="column", layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0;")
                 hr(data-ng-show="error")
                 .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 

@@ -1,4 +1,4 @@
-md-content(layout="row", flex, layout-padding, md-scroll-y, style="height:89vh; overflow:hidden")
+md-content(layout="row", flex)
 	md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left_chat", md-is-locked-open="$mdMedia('gt-md')")
 		//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
 		.input-group
@@ -8,7 +8,7 @@ md-content(layout="row", flex, layout-padding, md-scroll-y, style="height:89vh; 
 					i.fa.fa-search
 		inboxes
 
-	md-content(flex)
+	md-content(flex, layout="column")
 		md-toolbar.md-toolbar-tools(role="navigation")
 			md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
 				md-icon.md-primary.md-hue-3(md-svg-icon="navigation:arrow_back")
@@ -29,4 +29,4 @@ md-content(layout="row", flex, layout-padding, md-scroll-y, style="height:89vh; 
 						img(src="{{s_user.picture}}", style='margin:5px', width="50")
 					.s_name
 						h3 {{s_user.username}}
-		messages-chat
+		messages-chat(flex, layout-padding, layout="column")

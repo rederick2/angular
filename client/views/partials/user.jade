@@ -1,5 +1,6 @@
-div(layout="column", flex,  layout-align="center center", style="padding: 0;")
-	div(layout="row", layout-paddin, flex, style="height:150px;width:100%;background-color: rgb(117, 117, 117); margin-bottom:10px; padding:10px;")
+div(layout="column", flex, layout-align="start center" style="padding: 0;")
+	//div(style="height:150px;width:100%;background-color: rgb(117, 117, 117); margin-bottom:10px; padding:10px;")
+	md-toolbar.md-toolbar-tools(role="navigation", style="height:150px; background-color: rgb(117, 117, 117);")
 		img.md-avatar(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="margin:5px;border-radius:50%; height:90%")
 		h2(style="line-height: 90px;") {{fullname}}
 	.col-xs-12.col-sm-8.col-md-7
