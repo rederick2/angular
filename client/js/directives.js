@@ -317,6 +317,14 @@ angular.module('unsApp').directive('messagesChat', ['$location', function($locat
 
 }]);
 
+angular.module('unsApp').directive('headerUsers', ['$location', function($location) {
+    return {
+        restrict: 'E',
+        templateUrl : '/partials/headerUsers.jade'
+    };
+
+}]);
+
 angular.module('unsApp')
 .directive('infiniteScroll', [
   '$rootScope', '$window', '$timeout', function($rootScope, $window, $timeout) {

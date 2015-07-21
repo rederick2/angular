@@ -8,6 +8,30 @@
     position: relative;
 }
 
+header-users{
+  /*width:100%;
+  display: inline-block;*/
+}
+
+@media (max-width: 600px) { 
+    .menuTopUsers{
+      width: 100%
+    }
+}
+
+.md-subheader-inner{
+  padding: 0;
+}
+
+.menuTopUsers p{
+  color: #000;
+  font-size: 0.8em
+}
+
+.menuTopUsers list-item .md-list-item-inner>md-icon:first-child, md-list-item>md-icon:first-child{
+  margin-right: 2px;
+}
+
 html, body {position:relative;}
 
 .md-whiteframe-glow-z1 {

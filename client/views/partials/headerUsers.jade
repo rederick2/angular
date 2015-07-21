@@ -1,0 +1,17 @@
+div(layout="row", style="height:150px;width:100%;background-color: rgb(117, 117, 117); padding:10px;")
+	img.md-avatar(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", style="margin:5px;border-radius:50%; height:100px; width:100px")
+	h2(style="line-height: 90px;") {{user.name}}
+section(style="background-color:white")
+	md-subheader.md-primary(syle="width:100%; padding:0;")
+		div(layout="column", layout-align="start center")
+			md-list.menuTopUsers(layout="row", style="padding:0; z-index: 1;")
+				md-list-item(ng-click="goToPerson(user.username, $event)", flex="33")
+					md-icon(md-svg-icon="social:person")  
+					p Perfil
+				md-list-item(ng-click="navigateTo('/events', $event)", flex="33")
+					md-icon(md-svg-icon="notification:event_note")  
+					p Eventos
+				md-list-item(ng-click="navigateTo('/messages', $event)", flex="33")
+					md-icon(md-svg-icon="communication:chat")
+					p Mensajes
+				

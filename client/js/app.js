@@ -6,7 +6,9 @@ angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute',  'firebase' , '
     .factory('Usersregistered', function(angularFireCollection, fbURL) {
         return angularFireCollection(fbURL);
     })*/
-    .config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdIconProvider', function ($routeProvider, $locationProvider, $httpProvider, $mdIconProvider) {
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', '$mdIconProvider', '$mdThemingProvider', function ($routeProvider, $locationProvider, $httpProvider, $mdIconProvider, $mdThemingProvider) {
+        $mdThemingProvider.theme('altTheme')
+            .primaryPalette('purple');
 
         $mdIconProvider
             .iconSet('action', 'img/iconsets/action-icons.svg', 24)

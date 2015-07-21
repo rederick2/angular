@@ -6,6 +6,8 @@ angular.module('unsApp')
 
     var url = "https://rederick2.firebaseio.com/";
 
+    $scope.IsUser = Auth.user.username != '' ? true : false;
+
     /**
      * Build handler to open/close a SideNav; when animation finishes
      * report completion in console

@@ -8,7 +8,7 @@ html(lang='en', ng-app='unsApp')
         
         
         link(href="/css/bootstrap.css", rel="stylesheet")
-        link(rel='stylesheet', href='/css/app.css')
+        
         //link(rel='stylesheet', href='/css/docs.css')
         
         link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto')
@@ -30,7 +30,9 @@ html(lang='en', ng-app='unsApp')
         link(rel="stylesheet", href="/js/vendor/bootstrap-notify.css")
         
         //link(href="//ajax.googleapis.com/ajax/libs/angular_material/0.8.3/angular-material.min.css", rel="stylesheet")
-        link(href="//ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css", rel="stylesheet")
+        //link(href="//ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css", rel="stylesheet")
+        link(href="/css/angular-material.css", rel="stylesheet")
+        link(rel='stylesheet', href='/css/app.css')
         
 
     body(data-ng-cloak)
@@ -39,7 +41,7 @@ html(lang='en', ng-app='unsApp')
         .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
     section(layout="row", flex, ng-controller="NavCtrl" style="height:100%")
-        md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
+        md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')", ng-show="false" )
             md-toolbar.md-toolbar-tools(role="navigation")
                 a.navbar-brand(href="/", style="padding:5px") 
                     img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
@@ -94,7 +96,7 @@ html(lang='en', ng-app='unsApp')
                         md-icon(md-svg-icon="communication:chat")
                         p Mensajes
 
-        div(layout="column", flex)
+        div(layout="column", flex, style="position:relative")
             md-toolbar.md-whiteframe-glow-z1.site-content-toolbar.md-default-theme(aria-hidder="false", style="background-color: rgb(216, 47, 75);")
                 .md-toolbar-tools
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
@@ -105,12 +107,12 @@ html(lang='en', ng-app='unsApp')
                     md-button(ng-href='/firepad', data-access-level='accessLevels.user') Firepad
                     md-button(ng-href='/admin',data-access-level='accessLevels.admin') Admin
                     span(flex)
-                    md-button.btn-profile.navbar-text(style="padding: 0px;", ng-href="/{{user.username}}")
+                    md-button.btn-profile.navbar-text(style="padding: 0px;", ng-href="/{{user.username}}", hide-sm, show-gt-sm)
                         img(ng-src="{{imgProfile}}", height="30")
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
-            md-content(flex, layout="column", layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0;")
+            md-content(flex, layout="column", layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0; background-color: #f5f5f5")
                 hr(data-ng-show="error")
                 .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
 
@@ -147,7 +149,7 @@ html(lang='en', ng-app='unsApp')
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js")
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-messages.min.js")
-        //script(src='//rawgit.com/angular/bower-material/master/angular-material.js')
+    script(src='/js/angular-material.js')
     script(src="/js/docs.js")
 
 
