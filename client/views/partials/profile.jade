@@ -70,132 +70,134 @@
 			.modal-footer
 				button.btn.btn-danger(type="button", data-dismiss="modal")	Cancelar
 				button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting", ng-click="addExperience()")	Guardar
-header-users
-.row
-	.col-xs-12.col-sm-4.col-md-3(style="background:white; padding:0; width: 300px; position:fixed")
-		ul.menuProfile
-			li.active.scrolldEasing2.scrolldEasing2Mobile(active, id="formProfileBtn", ng-click="scroll('formProfileBtn')") 	
-				|	Datos Personales
-			li.scrolldEasing1.scrolldEasing1Mobile(id="formEducationBtn", active, ng-click="scroll('formEducationBtn')")
-				|	Datos Académicos
-				span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="educations.length != 0") {{educations.length}}
-			li.scrolldEasing2.scrolldEasing2Mobile(id="formExperienceBtn", active, ng-click="scroll('formExperienceBtn')")
-				|	Experiencial Profesional
-				span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="experiences.length != 0") {{experiences.length}}
-			li(active)
-				a(href="#") Proyectos
-	.col-xs-12.col-sm-8.col-md-7(style="margin-left:320px; padding:0")
-		.loading(style='display:none')
-					i.fa.fa-spinner.fa-spin
-		form(id="formProfile", editable-form, name="editableForm", onaftersave="saveUser()", style="margin-bottom: 5px;")
-			div.col-xs-12.col-sm-5.col-md-4.profile(style="padding: 10px 30px;")
-				div.thumbnail_p(style="position:relative")
-					img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
-					a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="picture", ng-show="viewUpload && authUser == userProfile",ng-mouseover="viewUpload = true") 
-						i.fa.fa-camera
-			div.col-xs-12.col-sm-9.col-md-8(style="background: white; padding-bottom: 15px;")
-				div.btn-group.col-md-12
-					span.title Nombre Completo
-					span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Localización
-					span(editable-places="user.location", e-name="google_places_ac", e-id="google_places_ac", e-required) {{ user.location || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Edad
-					span(editable-date="user.dob")  {{ edad }} años ({{ (user.dob | date:"dd/MM/yyyy") || 'Sin especificar' }})
-				div.btn-group.col-md-12
-					span.title Género
-					span(editable-select="user.gender", e-ng-options="s.value as s.text for s in genders")  {{ user.gender || 'Hombre' }}
-				div.btn-group.col-md-12
-					span.title Estado Civil
-					span(editable-select="user.marital", e-ng-options="s.value as s.text for s in statuses")  {{ user.marital || 'Soltero(a)' }}
-				div.btn-group.col-md-12
-					span.title Email
-					span.editable {{email}}
+md-content(flex, style="padding: 0;", layout-fill)
+	header-users(layout="column",flex, layout-fill)
+	div(layout="column", layout-align="start center" )
+		.col-xs-12.col-sm-12.col-md-9
+			.col-xs-12.col-sm-4.col-md-3(style="background:white; padding:0; width: 300px; position:fixed", ng-show="false")
+				ul.menuProfile
+					li.active.scrolldEasing2.scrolldEasing2Mobile(active, id="formProfileBtn", ng-click="scroll('formProfileBtn')") 	
+						|	Datos Personales
+					li.scrolldEasing1.scrolldEasing1Mobile(id="formEducationBtn", active, ng-click="scroll('formEducationBtn')")
+						|	Datos Académicos
+						span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="educations.length != 0") {{educations.length}}
+					li.scrolldEasing2.scrolldEasing2Mobile(id="formExperienceBtn", active, ng-click="scroll('formExperienceBtn')")
+						|	Experiencial Profesional
+						span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="experiences.length != 0") {{experiences.length}}
+					li(active)
+						a(href="#") Proyectos
+			.col-xs-12.col-sm-12.col-md-9(style="padding:0")
+				.loading(style='display:none')
+							i.fa.fa-spinner.fa-spin
+				form(id="formProfile", editable-form, name="editableForm", onaftersave="saveUser()", style="margin-bottom: 5px;")
+					div.col-xs-12.col-sm-5.col-md-4.profile(style="padding: 10px 30px;")
+						div.thumbnail_p(style="position:relative")
+							img(ng-src="{{imgProfile}}?type=large" alt="...", ng-init="finalized=true", ng-mouseover="viewUpload = true", ng-mouseleave="viewUpload = false", width="160")
+							a.btn.btn-default(style="position:absolute; top:10px; width: 40px;left:0;right:0; margin:auto",href="picture", ng-show="viewUpload && authUser == userProfile",ng-mouseover="viewUpload = true") 
+								i.fa.fa-camera
+					div.col-xs-12.col-sm-9.col-md-8(style="background: white; padding-bottom: 15px;")
+						div.btn-group.col-md-12
+							span.title Nombre Completo
+							span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'Sin especificar' }}
+						div.btn-group.col-md-12
+							span.title Localización
+							span(editable-places="user.location", e-name="google_places_ac", e-id="google_places_ac", e-required) {{ user.location || 'Sin especificar' }}
+						div.btn-group.col-md-12
+							span.title Edad
+							span(editable-date="user.dob")  {{ edad }} años ({{ (user.dob | date:"dd/MM/yyyy") || 'Sin especificar' }})
+						div.btn-group.col-md-12
+							span.title Género
+							span(editable-select="user.gender", e-ng-options="s.value as s.text for s in genders")  {{ user.gender || 'Hombre' }}
+						div.btn-group.col-md-12
+							span.title Estado Civil
+							span(editable-select="user.marital", e-ng-options="s.value as s.text for s in statuses")  {{ user.marital || 'Soltero(a)' }}
+						div.btn-group.col-md-12
+							span.title Email
+							span.editable {{email}}
 
-			.buttons(style="padding-left: 30px;")
-				button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
-				span(ng-show="editableForm.$visible")
-					button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
-					button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+					.buttons(style="padding-left: 30px;")
+						button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
+						span(ng-show="editableForm.$visible")
+							button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
+							button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
-		div(id="formEducation")
+			.col-xs-12.col-sm-12.col-md-9(id="formEducation")
+				div(style="text-align: center; margin-bottom: 5px;")
+					button.btn.btn-danger(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
+				form.formProfileOthers.col-xs-12.col-sm-5.col-md-4(editable-form, ng-repeat="education in educations" name="editableForm", onaftersave="saveEducation($index, education.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
+					ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
+								li.dropdown(data-toggle="dropdown")
+									a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
+										i.fa.fa-chevron-down
+									ul.dropdown-menu
+										li(data-access-level='accessLevels.user')
+											a(href="#" , data-toggle="modal" data-target="#modalRemove" ng-click="beforeRemove($index, education.id, 1);", ng-show="authUser == userProfile") Eliminar
+					div.btn-group.col-md-12
+						span.title Centro de Estudios
+						span(editable-text="educations[$index].school", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.school || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title  Tiempo de Estudios
+						span(editable-date="educations[$index].yearStart") {{ (education.yearStart | date:"yyyy") || 'Sin especificar' }}
+						span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
+						span(editable-date="educations[$index].yearEnd") {{ (education.yearEnd | date:"yyyy") || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Grado Académico
+						span(editable-text="educations[$index].schoolDegree", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.schoolDegree || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Carrera
+						span(editable-text="educations[$index].career", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.career || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Descripción
+						span(editable-textarea="educations[$index].description", e-name="name") {{ education.description || 'Sin especificar' }}
+
+					.buttons
+						button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
+						span(ng-show="editableForm.$visible")
+							button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
+							button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+
 			div(style="text-align: center; margin-bottom: 5px;")
-				button.btn.btn-danger(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
-			form.formProfileOthers(editable-form, ng-repeat="education in educations" name="editableForm", onaftersave="saveEducation($index, education.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
-				ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
-							li.dropdown(data-toggle="dropdown")
-								a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
-									i.fa.fa-chevron-down
-								ul.dropdown-menu
-									li(data-access-level='accessLevels.user')
-										a(href="#" , data-toggle="modal" data-target="#modalRemove" ng-click="beforeRemove($index, education.id, 1);", ng-show="authUser == userProfile") Eliminar
-				div.btn-group.col-md-12
-					span.title Centro de Estudios
-					span(editable-text="educations[$index].school", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.school || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title  Tiempo de Estudios
-					span(editable-date="educations[$index].yearStart") {{ (education.yearStart | date:"yyyy") || 'Sin especificar' }}
-					span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
-					span(editable-date="educations[$index].yearEnd") {{ (education.yearEnd | date:"yyyy") || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Grado Académico
-					span(editable-text="educations[$index].schoolDegree", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.schoolDegree || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Carrera
-					span(editable-text="educations[$index].career", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.career || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Descripción
-					span(editable-textarea="educations[$index].description", e-name="name") {{ education.description || 'Sin especificar' }}
+				button.btn.btn-danger(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
 
-				.buttons
-					button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
-					span(ng-show="editableForm.$visible")
-						button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
-						button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+			.col-xs-12.col-sm-12.col-md-9(id="formExperience")
+				form.formProfileOthers.col-xs-12.col-sm-5.col-md-4(id="formExperience", editable-form, ng-repeat="experience in experiences" name="editableForm", onaftersave="saveExperience($index, experience.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
+					ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
+								li.dropdown(data-toggle="dropdown")
+									a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
+										i.fa.fa-chevron-down
+									ul.dropdown-menu
+										li(data-access-level='accessLevels.user')
+											a(href="#" , data-toggle="modal" data-target="#modalRemove", ng-click="beforeRemove($index, experience.id, 2);", ng-show="authUser == userProfile") Eliminar
+					div.btn-group.col-md-12
+						span.title Compañia
+						span(editable-text="experiences[$index].company", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.company || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title  Tiempo
+						span(editable-date="experiences[$index].startDate") {{ (experience.startDate | date:"MM/yyyy") || 'Sin especificar' }}
+						span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
+						span(editable-date="experiences[$index].endDate") {{ (experience.endDate | date:"MM/yyyy") || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Cargo
+						span(editable-text="experiences[$index].position", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.position || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Lugar
+						span(editable-places="experiences[$index].location", e-name="google_places_ac", e-id = "locationExp_{{$index}}", e-required) {{ experience.location || 'Sin especificar' }}
+					div.btn-group.col-md-12
+						span.title Descripción
+						span(editable-text="experiences[$index].description", e-name="name") {{ experience.description || 'Sin especificar' }}
 
-		div(style="text-align: center; margin-bottom: 5px;")
-			button.btn.btn-danger(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
+					.buttons
+						button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
+						span(ng-show="editableForm.$visible")
+							button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
+							button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
 
-		div(id="formExperience")
-			form.formProfileOthers(id="formExperience", editable-form, ng-repeat="experience in experiences" name="editableForm", onaftersave="saveExperience($index, experience.id)", style="background: white; margin-bottom: 5px; border-left: 5px #D82F4B solid;")
-				ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
-							li.dropdown(data-toggle="dropdown")
-								a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
-									i.fa.fa-chevron-down
-								ul.dropdown-menu
-									li(data-access-level='accessLevels.user')
-										a(href="#" , data-toggle="modal" data-target="#modalRemove", ng-click="beforeRemove($index, experience.id, 2);", ng-show="authUser == userProfile") Eliminar
-				div.btn-group.col-md-12
-					span.title Compañia
-					span(editable-text="experiences[$index].company", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.company || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title  Tiempo
-					span(editable-date="experiences[$index].startDate") {{ (experience.startDate | date:"MM/yyyy") || 'Sin especificar' }}
-					span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
-					span(editable-date="experiences[$index].endDate") {{ (experience.endDate | date:"MM/yyyy") || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Cargo
-					span(editable-text="experiences[$index].position", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.position || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Lugar
-					span(editable-places="experiences[$index].location", e-name="google_places_ac", e-id = "locationExp_{{$index}}", e-required) {{ experience.location || 'Sin especificar' }}
-				div.btn-group.col-md-12
-					span.title Descripción
-					span(editable-text="experiences[$index].description", e-name="name") {{ experience.description || 'Sin especificar' }}
+	div(style="display:none")		
+		img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
+		a.btn.btn-danger(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
+		a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
 
-				.buttons
-					button.btn.btn-default(type="button", ng-click="editableForm.$show()", ng-show="!editableForm.$visible && authUser == userProfile") Editar
-					span(ng-show="editableForm.$visible")
-						button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
-						button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
-
-div(style="display:none")		
-	img.thumbnail(ng-src="{{jsondata.pictureUrl}}")
-	a.btn.btn-danger(href="{{jsondata.publicProfileUrl}}") {{jsondata.firstName}} {{jsondata.lastName}}
-	a.btn.btn-danger(ng-click="logoutLinkedIn()", ng-hide="jsondata == null") Logout
-
-script(type="in/Login")
+	script(type="in/Login")
 
 
 

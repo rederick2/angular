@@ -13,10 +13,33 @@ header-users{
   display: inline-block;*/
 }
 
+md-content.md-default-theme {
+  background: none;
+}
+
+
+.md-subheader{
+      margin-right: 0px;
+    }
+
+    .md-subheader:not(.md-sticky-no-effect):after {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      top: 0;
+      right: 0px;
+      content: '';
+    }
+
 @media (max-width: 600px) { 
     .menuTopUsers{
       width: 100%
     }
+
+    md-list-item > md-icon:first-child, md-list-item .md-list-item-inner > md-icon:first-child {
+       margin-right: 5px; 
+    }
+    
 }
 
 .md-subheader-inner{
