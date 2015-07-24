@@ -398,6 +398,7 @@ a.btn-profile{
   padding: 0px 10px;
   background: #f4f4f4;
   margin: 0;
+  /*border-bottom: 1px solid #ccc; */
 }
 
 .messages{
@@ -441,15 +442,23 @@ a.btn-profile{
 }
 
 .me{
-  background-color: #333;
+  background-color: #3F51B5;
   color: #fff;
   float: right;
+}
+
+.me md-icon{
+  color: white
 }
 
 .you{
   background-color: #fff;
   float: left;
   
+}
+
+.you md-icon{
+  color: black;
 }
 
 .message .imgProfile{

@@ -57,6 +57,12 @@ angular.module('unsApp')
 
             $('.loading').hide();
 
+            setTimeout(function() {
+
+                $('.masonry').masonry();
+
+            }, 100);
+
         });
 
 

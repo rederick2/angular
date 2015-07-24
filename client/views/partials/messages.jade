@@ -1,32 +1,33 @@
-md-content(layout="row", flex)
-	md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left_chat", md-is-locked-open="$mdMedia('gt-md')")
-		//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
-		.input-group
-			input.form-control(type='text', placeholder='Search', ng-model="typeaheadValue", bs-typeahead="typeahead")
-			span.input-group-btn
-				button.btn.btn-default(type='submit') 
-					i.fa.fa-search
-		inboxes
+div(layout="column", layout-align="start center", flex)
+	md-content.col-xs-12.col-sm-10.col-md-8(layout="row", flex)
+		md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left_chat", md-is-locked-open="$mdMedia('gt-md')")
+			//input.form-control(type="text", ng-model="typeaheadValue", bs-typeahead="typeahead")
+			.input-group
+				input.form-control(type='text', placeholder='Search', ng-model="chats")
+				span.input-group-btn
+					button.btn.btn-default(type='submit') 
+						i.fa.fa-search
+			inboxes
 
-	md-content(flex, layout="column")
-		md-toolbar.md-toolbar-tools(role="navigation")
-			md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
-				md-icon.md-primary.md-hue-3(md-svg-icon="navigation:arrow_back")
-			span(flex, style="line-height: 0px;") 
-				md-button(ng-href="/{{UsernameChat}}")
-					strong  {{UserChat}}
-			md-button.md-fab.md-mini.md-primary(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
-				md-icon.md-primary.md-hue-3(md-svg-icon="content:add")
-		.to(ng-show="newMessage")
-			form.form-horizontal(style="background: white; padding:5px")
-				.form-group
-					label.control-label.col-md-1() Para:
-					.col-sm-6
-						input.form-control(name="to", ng-model="to", placeholder="Nombre", ng-change="searchUsers(to); isSeach= true")
-			.listUsers(ng-show="isSeach")
-				.s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username);")
-					.picture
-						img(src="{{s_user.picture}}", style='margin:5px', width="50")
-					.s_name
-						h3 {{s_user.username}}
-		messages-chat(flex, layout-padding, layout="column")
+		md-content(flex, layout="column")
+			md-toolbar.md-toolbar-tools(role="navigation")
+				md-button.md-icon-button(aria-label="Settings", ng-click="toggleLeft()", hide-gt-md)
+					md-icon.md-primary.md-hue-3(md-svg-icon="navigation:arrow_back")
+				span(flex, style="line-height: 0px;") 
+					md-button(ng-href="/{{UsernameChat}}")
+						strong  {{UserChat}}
+				md-button.md-fab.md-mini.md-primary(ng-show="!newMessage", ng-click="newMessage = true; to=''; messages=[]; messages2 = [];") 
+					md-icon.md-primary.md-hue-3(md-svg-icon="content:add")
+			//.to(ng-show="newMessage")
+				form.form-horizontal(style="background: white; padding:5px")
+					.form-group
+						label.control-label.col-md-1() Para:
+						.col-sm-6
+							input.form-control(name="to", ng-model="to", placeholder="Nombre", ng-change="searchUsers(to); isSeach= true")
+				.listUsers(ng-show="isSeach")
+					.s_results(ng-repeat="s_user in s_users", ng-click="selectUser(s_user.username);")
+						.picture
+							img(src="{{s_user.picture}}", style='margin:5px', width="50")
+						.s_name
+							h3 {{s_user.username}}
+			messages-chat(flex, layout-padding, layout="column")

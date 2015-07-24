@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute',  'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
+angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute', 'angular-loading-bar', 'ngMenuSidenav', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
     
     /*.value('fbURL', 'https://rederick2.firebaseio.com/users/')
     .factory('Usersregistered', function(angularFireCollection, fbURL) {
@@ -232,6 +232,19 @@ angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute',  'firebase' , '
             }
             
         });
+
+        $rootScope.goToPerson = function(to, event) {
+
+            $location.path('/' + to + '/profile');
+
+        }
+
+
+        $rootScope.navigateTo = function(to, event) {
+
+            $location.path(to);
+        }
+
   
 
     }]);
