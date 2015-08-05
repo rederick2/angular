@@ -126,7 +126,7 @@ angular.module('xeditable').directive('editableSelect', ['editableDirectiveFacto
   function(editableDirectiveFactory) {
     return editableDirectiveFactory({
       directiveName: 'editableSelect',
-      inputTpl: '<select></select>',
+      inputTpl: '<custom-select></custom-select>',
       autosubmit: function() {
         var self = this;
         self.inputEl.bind('change', function() {
@@ -1317,7 +1317,8 @@ angular.module('xeditable').factory('editableThemes', function() {
     'default': {
       formTpl:      '<form class="editable-wrap"></form>',
       noformTpl:    '<span class="editable-wrap"></span>',
-      controlsTpl:  '<span class="editable-controls"></span>',
+      //controlsTpl:  '<span class="editable-controls"></span>',
+      controlsTpl:  '<md-input-container class="editable-controls" ng-class="{\'md-input-invalid\': $error}"></md-input-container>',
       inputTpl:     '',
       errorTpl:     '<div class="editable-error" ng-show="$error">{{$error}}</div>',
       buttonsTpl:   '<span class="editable-buttons"></span>',
@@ -1329,7 +1330,8 @@ angular.module('xeditable').factory('editableThemes', function() {
     'bs2': {
       formTpl:     '<form class="form-inline editable-wrap" role="form"></form>',
       noformTpl:   '<span class="editable-wrap"></span>',
-      controlsTpl: '<div class="editable-controls controls control-group" ng-class="{\'error\': $error}"></div>',
+      //controlsTpl: '<div class="editable-controls controls control-group" ng-class="{\'error\': $error}"></div>',
+      controlsTpl:  '<md-input-container class="editable-controls" ng-class="{\'md-input-invalid\': $error}"></md-input-container>',
       inputTpl:    '',
       errorTpl:    '<div class="editable-error help-block" ng-show="$error">{{$error}}</div>',
       buttonsTpl:  '<span class="editable-buttons"></span>',
@@ -1344,7 +1346,8 @@ angular.module('xeditable').factory('editableThemes', function() {
     'bs3': {
       formTpl:     '<form class="form-inline editable-wrap" role="form"></form>',
       noformTpl:   '<span class="editable-wrap"></span>',
-      controlsTpl: '<div class="editable-controls form-group" ng-class="{\'has-error\': $error}"></div>',
+      //controlsTpl: '<div class="editable-controls form-group" ng-class="{\'has-error\': $error}"></div>',
+      controlsTpl:  '<md-input-container class="editable-controls" ng-class="{\'md-input-invalid\': $error}"></md-input-container>',
       inputTpl:    '',
       errorTpl:    '<div class="editable-error help-block" ng-show="$error">{{$error}}</div>',
       buttonsTpl:  '<span class="editable-buttons"></span>',
@@ -1362,7 +1365,7 @@ angular.module('xeditable').factory('editableThemes', function() {
         switch(this.directiveName) {
           case 'editablePlaces':
           {
-              this.inputEl.addClass('form-control');
+              //this.inputEl.addClass('form-control');
               if(this.theme.inputClass) {
                 // don`t apply `input-sm` and `input-lg` to select multiple
                 // should be fixed in bs itself!
@@ -1402,7 +1405,7 @@ angular.module('xeditable').factory('editableThemes', function() {
           case 'editableBsdate':
           case 'editableDate':
           case 'editableSelect':
-            this.inputEl.addClass('form-control');
+            //this.inputEl.addClass('form-control');
             if(this.theme.inputClass) {
               // don`t apply `input-sm` and `input-lg` to select multiple
               // should be fixed in bs itself!

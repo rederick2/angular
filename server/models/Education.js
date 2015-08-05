@@ -7,8 +7,8 @@ var educationSchema = new mongoose.Schema({
     id: {type:Number, required:true},
     profile: {type: mongoose.Schema.Types.ObjectId, ref: 'Profile', required: true},
     school: String, // Nombre de la Institucion
-    yearStart: Date, // Año de inicio y fin: ej.: 2010-2015
-    yearEnd: Date,
+    yearStart: Number, // Año de inicio y fin: ej.: 2010-2015
+    yearEnd: Number,
     schoolDegree: String, // Grado de Estudios: Diplomado, Bachillerato, Licenciatura, etc
     career:String, // Carrera
     description : String,

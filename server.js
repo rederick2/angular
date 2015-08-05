@@ -153,5 +153,5 @@ require('./server/routes.js')(app);
 
 //app.set('port', process.env.VCAP_APP_PORT || config.port);
 http.createServer(app).listen(app.get('port'), function(){
-    console.log("Express server listening on port " + app.get('port'));
+    console.log("Express Server listening on port " + app.get('port'));
 });

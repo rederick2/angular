@@ -806,4 +806,168 @@ angular.module('unsApp')
     }
 });
 
+angular.module('unsApp')
+.directive('customSelect', function($parse, $timeout) {
+  
+    var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/;
+
+    var regularTemplate = '<md-select ng-model="ngModel" ng-change="ngChange()">\
+            <md-select-label>{{selectedItem.text}}</md-select-label> \
+            <md-option md-no-ink ng-repeat="item in items track by $index" ng-value="item.value" ng-click="selected(item)">{{item.text}}</md-option> \
+            </md-select>';
+
+    var oneTimeTemplate = '<md-select ng-model="ngModel" ng-change="ngChange()">\
+            <md-select-label>{{selectedItem.text}}</md-select-label> \
+            <md-option md-no-ink ng-repeat="item in ::items track by $index" ng-value="::item.value" ng-click="selected(item)">{{::item.text}}</md-option> \
+            </md-select>';
+
+    var noSelectionTemplate = '<md-select ng-model="ngModel" class="no-select">\
+            <md-select-label>{{selectedItem.text}}</md-select-label> \
+            <md-option md-no-ink ng-value="::items[0].value">{{::items[0].text}}</md-option></md-select>';
+
+    var groupTemplate = '<md-select ng-model="ngModel" ng-change="ngChange()">\
+            <md-select-label>{{selectedItem.text}}</md-select-label> \
+            <md-optgroup ng-repeat = "group in groups" ng-attr-label="{{group}}"> \
+            <md-option md-no-ink ng-repeat="item in items| filter: {group: group}" track by $index" ng-value="item.value" ng-click="selected(item)">{{item.text}}</md-option></md-optgroup> \
+            </md-select>';
+
+    var groupTemplatePerformant = '<md-select ng-model="ngModel" ng-change="ngChange()">\
+            <md-select-label>{{selectedItem.text}}</md-select-label> \
+            <md-optgroup ng-repeat = "group in ::groups" ng-attr-label="{{::group}}"> \
+            <md-option md-no-ink ng-repeat="item in ::items| filter: {group: group}" track by $index" ng-value="::item.value" ng-click="selected(item)">{{::item.text}}</md-option></md-optgroup> \
+            </md-select>';
+    return {
+        restrict: 'E',
+        require: 'ngModel',
+        scope: {
+            ngModel: '=',
+            ngChange:"&?"
+        },
+        template: function(elm, attr){
+          var settings = JSON.parse(attr.settings || "{}");
+          
+          if(settings.noSelection){
+            return noSelectionTemplate;
+          }
+          
+          if(attr.options.match(NG_OPTIONS_REGEXP)[3]){
+            if(settings.performant){
+              return groupTemplatePerformant;
+            }
+            return groupTemplate;
+          }
+          
+          if(settings.performant){
+             return oneTimeTemplate;
+          }
+          
+          return regularTemplate;
+        },
+        link: function(scope, elm, attrs, ctrl) {
+            var match = attrs.options.match(NG_OPTIONS_REGEXP);
+
+            console.log(match)
+
+            var
+                displayFn = $parse(match[2] || match[1]),
+                valueName = match[4] || match[6],
+                selectAs = / as /.test(match[0]) && match[1],
+                selectAsFn = selectAs ? $parse(selectAs) : null,
+                keyName = match[5],
+                groupByFn = $parse(match[3] || ''),
+                valueFn = $parse(match[2] ? match[1] : valueName),
+                valuesFn = $parse(match[7]),
+                track = match[8],
+                trackFn = track ? $parse(match[8]) : null,
+                locals = {},
+                displayField = _getNormalizedProp(match[2] || match[1]),
+                idField = _getNormalizedProp(track || selectAs || valueName),
+                trackField = _getNormalizedProp(track),
+                groupField = _getNormalizedProp(match[3]),
+                settings = JSON.parse(attrs.settings || "{}"),
+                unWatchCollection;
+         
+          init();
+          
+          function init(){
+            scope.selectedItem = {};
+            unWatchCollection = scope.$parent.$watchCollection(valuesFn, _setCollection);
+            scope.selected = setSelected;
+            scope.groups = [];
+            ctrl.$render = render;
+          }
+          
+          function setSelected(item){
+              scope.selectedItem = item;
+          }
+          
+          function render(){
+            if(!angular.isArray(scope.items) || !ctrl.$viewValue) return;
+            var viewValue = _getMatchedTrackValue(ctrl.$viewValue);
+            
+              for(var i=0, l= scope.items.length; i<l; i++){
+                if(viewValue == _getMatchedTrackValue(scope.items[i].value)){
+                  return scope.selectedItem = scope.items[i];
+                }
+             }
+          }
+          
+          function _getMatchedTrackValue(value){
+             return trackField ? scope.$eval.call(value, trackField) : value;
+          }
+  
+           function _getNormalizedProp(prop){
+              if(!prop) return prop;
+              return prop.split('.').slice(1).join('.');
+           }
+          
+           function _setCollection(values){
+                scope.groups = [];
+                if(angular.isDefined(values) && settings.performant){
+                  unWatchCollection();
+                }
+               
+                if(values && angular.isArray(values)){
+                 
+                  scope.items = values.map(function(it, i){
+                    console.log(_callExpression(displayFn, i, it))
+                     var ret = {
+                       text: _callExpression(displayFn, i, it),
+                       value: _callExpression(selectAsFn || valueFn, i, it)
+                     };
+                    _setGroup(i, it, ret);
+                    return ret;
+                  });
+                }else if (values) {
+                    // TODO: Implement for object if needed
+                    scope.items = {};
+                    for (var prop in values) {
+                        if (values.hasOwnProperty(prop)) {
+                            scope.items[prop] = _callExpression(displayFn, prop, values[prop]);
+                        }
+                    }
+                }
+                ctrl.$render();
+            }
+          
+          function _setGroup(i, it, listItem){
+             var group;
+             if(!groupField) return;
+             group = _callExpression(groupByFn, i, it) || "List";
+             listItem.group = group;
+             if(!~scope.groups.indexOf(group)){
+                scope.groups.push(group);  
+             }
+          }
+  
+            function _callExpression(exprFn, key, value) {
+
+                locals[valueName] = value;
+                if (keyName) locals[keyName] = key;
+                return exprFn(window, locals);
+            }
+        }
+    }
+});
+
 

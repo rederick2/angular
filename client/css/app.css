@@ -13,7 +13,7 @@ header-users{
   display: inline-block;*/
 }
 
-md-content.md-default-theme {
+.main {
   background: none;
 }
 
@@ -188,7 +188,7 @@ form[name="editableForm"] > div {
 }
 
 form[name="editableForm"] .title {
-  display: inline-block;
+  /*display: inline-block;*/
   font-weight: bold;
   padding-top: 5px;
   vertical-align: top;
@@ -757,6 +757,14 @@ body {
 
 /********************** PROFILE ****************************/
 
+md-input-container.editable-controls {
+  padding: 0;
+}
+
+md-input-container.editable-controls [ng-message] {
+  position: static;
+}
+
 .menuProfile{
   list-style: none;
   padding: 0;
@@ -784,7 +792,7 @@ li.active{
 
 .formProfileOthers > div{
   padding: 15px 30px;
-  border-bottom: 1px solid #ddd;
+  /*border-bottom: 1px solid #ddd;*/
 }
 
 .formProfileOthers .title{
@@ -793,7 +801,7 @@ li.active{
 
 
 .editable-text, .editable-places, .editable-textarea{
-  width: 62%;
+  width: 100%;
 }
 
 .loading{

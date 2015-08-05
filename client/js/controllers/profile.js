@@ -1,6 +1,6 @@
 angular.module('unsApp')
 .controller('ProfileCtrl',
-['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', '_', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth, _) {
+['$rootScope', '$routeParams', '$scope', '$filter', 'Profiles', 'Users', 'Auth', '_', '$mdDialog', function($rootScope, $routeParams, $scope, $filter, Profiles, Users, Auth, _, $mdDialog) {
 
     $scope.authUser = Auth.user.username;
     
@@ -34,6 +34,8 @@ angular.module('unsApp')
 
             $scope.user = res.profile; 
 
+            console.log(res)
+
             $scope.idProfile = res.profile.id;
             //console.log(res[0]);
             if(res.educations != 0){
@@ -61,12 +63,29 @@ angular.module('unsApp')
 
                 $('.masonry').masonry();
 
-            }, 100);
+            }, 4500);
 
         });
 
 
     };
+
+    var myDate = new Date();
+    var year = myDate.getFullYear();
+
+    $scope.items = []; 
+
+
+    for(var i = 1970; i < year+1; i++){
+      $scope.items.push({id: i, name:i});
+    }
+
+
+     $scope.someVal = 3;
+
+    $scope.changed = function(val){
+        console.log("Updated", val);
+      }
 
     $scope.scroll = function(id){
 
@@ -288,73 +307,102 @@ angular.module('unsApp')
         
     };
 
-    $scope.beforeRemove = function(index, id, tipo) {
+    /*$scope.beforeRemove = function(index, id, tipo) {
         // $scope.user already updated!
 
         $scope.index = index;
         $scope.id = id;
         $scope.tipo = tipo;
         
-    };
+    };*/
+
+    $scope.refresh = function(){
+
+        setTimeout(function(){
+            $('.masonry').masonry();
+        }, 10);
+        
+
+       // console.log('hhh');
+    }
 
 
-    $scope.remove = function(){
+    $scope.remove = function(index, id, tipo){
+
+        $scope.index = index;
+        $scope.id = id;
+        $scope.tipo = tipo;
 
         if(Auth.user.username == $scope.userProfile){
 
-            if($scope.tipo == 1){
+                $mdDialog.show(
+                  $mdDialog.confirm()
+                    .title('Eliminar')
+                    .content('Desea realmente eliminar?')
+                    .ok('Aceptar')
+                    .cancel('Cancelar')
+                    .targetEvent(event)
+                ).then(function () {
+                    //console.log(_.findWhere($rootScope.bienesSolicitudes[id], { Vcodbarra: Vcodbarra }));
+                    console.log(tipo);
 
-                Profiles.removeEducation(
-                    {
-                        id: $scope.id
+                    if($scope.tipo == 1){
 
-                    } , 
-                
-                    function(res){
+                        Profiles.removeEducation(
+                            {
+                                id: $scope.id
 
-                            $scope.educations = _.without($scope.educations, $scope.educations[$scope.index]);
+                            } , 
+                        
+                            function(res){
 
-                            $scope.id = 0;
+                                    $scope.educations = _.without($scope.educations, $scope.educations[$scope.index]);
 
-                            $scope.index = 0;
+                                    $scope.id = 0;
 
-                            $scope.tipo = 0;
+                                    $scope.index = 0;
 
-                            $('#modalRemove').modal('hide');
+                                    $scope.tipo = 0;
 
-                            return true;
+                                    $('#modalRemove').modal('hide');
 
-                    }, function(err){
-                            $rootScope.error = err;
+                                    return true;
+
+                            }, function(err){
+                                    $rootScope.error = err;
+                        });
+
+                    }else if($scope.tipo == 2){
+
+                        Profiles.removeExperience(
+                            {
+                                id: $scope.id
+
+                            } , 
+                        
+                            function(res){
+
+                                    $scope.experiences = _.without($scope.experiences, $scope.experiences[$scope.index]);
+
+                                    $scope.id = 0;
+
+                                    $scope.index = 0;
+
+                                    $scope.tipo = 0;
+
+                                    $('#modalRemove').modal('hide');
+
+                                    return true;
+
+                            }, function(err){
+                                    $rootScope.error = err;
+                        });
+
+                    }
+                    
+                }, function () {
+                    //console.log('You decided to keep your debt.');
                 });
-
-            }else if($scope.tipo == 2){
-
-                Profiles.removeExperience(
-                    {
-                        id: $scope.id
-
-                    } , 
-                
-                    function(res){
-
-                            $scope.experiences = _.without($scope.experiences, $scope.experiences[$scope.index]);
-
-                            $scope.id = 0;
-
-                            $scope.index = 0;
-
-                            $scope.tipo = 0;
-
-                            $('#modalRemove').modal('hide');
-
-                            return true;
-
-                    }, function(err){
-                            $rootScope.error = err;
-                });
-
-            }
 
         }
     }
