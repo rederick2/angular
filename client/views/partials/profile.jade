@@ -71,178 +71,186 @@
 			.modal-footer
 				button.btn.btn-danger(type="button", data-dismiss="modal")	Cancelar
 				button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting", ng-click="addExperience()")	Guardar
-md-content(flex, style="padding: 0;", layout-fill)
+md-content.main(flex, style="padding: 0;", layout-fill)
 	header-users(layout="column",flex, layout-fill)
+	md-toolbar
+		.md-toolbar-tools(role="navigation", style="background-color:#F5F5F5;")
+			md-button.md-raised.md-primary(type="button", data-toggle="modal", data-target="#modalEducation", ng-show="authUser == userProfile")
+				md-icon(md-menu-align-target, md-svg-icon="av:queue")
+				|	Estudios
+			md-button.md-raised.md-primary(type="button", data-toggle="modal", data-target="#modalExperience", ng-show="authUser == userProfile")
+				md-icon(md-menu-align-target, md-svg-icon="av:queue")
+				|	Experiencia
 	div(layout="column", layout-align="start center" )
-		.col-xs-12.col-sm-12.col-md-9.masonry(masonry)
-			//.col-xs-12.col-sm-4.col-md-3.masonry-brick(style="background:white; padding:0; width: 300px; position:fixed", ng-show="false")
-				ul.menuProfile
-					li.active.scrolldEasing2.scrolldEasing2Mobile(active, id="formProfileBtn", ng-click="scroll('formProfileBtn')") 	
-						|	Datos Personales
-					li.scrolldEasing1.scrolldEasing1Mobile(id="formEducationBtn", active, ng-click="scroll('formEducationBtn')")
-						|	Datos Académicos
-						span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="educations.length != 0") {{educations.length}}
-					li.scrolldEasing2.scrolldEasing2Mobile(id="formExperienceBtn", active, ng-click="scroll('formExperienceBtn')")
-						|	Experiencial Profesional
-						span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="experiences.length != 0") {{experiences.length}}
-					li(active)
-						a(href="#") Proyectos
-			//.col-xs-12.col-sm-6.col-md-4.masonry-brick(style="padding:0")
-				.loading(style='display:none')
-							i.fa.fa-spinner.fa-spin
-			.col-xs-12.col-sm-6.col-md-4
-				.panel.panel-default
-					md-toolbar
-						.md-toolbar-tools(role="navigation", style="background-color:#8cc474")
-							md-menu.md-menu(data-access-level='accessLevels.user')
-								md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
-									md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
-								md-menu-content(width="2")
-									md-menu-item
-										md-button
-											md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
-											|	Compartir
-							h2(flex)
-								span Datos Personales
-					div.panel-body
-						form.formProfileOthers(id="formProfile", editable-form, name="editableForm", onaftersave="saveUser()", style="margin-bottom: 5px;")
-							div
-								.title Nombre Completo
-								span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'Sin especificar' }}
-							div
-								.title Localización
-								span(editable-places="user.location", e-name="google_places_ac", e-id="google_places_ac", e-required) {{ user.location || 'Sin especificar' }}
-							div
-								.title Edad
-								span(editable-date="user.dob")  {{ edad }} años ({{ (user.dob | date:"dd/MM/yyyy") || 'Sin especificar' }})
-							div
-								.title Género
-								span(editable-select="user.gender", e-options="s.value as s.text for s in genders")  {{ user.gender || 'Hombre' }}
-							div
-								.title Estado Civil
-								span(editable-select="user.marital", e-options="s.value as s.text for s in statuses")  {{ user.marital || 'Soltero(a)' }}
-							div
-								.title Email
-								span.editable {{email}}
+		.col-xs-12.col-sm-12.col-md-9
+			.masonry(masonry)
+				//.col-xs-12.col-sm-4.col-md-3.masonry-brick(style="background:white; padding:0; width: 300px; position:fixed", ng-show="false")
+					ul.menuProfile
+						li.active.scrolldEasing2.scrolldEasing2Mobile(active, id="formProfileBtn", ng-click="scroll('formProfileBtn')") 	
+							|	Datos Personales
+						li.scrolldEasing1.scrolldEasing1Mobile(id="formEducationBtn", active, ng-click="scroll('formEducationBtn')")
+							|	Datos Académicos
+							span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="educations.length != 0") {{educations.length}}
+						li.scrolldEasing2.scrolldEasing2Mobile(id="formExperienceBtn", active, ng-click="scroll('formExperienceBtn')")
+							|	Experiencial Profesional
+							span.badge.pull-right(style="padding: 5px 10px; top:0", ng-show="experiences.length != 0") {{experiences.length}}
+						li(active)
+							a(href="#") Proyectos
+				//.col-xs-12.col-sm-6.col-md-4.masonry-brick(style="padding:0")
+					.loading(style='display:none')
+								i.fa.fa-spinner.fa-spin
+				.col-xs-12.col-sm-6.col-md-4.masonry-brick
+					.panel.panel-default
+						md-toolbar
+							.md-toolbar-tools(role="navigation", style="background-color:#8cc474")
+								md-menu.md-menu(data-access-level='accessLevels.user')
+									md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
+										md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
+									md-menu-content(width="2")
+										md-menu-item
+											md-button
+												md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
+												|	Compartir
+								h2(flex)
+									span Datos Personales
+						div.panel-body
+							img(src="#", align='left', valign='middle', style='margin:5px; display:none', width="50")
+							form.formProfileOthers(id="formProfile", editable-form, name="editableForm", onaftersave="saveUser()", style="margin-bottom: 5px;")
+								div
+									.title Nombre Completo
+									span(editable-text="user.fullname", e-name="name", onbeforesave="checkName($data)", e-required) {{ user.fullname || 'Sin especificar' }}
+								div
+									.title Localización
+									span(editable-places="user.location", e-name="google_places_ac", e-id="google_places_ac", e-required) {{ user.location || 'Sin especificar' }}
+								div
+									.title Edad
+									span(editable-datepicker="user.dob")  {{ edad }} años ({{ (user.dob | date:"dd/MM/yyyy") || 'Sin especificar' }})
+								div
+									.title Género
+									span(editable-select="user.gender", e-options="s.value as s.text for s in genders")  {{ user.gender || 'Hombre' }}
+								div
+									.title Estado Civil
+									span(editable-select="user.marital", e-options="s.value as s.text for s in statuses")  {{ user.marital || 'Soltero(a)' }}
+								div
+									.title Email
+									span.editable {{email}}
 
-							md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile", aria-label="Editar")
-								md-icon(md-menu-align-target, md-svg-icon="content:create")
-							span(ng-show="editableForm.$visible")
-								md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting", aria-label="Guardar")
-									md-icon(md-menu-align-target, md-svg-icon="content:save")
-								md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()", aria-label="Calcelar")
-									md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
+								md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile", aria-label="Editar")
+									md-icon(md-menu-align-target, md-svg-icon="content:create")
+								span(ng-show="editableForm.$visible")
+									md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting", aria-label="Guardar")
+										md-icon(md-menu-align-target, md-svg-icon="content:save")
+									md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel(); refresh();", aria-label="Calcelar")
+										md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
 
-			//.col-xs-12.col-sm-6.col-md-4(id="formEducation")
-				div(style="text-align: center; margin-bottom: 5px;")
-					button.btn.btn-danger(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
-			.col-xs-12.col-sm-6.col-md-4.masonry-brick(ng-repeat="education in educations")
-				.panel.panel-default
-					md-toolbar
-						.md-toolbar-tools(role="navigation", style="background-color:#fbcb43")
-							md-menu.md-menu(data-access-level='accessLevels.user')
-								md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
-									md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
-								md-menu-content(width="2")
-									md-menu-item
-										md-button(ng-click="remove($index, education.id, 1);", ng-show="authUser == userProfile")
-											md-icon(md-menu-align-target, md-svg-icon="action:delete")
-											|	Eliminar
-									md-menu-item
-										md-button
-											md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
-											|	Compartir
-							h2(flex)
-								span Estudios Académicos
-							
-					div.panel-body
-						form.formProfileOthers(id="formEducation", editable-form, name="editableForm", onaftersave="saveEducation($index, education.id)")
-							//ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
-										li.dropdown(data-toggle="dropdown")
-											a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
-												i.fa.fa-chevron-down
-											ul.dropdown-menu
-												li(data-access-level='accessLevels.user')
-													a(href="#" , data-toggle="modal" data-target="#modalRemove" ng-click="beforeRemove($index, education.id, 1);", ng-show="authUser == userProfile") Eliminar
-							div
-								.title Centro de Estudios
-								span(editable-text="educations[$index].school", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.school || 'Sin especificar' }}
-							div
-								.title  Tiempo de Estudios
-								span(editable-select="educations[$index].yearStart", e-options="item.id as item.name for item in items") {{ education.yearStart || 'Sin especificar' }}
-								span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
-								span(editable-select="educations[$index].yearEnd", e-options="item.id as item.name for item in items") {{ education.yearEnd || 'Sin especificar' }}
-							div
-								.title Grado Académico
-								span(editable-text="educations[$index].schoolDegree", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.schoolDegree || 'Sin especificar' }}
-							div
-								.title Carrera
-								span(editable-text="educations[$index].career", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.career || 'Sin especificar' }}
-							div
-								.title Descripción
-								span(editable-textarea="educations[$index].description", e-name="name") {{ education.description || 'Sin especificar' }}
-							md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile")
-								md-icon(md-menu-align-target, md-svg-icon="content:create")
-							md-button.md-fab.md-primary(type="button", data-toggle="modal", data-target="#modalEducation", ng-show="authUser == userProfile && $first")
-								md-icon(md-menu-align-target, md-svg-icon="av:queue")
-							span(ng-show="editableForm.$visible")
-								md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting")
-									md-icon(md-menu-align-target, md-svg-icon="content:save")
-								md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()")
-									md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
-								//button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
-								//button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()") Cancelar
+				//.col-xs-12.col-sm-6.col-md-4(id="formEducation")
+					div(style="text-align: center; margin-bottom: 5px;")
+						button.btn.btn-danger(data-toggle="modal" data-target="#modalEducation", ng-show="authUser == userProfile")	Agregar Estudios
+				.col-xs-12.col-sm-6.col-md-4.masonry-brick(ng-repeat="education in educations")
+					.panel.panel-default
+						md-toolbar
+							.md-toolbar-tools(role="navigation", style="background-color:#fbcb43")
+								md-menu.md-menu(data-access-level='accessLevels.user')
+									md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
+										md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
+									md-menu-content(width="2")
+										md-menu-item
+											md-button(ng-click="remove($index, education.id, 1);", ng-show="authUser == userProfile")
+												md-icon(md-menu-align-target, md-svg-icon="action:delete")
+												|	Eliminar
+										md-menu-item
+											md-button
+												md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
+												|	Compartir
+								h2(flex)
+									span Estudios Académicos
+								
+						div.panel-body
+							img(src="#", align='left', valign='middle', style='margin:5px; display:none', width="50")
+							form.formProfileOthers(id="formEducation", editable-form, name="editableForm", onaftersave="saveEducation($index, education.id)")
+								//ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user', style="position: absolute; right: 0; z-index: 1;")
+											li.dropdown(data-toggle="dropdown")
+												a.link.dropdown-toggle(data-toggle="dropdown" , href="#")
+													i.fa.fa-chevron-down
+												ul.dropdown-menu
+													li(data-access-level='accessLevels.user')
+														a(href="#" , data-toggle="modal" data-target="#modalRemove" ng-click="beforeRemove($index, education.id, 1);", ng-show="authUser == userProfile") Eliminar
+								div
+									.title Centro de Estudios
+									span(editable-text="educations[$index].school", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.school || 'Sin especificar' }}
+								div
+									.title  Tiempo de Estudios
+									span(editable-select="educations[$index].yearStart", e-options="item.id as item.name for item in items") {{ education.yearStart || 'Sin especificar' }}
+									span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
+									span(editable-select="educations[$index].yearEnd", e-options="item.id as item.name for item in items") {{ education.yearEnd || 'Actualmente' }}
+								div
+									.title Grado Académico
+									span(editable-text="educations[$index].schoolDegree", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.schoolDegree || 'Sin especificar' }}
+								div
+									.title Carrera
+									span(editable-text="educations[$index].career", e-name="name", onbeforesave="checkName($data)", e-required) {{ education.career || 'Sin especificar' }}
+								div
+									.title Descripción
+									span(editable-textarea="educations[$index].description", e-name="name") {{ education.description || 'Sin especificar' }}
+								md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile")
+									md-icon(md-menu-align-target, md-svg-icon="content:create")
+								span(ng-show="editableForm.$visible")
+									md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting")
+										md-icon(md-menu-align-target, md-svg-icon="content:save")
+									md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel(); refresh();")
+										md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
+									//button.btn.btn-danger(type="submit", ng-disabled="editableForm.$waiting") Guardar
+									//button.btn.btn-default(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel(); refresh();") Cancelar
 
-			//div(style="text-align: center; margin-bottom: 5px;")
-				button.btn.btn-danger(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
+				//div(style="text-align: center; margin-bottom: 5px;")
+					button.btn.btn-danger(data-toggle="modal" data-target="#modalExperience", ng-show="authUser == userProfile")	Agregar Experiencia
 
-			//.col-xs-12.col-sm-12.col-md-9(id="formExperience")
-			.col-xs-12.col-sm-6.col-md-4.masonry-brick(ng-repeat="experience in experiences")
-				.panel.panel-default
-					md-toolbar
-						.md-toolbar-tools(role="navigation")
-							md-menu.md-menu(data-access-level='accessLevels.user')
-								md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
-									md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
-								md-menu-content(width="2")
-									md-menu-item
-										md-button(ng-click="remove($index, experience.id, 2);", ng-show="authUser == userProfile")
-											md-icon(md-menu-align-target, md-svg-icon="action:delete")
-											|	Eliminar
-									md-menu-item
-										md-button
-											md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
-											|	Compartir
-							h2(flex)
-								span Experiencia Laboral
-					div.panel-body
-						form.formProfileOthers(id="formExperience", editable-form, name="editableForm", onaftersave="saveExperience($index, experience.id)")
-							div
-								.title Compañia
-								span(editable-text="experiences[$index].company", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.company || 'Sin especificar' }}
-							div
-								.title  Tiempo
-								span(editable-date="experiences[$index].startDate") {{ (experience.startDate | date:"MM/yyyy") || 'Sin especificar' }}
-								span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
-								span(editable-date="experiences[$index].endDate") {{ (experience.endDate | date:"MM/yyyy") || 'Sin especificar' }}
-							div
-								.title Cargo
-								span(editable-text="experiences[$index].position", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.position || 'Sin especificar' }}
-							div
-								.title Lugar
-								span(editable-places="experiences[$index].location", e-name="google_places_ac", e-id = "locationExp_{{$index}}", e-required) {{ experience.location || 'Sin especificar' }}
-							div
-								.title Descripción
-								span(editable-text="experiences[$index].description", e-name="name") {{ experience.description || 'Sin especificar' }}
-							md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile")
-								md-icon(md-menu-align-target, md-svg-icon="content:create")
-							md-button.md-fab.md-primary(type="button", data-toggle="modal", data-target="#modalExperience", ng-show="authUser == userProfile && $first")
-								md-icon(md-menu-align-target, md-svg-icon="av:queue")
-							span(ng-show="editableForm.$visible")
-								md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting")
-									md-icon(md-menu-align-target, md-svg-icon="content:save")
-								md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel()")
-									md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
+				//.col-xs-12.col-sm-12.col-md-9(id="formExperience")
+				.col-xs-12.col-sm-6.col-md-4.masonry-brick(ng-repeat="experience in experiences")
+					.panel.panel-default
+						md-toolbar
+							.md-toolbar-tools(role="navigation")
+								md-menu.md-menu(data-access-level='accessLevels.user')
+									md-button(aria-label="Open demo menu", class="md-icon-button", ng-click="$mdOpenMenu()")
+										md-icon(md-menu-origin, md-svg-icon="navigation:more_vert")
+									md-menu-content(width="2")
+										md-menu-item
+											md-button(ng-click="remove($index, experience.id, 2);", ng-show="authUser == userProfile")
+												md-icon(md-menu-align-target, md-svg-icon="action:delete")
+												|	Eliminar
+										md-menu-item
+											md-button
+												md-icon(md-menu-align-target, md-svg-icon="file:folder_shared")
+												|	Compartir
+								h2(flex)
+									span Experiencia Laboral
+						div.panel-body
+							img(src="#", align='left', valign='middle', style='margin:5px; display:none', width="50")
+							form.formProfileOthers(id="formExperience", editable-form, name="editableForm", onaftersave="saveExperience($index, experience.id)")
+								div
+									.title Compañia
+									span(editable-text="experiences[$index].company", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.company || 'Sin especificar' }}
+								div
+									.title  Tiempo
+									span(editable-datepicker="experiences[$index].startDate")	{{experience.startDate || 'Sin especificar' }}
+									span(style="margin:0 10px; vertical-align: middle; font-size: 1.35em;")-
+									span(editable-datepicker="experiences[$index].endDate") {{experience.endDate || 'Actualmente' }}
+								div
+									.title Cargo
+									span(editable-text="experiences[$index].position", e-name="name", onbeforesave="checkName($data)", e-required) {{ experience.position || 'Sin especificar' }}
+								div
+									.title Lugar
+									span(editable-places="experiences[$index].location", e-name="google_places_ac", e-id = "locationExp_{{$index}}", e-required) {{ experience.location || 'Sin especificar' }}
+								div
+									.title Descripción
+									span(editable-text="experiences[$index].description", e-name="name") {{ experience.description || 'Sin especificar' }}
+								md-button.md-fab.md-primary(type="button", ng-click="editableForm.$show(); refresh();", ng-disabled="editableForm.$visible" ng-show="authUser == userProfile")
+									md-icon(md-menu-align-target, md-svg-icon="content:create")
+								span(ng-show="editableForm.$visible")
+									md-button.md-fab.md-warn(type="submit", ng-disabled="editableForm.$waiting")
+										md-icon(md-menu-align-target, md-svg-icon="content:save")
+									md-button.md-fab.md-primary(type="button", ng-disabled="editableForm.$waiting", ng-click="editableForm.$cancel(); refresh();")
+										md-icon(md-menu-align-target, md-svg-icon="navigation:cancel")
 
 	div(style="display:none")		
 		img.thumbnail(ng-src="{{jsondata.pictureUrl}}")

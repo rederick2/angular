@@ -6526,7 +6526,7 @@ md-sidenav {
       right: -16px;
       content: ''; }
     .md-subheader:not(.md-sticky-no-effect).md-sticky-clone {
-      z-index: 2; }
+      z-index: 100; }
     .md-subheader:not(.md-sticky-no-effect)[sticky-state="active"] {
       margin-top: -2px; }
     .md-subheader:not(.md-sticky-no-effect):not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {

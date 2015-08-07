@@ -137,6 +137,15 @@ angular.module('xeditable').directive('editableSelect', ['editableDirectiveFacto
       }
     });
 }]);
+
+//datepicker
+angular.module('xeditable').directive('editableDatepicker', ['editableDirectiveFactory',
+  function(editableDirectiveFactory) {
+    return editableDirectiveFactory({
+      directiveName: 'editableDatepicker',
+      inputTpl: '<mb-datepicker arrows="arrows" calendar-header="header" date="$data" date-format="MM/DD/YYYY"></mb-datepicker>'      
+    });
+}]);
 //textarea
 angular.module('xeditable').directive('editableTextarea', ['editableDirectiveFactory',
   function(editableDirectiveFactory) {

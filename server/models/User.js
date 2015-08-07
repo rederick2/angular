@@ -23,7 +23,8 @@ var userSchema = new mongoose.Schema({
     activado: { type: Boolean, 'default': true },
     role: { bitMask: Number, title: String },
     online: { type: Boolean, 'default': false },
-    messages : [message]
+    messages : [message],
+    company : String
 });
 /* Si todo sale bien creamos el perfil del usuario y lo guardamos */
 userSchema.statics.findOrCreate = function (profile, done) {

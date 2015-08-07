@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute', 'angular-loading-bar', 'ngMenuSidenav', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
+angular.module('unsApp', ['ngMaterial', 'ngMessages', 'ngRoute', 'materialDatePicker', 'ngMenuSidenav', 'firebase' , 'ngCookies',  'angularMoment', 'ngSanitize','angularFileUpload', 'wu.masonry', '$strap.directives', 'xeditable', 'ui.bootstrap', 'ngAutocomplete'])
     
     /*.value('fbURL', 'https://rederick2.firebaseio.com/users/')
     .factory('Usersregistered', function(angularFireCollection, fbURL) {

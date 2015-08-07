@@ -1,6 +1,8 @@
 var _ =           require('underscore')
     , mongoose = require('mongoose')
     , User = mongoose.model('User')
+    , Profile = mongoose.model('Profile')
+    , Experience = mongoose.model('Experience')
     , Message = mongoose.model('Message')
     , Counter = mongoose.model('Counter')
     , Inbox = mongoose.model('Inbox')
@@ -43,14 +45,41 @@ module.exports = {
 
     getUsers: function(req, res) {
 
-        User.find(null, '_id username picture name').limit(req.body.limit).sort({id:-1}).skip((req.body.page) * req.body.limit).exec(function(err, docs) {
-            if (err) {
-                res.render('error', {
-                    status: 500
+        var sm = User.find(null, '_id username picture name').limit(req.body.limit).sort({id:-1}).skip((req.body.page) * req.body.limit).stream();
+
+        var docs = [];
+
+        sm.on('data', function (doc) {
+            
+            if(!doc) return res.json({success:'true'});
+
+            if(doc) this.pause();
+
+            var self = this;
+
+            Profile.findOne({ user: doc }, function (err, profile) {
+
+                Experience.findOne({ profile: profile, endDate: null }, 'company', function (err, experience) {
+
+                    if(experience) doc.company = experience.company;
+
+                    docs.push(doc);
+
+                    self.resume();
+
                 });
-            } else {
-                res.json(docs);
-            }
+
+            });
+
+        }).on('error', function (err) {
+
+          // handle the error
+          return res.send(403, err);
+
+        }).on('close', function () {
+
+          // the stream is closed
+            res.json(docs);
 
         });
 

@@ -17,6 +17,9 @@ header-users{
   background: none;
 }
 
+.editable-wrap, .mb-input-field{
+  width: 90px;
+}
 
 .md-subheader{
       margin-right: 0px;

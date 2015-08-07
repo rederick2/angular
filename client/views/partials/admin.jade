@@ -1,20 +1,20 @@
-.container(infinite-scroll='addItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0')
-  div
-      h1 Angular Infinite Scroll Demo
-      p Scroll the div to add more elements.
-      div.row
-        div.col-sm-6.col-md-4(ng-repeat='item in items') 
-          a.thumbnail(href='./{{item.username}}')
-            img(src='http://placehold.it/390x200')
-            div.caption 
-              h3 {{item.username}}
+md-content.main(flex, style="padding: 0;", layout-fill)
+  header-users(layout="column",flex, layout-fill)
+  div(layout="column", layout-align="start center",infinite-scroll='addItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0' )
+      .col-xs-12.col-sm-12.col-md-9
+        .masonry(masonry)
+          .col-xs-6.col-sm-6.col-md-2.masonry-brick(ng-repeat='item in items') 
+            md-card(style="margin: 10px auto;")
+              img.md-card-image(ng-src="{{item.picture || 'http://placehold.it/50x50?type=large' }}?type=large" alt="...")
+              md-card-content(style="color:#ddd")
+                  h3 {{item.username}}
+                  p  
+                    md-icon(md-svg-icon="action:work") 
+                    |  {{ item.company || ' Sin Especificar '}}
+                  p 
+                    md-icon(md-svg-icon="social:school")
+                    |  {{ item.education || ' Sin Especificar '}}
       i.fa.fa-spinner.fa-spin(ng-show='busy')
-      p
-        | Maximum {{maxItems}} items
-        small ({{items.length}} added)
-        button.btn(ng-click='items=[];canLoad=true;addItems();') Reset
-      p
-        | It is up to you to add server requests and loading indicators.
 
 
 

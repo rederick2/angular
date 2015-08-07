@@ -34,7 +34,9 @@ angular.module('unsApp')
 
             $scope.user = res.profile; 
 
-            console.log(res)
+            if(res.profile.dob != null)
+                $scope.user.dob = new Date(res.profile.dob).toLocaleDateString();
+           // $scope.dob = res.profile.dob.toLocaleDateString(); 
 
             $scope.idProfile = res.profile.id;
             //console.log(res[0]);
@@ -50,6 +52,11 @@ angular.module('unsApp')
             if(res.experiences != 0){
                 //console.log(res.educations);//$scope.educations = res.educations;
                 res.experiences.forEach(function(r){
+
+                    if(r.startDate != null)
+                        r.startDate = new Date(r.startDate).toLocaleDateString();
+                    if(r.endDate != null)
+                        r.endDate = new Date(r.endDate).toLocaleDateString();
                     $scope.experiences.push(r);
                     //console.log(r);
                 });
@@ -59,11 +66,11 @@ angular.module('unsApp')
 
             $('.loading').hide();
 
-            setTimeout(function() {
+           /* setTimeout(function() {
 
                 $('.masonry').masonry();
 
-            }, 4500);
+            }, 4500);*/
 
         });
 
@@ -84,7 +91,7 @@ angular.module('unsApp')
      $scope.someVal = 3;
 
     $scope.changed = function(val){
-        console.log("Updated", val);
+        //console.log("Updated", val);
       }
 
     $scope.scroll = function(id){
@@ -103,10 +110,10 @@ angular.module('unsApp')
             var diaActual = fechaActual.getDate();
             var mmActual = fechaActual.getMonth() + 1;
             var yyyyActual = fechaActual.getFullYear();
-            FechaNac = fecha.split("-");
-            var diaCumple = FechaNac[2];
+            FechaNac = fecha.split("/");
+            var diaCumple = FechaNac[0];
             var mmCumple = FechaNac[1];
-            var yyyyCumple = FechaNac[0];
+            var yyyyCumple = FechaNac[2];
             //retiramos el primer cero de la izquierda
             if (mmCumple.substr(0,1) == 0) {
                 mmCumple= mmCumple.substring(1, 2);
@@ -177,7 +184,7 @@ angular.module('unsApp')
                 [ "id", "firstName", "lastName", "pictureUrl",
                         "publicProfileUrl", "educations", "positions" ]).result(function(result) {
 
-                            console.log(result);
+                            //console.log(result);
             //set the model
             $scope.$apply(function() {
                 $scope.jsondata = result.values[0];
@@ -198,7 +205,7 @@ angular.module('unsApp')
     };
 
     $scope.checkName = function(data) {
-        console.log(data);
+        //console.log(data);
         if (data == '') {
           return "Nombre no puede ser vacio";
         }
@@ -344,7 +351,7 @@ angular.module('unsApp')
                     .targetEvent(event)
                 ).then(function () {
                     //console.log(_.findWhere($rootScope.bienesSolicitudes[id], { Vcodbarra: Vcodbarra }));
-                    console.log(tipo);
+                    //console.log(tipo);
 
                     if($scope.tipo == 1){
 

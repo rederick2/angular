@@ -1,7 +1,7 @@
 angular.module('unsApp')
 .controller('AdminCtrl',
-['$rootScope', '$scope', 'Auth', 'Users', '_' , 
-function($rootScope, $scope, Auth, Users, _ ) {
+['$rootScope', '$scope', 'Auth', 'Users', 'Profiles', '_' , 
+function($rootScope, $scope, Auth, Users, Profiles, _ ) {
     $scope.loading = true;
     $scope.userRoles = Auth.userRoles;
 
@@ -24,9 +24,10 @@ function($rootScope, $scope, Auth, Users, _ ) {
         $scope.busy = true;
 
 
-            Users.getUsers({limit:5, page:$scope.page} , function(res) {
+            Users.getUsers({limit:15, page:$scope.page} , function(res) {
 
                     res.forEach(function(r){
+
                         $scope.items.push(r);
                     });
 
