@@ -115,6 +115,17 @@ html(lang='en', ng-app='unsApp')
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
+                    md-menu(md-position-mode="target-right target")
+                        md-button(aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)")
+                            md-icon(md-menu-origin md-svg-icon="call:portable-wifi-off")
+                        md-menu-content(width="4")
+                            md-menu-item(ng-repeat="not in notifications")
+                                md-button(ng-href="/{{not.link}}")
+                                    div(layout="row")
+                                        img(src="{{not.from.picture}}", align='left', valign='middle', width="50")
+                                        .content {{not.title}}
+                                            h6
+                                                span(am-time-ago="not.datetime", title="{{not.datetime | amCalendar}}")
                     ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
                         li.dropdown(data-toggle="dropdown")
 
