@@ -4,8 +4,8 @@
   "dependencies": {
     "express": "~3.4.8",
     "jade": "~0.35.0",
-    "passport": "*",
-    "passport-local": "*",
+    "passport": "~0.2.2",
+    "passport-local": "~1.0.0",
     "underscore": "*",
     "validator": "~1.1.1",
     "passport-twitter": "~0.1.4",

@@ -44,7 +44,7 @@ html(lang='en', ng-app='unsApp')
         .notifications.bottom-left(style="position:absolute; bottom:15px; z-index:100000")
         #presenceDiv
     section(layout="row", flex, ng-controller="NavCtrl" style="height:100%")
-        md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')", ng-show="true" )
+        md-sidenav.md-sidenav-left.md-whiteframe-z2(md-component-id="left", md-is-locked-open="$mdMedia('gt-md')", ng-show="false" )
             md-toolbar.md-toolbar-tools(role="navigation")
                 a.navbar-brand(href="/", style="padding:5px") 
                     img.fa(src="/img/zbz-logo-200_402x.png", alt="Zbz!", width="40")
@@ -115,6 +115,19 @@ html(lang='en', ng-app='unsApp')
                         strong &nbsp;{{ fullname }}&nbsp;
                     md-button.md-icon-button(aria-label="Settings", ng-click="toggleRight()")
                         md-icon.md-hue-3(md-svg-icon="communication:chat")
+                    ul.nav.navbar-nav.navbar-right(data-access-level='accessLevels.user')
+                        li.dropdown(data-toggle="dropdown")
+
+                            a.dropdown-toggle(data-toggle="dropdown" , href="#")
+                                i.fa.fa-cog
+                                //b.caret
+                            ul.dropdown-menu
+                                li(data-access-level='accessLevels.user')
+                                    a(href="/{{ user.username }}/profile")
+                                        | Perfil
+                                li(data-access-level='accessLevels.user')
+                                    a(href="", data-ng-click="logout()")
+                                        | Salir        
             md-content(flex, layout="column", layout-padding, md-scroll-y, ng-view='ng-view', style="padding: 0; background-color: #f5f5f5")
                 hr(data-ng-show="error")
                 .alert.alert-danger(data-ng-bind="error", data-ng-show="error")
