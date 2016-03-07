@@ -32,8 +32,8 @@
     "test": "grunt test"
   },
   "engines": {
-    "node": "4.1.x",
-    "npm": "1.2.x"
+    "node": "*",
+    "npm": "*"
   },
   "devDependencies": {
     "sinon": "~1.7.2",
