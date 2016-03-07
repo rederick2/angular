@@ -69,7 +69,7 @@ module.exports = {
 
   facebook : function(req, res, next) {
 
-    //console.log("BUSCARRRRRFACEEEEE");
+    console.log("BUSCARRRRRFACEEEEE");
     var profile = req.body;
     var uid = profile.uid.split(':');
 

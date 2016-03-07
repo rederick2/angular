@@ -3,7 +3,7 @@
     "host": "localhost",
     "db": {
         "name": "rederick2",
-        "uri" :	"users:alex2002@ds053438.mongolab.com:53438/rederick2"
+        "uri" :	"users:alex2002@ds053438.mlab.com:53438/rederick2"
     },
     "twitter": {
         "consumerKey": "",
