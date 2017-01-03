@@ -30,7 +30,11 @@ var routes = [
         }]
     },
 
-    
+    {
+        path: '/twilio/token',
+        httpMethod: 'POST',
+        middleware: [AuthCtrl.twilio]
+    },
 
     // OAUTH
     {
