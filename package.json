@@ -16,7 +16,6 @@
     "mongoose": "*",
     "firebase": "*",
     "q": "*",
-    "twilio" : "*",
     "cloudinary" : "1.0.10",
     "request" : "*",
     "raven" : "*",

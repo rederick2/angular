@@ -27,12 +27,6 @@
     "loginsecure": false,
     "key": "",
     "cert": "",
-    "sentry": "dsn",
-    "twilio": {
-        "TWILIO_ACCOUNT_SID": "AC7b163bd022b2ca0e9af35a540e173828",
-        "TWILIO_API_KEY": "SKae40af932b083bcb8692733cafafffd3",
-        "TWILIO_API_SECRET": "0KgSRDBvSucGKk8yQg6YjsraqFZKuYon",
-        "TWILIO_CONFIGURATION_SID" : "VS78bf63193ed1e7a50f92e806f7774a92"
-    }
+    "sentry": "dsn"
 }
 
