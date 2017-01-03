@@ -1,19 +1,24 @@
-.chipsdemoContactChips(layout='column', style="padding-top: 50px")
-  md-content.md-padding.autocomplete(layout='column')
-    p
-      | Contact Chips.   
-    md-contact-chips(ng-model='contacts', md-contacts='querySearch($query)', md-contact-name='name', md-contact-image='image', md-contact-email='email', md-require-match='', filter-selected='filterSelected', placeholder='To')  
-    md-checkbox(ng-model='filterSelected') Filter selected contacts from options    
-    br    
-    md-list
-      md-subheader.md-no-sticky Contacts
-      md-list-item.md-2-line.contact-item(ng-repeat='(index, contact) in allContacts', ng-if='contacts.indexOf(contact) < 0')
-        img.md-avatar(ng-src='{{contact.image}}', alt='{{contact.name}}')       
-        .md-list-item-text.compact
-          h3 {{contact.name}}         
-          p {{contact.email}}    
-      md-list-item.md-2-line.contact-item.selected(ng-repeat='(index, contact) in contacts')
-        img.md-avatar(ng-src='{{contact.image}}', alt='{{contact.name}}')     
-        .md-list-item-text.compact
-          h3 {{contact.name}}      
-          p {{contact.email}}
+.col-xs-3(style="margin-top:20px")
+  form.form-horizontal(ng-submit="register()", name="registerForm")
+    .form-group
+        label.col-sm-10.control-label Nombre de Usuario
+        .col-sm-10
+          input.form-control(type="text", name="name", ng-model="name")
+    .form-group
+        .col-sm-10
+          button.btn.btn-default(type="button", ng-click="conectar()")  
+            | Conectar
+  div(id="local-media")
+  div(id="remote-media")
+  button.btn.btn-default(type="button", ng-click="preview()")   Vista Previa
+
+  hr
+
+  .form-group
+        label.col-sm-10.control-label Invitado
+        .col-sm-10
+          input.form-control(type="text", name="invitado", ng-model="invitado")
+    .form-group
+        .col-sm-10
+          button.btn.btn-default(type="button", ng-click="invitar()")  
+            | Invitar

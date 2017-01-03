@@ -2,9 +2,41 @@ var mongoose = require('mongoose'),
     userRoles =       require('../../client/js/routingConfig').userRoles,
     User = mongoose.model('User'),
     Firebase = require('../models/Firebase.js'),
+    AccessTokenTwilio = require('twilio').AccessToken,
+    ConversationsGrant = AccessTokenTwilio.ConversationsGrant,
     Infosocial = mongoose.model('Infosocial');
 
+    //config = require('../../config.json');
+
 module.exports = {
+
+  twilio : function(request, response) {
+
+    var identity = request.body.nameUser;
+    
+    // Create an access token which we will sign and return to the client,
+    // containing the grant we just created
+    var token = new AccessTokenTwilio(
+        config.twilio.TWILIO_ACCOUNT_SID,
+        config.twilio.TWILIO_API_KEY,
+        config.twilio.TWILIO_API_SECRET
+    );
+
+    //assign the generated identity to the token
+    token.identity = identity;
+        
+    //grant the access token Twilio Video capabilities
+    var grant = new ConversationsGrant();
+    grant.configurationProfileSid = config.twilio.TWILIO_CONFIGURATION_SID;
+    token.addGrant(grant);
+
+    // Serialize the token to a JWT string and include it in a JSON response
+    response.send({
+        identity: identity,
+        token: token.toJwt()
+    });
+
+  },
 
   twitter : function(token, tokenSecret, profile, done) {
     User.findOrCreate({
@@ -69,7 +101,7 @@ module.exports = {
 
   facebook : function(req, res, next) {
 
-    console.log("BUSCARRRRRFACEEEEE");
+    //console.log("BUSCARRRRRFACEEEEE");
     var profile = req.body;
     var uid = profile.uid.split(':');
 

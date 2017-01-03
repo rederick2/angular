@@ -62,6 +62,11 @@ angular.module('unsApp')
                 success();
             }).error(error);
         },
+        twilio: function(nameUser, success, error) {
+            $http.post('/twilio/token', nameUser).success(function(res){
+                success(res);
+            }).error(error);
+        },
         accessLevels: accessLevels,
         userRoles: userRoles,
         user: currentUser
