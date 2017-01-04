@@ -29,6 +29,7 @@ var postSchema = new mongoose.Schema({
     type: String,
     created_time: {type: Date, default: Date.now},
     updated_time: {type: Date, default: Date.now},
+    passages : [{id:Number, description: String, created_time:Date}]
     comments : [{id:Number, from:{username:String,name:String,picture:String},message:String, created_time:Date}]
 }, {collection: 'posts'});
 
