@@ -2,56 +2,132 @@
 
 /* Controllers */
 angular.module('unsApp')
-.controller('LiveCtrl', ['$scope', '$timeout', '$q', function($scope, $timeout, $q) {
+.controller('LiveCtrl', ['$scope', '$timeout', '$q', 'Auth', function($scope, $timeout, $q, Auth) {
     //var self = this;
     
     /**
      * Search for contacts.
      */
-    $scope.querySearch = function (query) {
-    	
-      var results = query ?
-          $scope.allContacts.filter(createFilterFor(query)) : [];
-      console.log(results)
-      return results;
-    }
-    /**
-     * Create filter function for a query string
-     */
-    $scope.createFilterFor = function(query) {
-      var lowercaseQuery = angular.lowercase(query);
-      return function filterFn(contact) {
-        return (contact._lowername.indexOf(lowercaseQuery) != -1);;
-      };
-    }
-    $scope.loadContacts = function() {
-      var contacts = [
-        'Marina Augustine',
-        'Oddr Sarno',
-        'Nick Giannopoulos',
-        'Narayana Garner',
-        'Anita Gros',
-        'Megan Smith',
-        'Tsvetko Metzger',
-        'Hector Šimek',
-        'Some-guy withalongalastaname'
-      ];
-      return contacts.map(function (c, index) {
-        var cParts = c.split(' ');
-        var contact = {
-          name: c,
-          email: cParts[0][0].toLowerCase() + '.' + cParts[1].toLowerCase() + '@example.com',
-          image: 'http://lorempixel.com/50/50/people?' + index
-        };
-        contact._lowername = contact.name.toLowerCase();
-        return contact;
-      });
-    }
+    $scope.previewMedia;
+    $scope.conversationsClient;
+    $scope.activeConversation;
+    $scope.invitado = '';
 
-    $scope.querySearch = $scope.querySearch();
-    $scope.allContacts = $scope.loadContacts();
-    $scope.contacts = [$scope.allContacts[0]];
-    $scope.filterSelected = true;
+    $scope.name = '';
+
+    $scope.accessToken = "";
+
+    $scope.conectar = function()
+	{
+		console.log({'nameUser' : $scope.name})
+	    Auth.twilio({'nameUser' : $scope.name},
+	              function(res) {
+	                  //console.log(res);
+                  	if(res.token){
+
+	                    $scope.accessToken = res.token;
+
+		                var accessManager = new Twilio.AccessManager($scope.accessToken);
+
+						// create a Conversations Client and connect to Twilio
+						$scope.conversationsClient = new Twilio.Conversations.Client(accessManager);
+						$scope.conversationsClient.listen().then(
+						  $scope.clientConnected,
+						  function (error) {
+						    console.log('Could not connect to Twilio: ' + error.message);
+						  }
+						);
+					}
+	                  
+	              },
+	              function(err) {
+	                  alert("Failed to token");
+	              });
+
+	    
+	}
+
+
+	$scope.clientConnected = function() {
+
+	  //document.getElementById('invite-controls').style.display = 'block';
+	  console.log("Connected to Twilio. Listening for incoming Invites as '" + $scope.conversationsClient.identity + "'");
+
+	  $scope.conversationsClient.on('invite', function (invite) {
+	    console.log('Incoming invite from: ' + invite.from);
+	    invite.accept().then($scope.conversationStarted);
+	  });
+
+	  // bind button to create conversation
+	  $scope.invitar = function () {
+	    
+	    var inviteTo = $scope.invitado;
+
+	    if ($scope.activeConversation) {
+	      // add a participant
+	      console.log($scope.activeConversation);
+
+	      $scope.activeConversation.invite(inviteTo);
+	    } else {
+	      // create a conversation
+	      console.log(3);
+
+	      var options = {};
+	      if ($scope.previewMedia) {
+	        options.localMedia = $scope.previewMedia;
+	      }
+	      $scope.conversationsClient.inviteToConversation(inviteTo, options).then(
+	        $scope.conversationStarted,
+	        function (error) {
+	          console.log('Unable to create conversation');
+	          console.log('Unable to create conversation', error);
+	        }
+	      );
+	    }
+	  };
+	};
+
+	$scope.conversationStarted = function (conversation) {
+	  console.log('In an active Conversation');
+	  $scope.activeConversation = conversation;
+	  // draw local video, if not already previewing
+	  if (!$scope.previewMedia) {
+	    conversation.localMedia.attach('#local-media');
+	  }
+	  // when a participant joins, draw their video on screen
+	  conversation.on('participantConnected', function (participant) {
+	    console.log("Participant '" + participant.identity + "' connected");
+	    participant.media.attach('#remote-media');
+	  });
+	  // when a participant disconnects, note in log
+	  conversation.on('participantDisconnected', function (participant) {
+	    console.log("Participant '" + participant.identity + "' disconnected");
+	  });
+	  // when the conversation ends, stop capturing local video
+	  conversation.on('ended', function (conversation) {
+	    console.log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
+	    conversation.localMedia.stop();
+	    conversation.disconnect();
+	    $scope.activeConversation = null;
+	  });
+	};
+    
+
+    $scope.preview = function(){
+    	if (!$scope.previewMedia) {
+		    $scope.previewMedia = new Twilio.Conversations.LocalMedia();
+		    Twilio.Conversations.getUserMedia().then(
+		      function (mediaStream) {
+		        $scope.previewMedia.addStream(mediaStream);
+		        $scope.previewMedia.attach('#local-media');
+		      },
+		      function (error) {
+		        console.error('Unable to access local media', error);
+		        console.log('Unable to access Camera and Microphone');
+		      }
+		    );
+		  };
+    }
 
 }]);
 
