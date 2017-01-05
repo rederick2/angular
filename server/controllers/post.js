@@ -168,9 +168,9 @@ module.exports = {
 
                 if(err) return res.send(500, err);
 
-                var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.id);
+                /*var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.id);
 
-                myRootRef.remove();
+                myRootRef.remove();*/
 
                 if(doc.type == 'photo'){
 
@@ -211,9 +211,9 @@ module.exports = {
 
             Post.findOne({id:req.body.idpost}).populate('to' , 'username').exec(function(err, doc){
 
-                var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.idpost + '/comments/' + req.body.id);
+                /*var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + req.body.idpost + '/comments/' + req.body.id);
 
-                myRootRef.remove();
+                myRootRef.remove();*/
 
                 Comment.remove({id:req.body.id}).exec();
 
@@ -251,9 +251,9 @@ module.exports = {
 
                     comment.save();
 
-                    var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + doc.id + '/comments/' + count);
+                    /*var myRootRef = Firebase.getRef('posts/' + doc.to.username + '/' + doc.id + '/comments/' + count);
 
-                    myRootRef.set({id:count, from: user.username, fromPicture: user.picture, fromName: user.name, message:req.body.message, time:req.body.time});
+                    myRootRef.set({id:count, from: user.username, fromPicture: user.picture, fromName: user.name, message:req.body.message, time:req.body.time});*/
 
                     res.json({success:'true' , to:doc.to.username, name: user.name,  id: doc.id}); 
                 });
@@ -307,6 +307,7 @@ module.exports = {
                                     fuente : req.body.fuente,
                                     description : req.body.description,
                                     message : req.body.message,
+                                    passages : req.body.passages,
                                     type : req.body.type
                                 }
 
@@ -314,7 +315,7 @@ module.exports = {
 
                             post.save();
 
-                            var myRootRef = Firebase.getRef('posts/' + to.username + '/' + count);
+                            /*var myRootRef = Firebase.getRef('posts/' + to.username + '/' + count);
 
                             myRootRef.set({
                                     id: count,
@@ -327,8 +328,9 @@ module.exports = {
                                     fuente : req.body.fuente,
                                     description : req.body.description,
                                     message : req.body.message,
+                                    passages : req.body.passages,
                                     type : req.body.type
-                                });
+                                });*/
 
                             res.json({success:'true'});  
 

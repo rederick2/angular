@@ -153,7 +153,7 @@ angular.module('unsApp')
         var myUserRef = userListRef;
 
         // Get a reference to my own presence status.
-        var connectedRef = new Firebase("http://presence.firebaseio-demo.com/.info/connected");
+        var connectedRef = new Firebase("http://rederick2.firebaseio.com/.info/connected");
         connectedRef.on("value", function(isOnline) {
         if (isOnline.val()) {
           // If we lose our internet connection, we want ourselves removed from the list.

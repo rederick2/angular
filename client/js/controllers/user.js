@@ -337,6 +337,7 @@ angular.module('unsApp')
         //var message = '';
         var title = '';
         var picture = '';
+        var passages = '';
         var description = '';
         var source = '';
         var url = '';
@@ -351,6 +352,7 @@ angular.module('unsApp')
             description = $scope.description;//$('.liveurl').html();
             title = $scope.title;
             picture = $scope.picture;
+            passages = $scope.passages;
             url = $scope.url;
             fuente = getHost(url);
             source = $scope.source;
@@ -362,7 +364,7 @@ angular.module('unsApp')
         Posts.add({
             from : Auth.user.username,
             to : $scope.username,
-            title : title,
+            title : $scope.title,
             picture : picture,
             picture_id : picture_id,
             source : source,
@@ -370,6 +372,7 @@ angular.module('unsApp')
             fuente:fuente,
             description : description,
             message : $scope.message,
+            passages : $scope.passages,
             type : $scope.typepost,
             created_time: new Date(), 
             updated_time: new Date()
@@ -378,6 +381,7 @@ angular.module('unsApp')
         function(res){
             $scope.message = '';
             $scope.picture = '';
+            $scope.passages = '';
             $scope.page = 0;
             $scope.busy = false;
             $scope.posts = [];

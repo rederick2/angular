@@ -107,7 +107,7 @@ html(lang='en', ng-app='unsApp')
                     md-button(data-toggle="modal", data-access-level='accessLevels.anon', data-target="#modalLogin") Iniciar Sesión
                     md-button(data-access-level='accessLevels.anon', data-toggle="modal", data-target="#modalRegister") Registrarse
                     md-button(ng-href='/', data-access-level='accessLevels.user') Inicio
-                    md-button(ng-href='/firepad', data-access-level='accessLevels.user') Firepad
+                    //md-button(ng-href='/firepad', data-access-level='accessLevels.user') Firepad
                     md-button(ng-href='/admin',data-access-level='accessLevels.admin') Admin
                     span(flex)
                     md-button.btn-profile.navbar-text(style="padding: 0px;", ng-href="/{{user.username}}", hide-sm, show-gt-sm)
